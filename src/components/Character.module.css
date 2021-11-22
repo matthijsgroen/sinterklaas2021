@@ -1,6 +1,8 @@
 .character {
   position: absolute;
-  width: 128px;
-  height: 128px;
-  transition: transform 64ms ease-in-out;
+  width: 64px;
+  height: 64px;
+  top: 30vh;
+  left: 10vw;
+  transition: transform 128ms ease-in-out;
 }

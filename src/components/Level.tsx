@@ -49,13 +49,17 @@ const inDirection = (
   direction: Direction,
   xDelta: number,
   yDelta: number
-): boolean => direction === "east" && xDelta === -1;
+): boolean =>
+  (direction === "east" && xDelta === -1) ||
+  (direction === "south" && yDelta === 1);
 
 const inOppositeDirection = (
   direction: Direction,
   xDelta: number,
   yDelta: number
-): boolean => direction === "east" && xDelta === 1;
+): boolean =>
+  (direction === "east" && xDelta === 1) ||
+  (direction === "south" && yDelta === -1);
 
 const calculateNewPos = (
   levelData: LevelData,
@@ -123,16 +127,16 @@ const Level: React.FunctionComponent<Props> = ({ data, position }) => {
     window.addEventListener("keydown", preventKeyboardScrolling);
     const keyHandler = (event: KeyboardEvent) => {
       if (event.code === "ArrowUp") {
-        setPlayerPos((pos) => calculateNewPos(data, pos, 0, 1));
-      }
-      if (event.code === "ArrowDown") {
-        setPlayerPos((pos) => calculateNewPos(data, pos, 0, -1));
-      }
-      if (event.code === "ArrowLeft") {
         setPlayerPos((pos) => calculateNewPos(data, pos, -1, 0));
       }
-      if (event.code === "ArrowRight") {
+      if (event.code === "ArrowDown") {
         setPlayerPos((pos) => calculateNewPos(data, pos, 1, 0));
+      }
+      if (event.code === "ArrowLeft") {
+        setPlayerPos((pos) => calculateNewPos(data, pos, 0, -1));
+      }
+      if (event.code === "ArrowRight") {
+        setPlayerPos((pos) => calculateNewPos(data, pos, 0, 1));
       }
     };
 

@@ -40,8 +40,9 @@ const getStyle = (
   const size = sizeMapping[tileSize];
 
   return {
-    left: `${32 * position[0] + 32 * position[1] + size}px`,
-    top: `${16 * position[0] - 16 * position[1] - 40 * position[2]}px`,
+    transform: `translate(${32 * position[0] + 32 * position[1] + size}px, ${
+      16 * position[0] - 16 * position[1] - 40 * position[2]
+    }px)`,
     zIndex: `${100 + position[0] - position[1] + 10 * position[2]}`,
   };
 };

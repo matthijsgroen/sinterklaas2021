@@ -8,8 +8,8 @@ type Props = {
 
 const calculatePosition = (position: Position): React.CSSProperties => {
   return {
-    transform: `translate(${32 * position[0] + 32 * position[1] + 72}px, ${
-      16 * position[0] - 16 * position[1] - 40 * position[2] + 46
+    transform: `translate(${32 * position[0] + 32 * position[1] + 100}px, ${
+      16 * position[0] - 16 * position[1] - 40 * position[2] + 100
     }px)`,
     zIndex: `${100 + position[0] - position[1] + 10 * position[2]}`,
   };
