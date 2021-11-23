@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../state/store";
-import { Position } from "../../types";
+import { RootState } from "./store";
+import { Position } from "../types";
 
 export interface CharacterState {
   x: number;

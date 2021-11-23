@@ -1,9 +1,5 @@
 import React, { useEffect, useCallback, useRef } from "react";
-import {
-  move,
-  selectFollowers,
-  selectPosition,
-} from "../state/character/characterSlice";
+import { move, selectFollowers, selectPosition } from "../state/characterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { Direction, LevelData, Position, TerrainTile } from "../types";
 import Character from "./Character";
