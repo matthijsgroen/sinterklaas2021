@@ -1,5 +1,9 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { move, selectPosition } from "../state/character/characterSlice";
+import React, { useEffect, useCallback, useRef } from "react";
+import {
+  move,
+  selectFollowers,
+  selectPosition,
+} from "../state/character/characterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { Direction, LevelData, Position, TerrainTile } from "../types";
 import Character from "./Character";
@@ -136,20 +140,18 @@ const directionMap: DirectionMap = {
 
 const Level: React.FunctionComponent<Props> = ({ data }) => {
   const position = useAppSelector(selectPosition);
+  const followers = useAppSelector(selectFollowers);
   const dispatch = useAppDispatch();
-  const [playerPos, setPlayerPos] = useState(position);
+  const posRef = useRef(position);
+  // const [playerPos, setPlayerPos] = useState(position);
 
   const movePlayer = useCallback(
     (direction: MoveDirection) => {
       const deltas = directionMap[direction];
-
-      setPlayerPos((pos) => {
-        const newPos = calculateNewPos(data, pos, ...deltas);
-        dispatch(move(newPos));
-        return newPos;
-      });
+      posRef.current = calculateNewPos(data, posRef.current, ...deltas);
+      dispatch(move(posRef.current));
     },
-    [dispatch, data, setPlayerPos]
+    [dispatch, data]
   );
 
   useEffect(() => {
@@ -187,7 +189,10 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
       {data.decorations.map((tile, index) => (
         <Tile tile={tile} key={index} />
       ))}
-      <Character position={playerPos} />
+      {followers.map(({ index, pos }) => (
+        <Character position={pos} index={index} key={index} size="small" />
+      ))}
+      <Character position={position} />
     </div>
   );
 };
