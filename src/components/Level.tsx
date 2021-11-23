@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { move, selectPosition } from "../state/character/characterSlice";
+import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { Direction, LevelData, Position, TerrainTile } from "../types";
 import Character from "./Character";
 import styles from "./Level.module.css";
 import Tile from "./Tile";
 
 type Props = {
-  direction: Direction;
-  position: Position;
   data: LevelData;
 };
 
@@ -18,6 +18,13 @@ const preventEvents = [
   "ArrowRight",
   "Space",
 ];
+
+enum MoveDirection {
+  Up,
+  Down,
+  Left,
+  Right,
+}
 
 const getTopTerrain = (
   data: LevelData,
@@ -44,7 +51,9 @@ const getTopTerrain = (
   return result;
 };
 
-const isRamp = (img: string): boolean => ["blockDirtRamp"].includes(img);
+const isRamp = (img: string): boolean =>
+  ["blockDirtRamp", "blockSlope", "blockSnowSlope"].includes(img);
+
 const inDirection = (
   direction: Direction,
   xDelta: number,
@@ -114,43 +123,68 @@ const calculateNewPos = (
   return [x + xDelta, y + yDelta, z];
 };
 
-const Level: React.FunctionComponent<Props> = ({ data, position }) => {
+type DirectionMap = {
+  [Key in MoveDirection]: [number, number];
+};
+
+const directionMap: DirectionMap = {
+  [MoveDirection.Up]: [-1, 0],
+  [MoveDirection.Down]: [1, 0],
+  [MoveDirection.Left]: [0, -1],
+  [MoveDirection.Right]: [0, 1],
+};
+
+const Level: React.FunctionComponent<Props> = ({ data }) => {
+  const position = useAppSelector(selectPosition);
+  const dispatch = useAppDispatch();
   const [playerPos, setPlayerPos] = useState(position);
 
+  const movePlayer = useCallback(
+    (direction: MoveDirection) => {
+      const deltas = directionMap[direction];
+
+      setPlayerPos((pos) => {
+        const newPos = calculateNewPos(data, pos, ...deltas);
+        dispatch(move(newPos));
+        return newPos;
+      });
+    },
+    [dispatch, data, setPlayerPos]
+  );
+
   useEffect(() => {
-    const preventKeyboardScrolling = (event: KeyboardEvent) => {
+    const keyHandler = (event: KeyboardEvent) => {
       if (preventEvents.includes(event.code)) {
         event.preventDefault();
         event.stopImmediatePropagation();
       }
-    };
-    window.addEventListener("keydown", preventKeyboardScrolling);
-    const keyHandler = (event: KeyboardEvent) => {
       if (event.code === "ArrowUp") {
-        setPlayerPos((pos) => calculateNewPos(data, pos, -1, 0));
+        movePlayer(MoveDirection.Up);
       }
       if (event.code === "ArrowDown") {
-        setPlayerPos((pos) => calculateNewPos(data, pos, 1, 0));
+        movePlayer(MoveDirection.Down);
       }
       if (event.code === "ArrowLeft") {
-        setPlayerPos((pos) => calculateNewPos(data, pos, 0, -1));
+        movePlayer(MoveDirection.Left);
       }
       if (event.code === "ArrowRight") {
-        setPlayerPos((pos) => calculateNewPos(data, pos, 0, 1));
+        movePlayer(MoveDirection.Right);
       }
     };
 
-    window.addEventListener("keyup", keyHandler);
+    window.addEventListener("keydown", keyHandler);
 
     return () => {
-      window.removeEventListener("keyup", keyHandler);
-      window.removeEventListener("keydown", preventKeyboardScrolling);
+      window.removeEventListener("keydown", keyHandler);
     };
-  }, [data]);
+  }, [movePlayer]);
 
   return (
     <div className={styles.terrain}>
       {data.tiles.map((tile, index) => (
+        <Tile tile={tile} key={index} />
+      ))}
+      {data.decorations.map((tile, index) => (
         <Tile tile={tile} key={index} />
       ))}
       <Character position={playerPos} />

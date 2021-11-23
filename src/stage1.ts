@@ -43,6 +43,7 @@ const stage1: LevelData = {
     { coord: [5, -1, 1], img: "block", set: "terrain" },
     { coord: [6, -1, 1], img: "treePine", set: "terrain" },
   ],
+  decorations: [{ coord: [6, 1, 1], img: "plant", set: "terrain" }],
 };
 
 export default stage1;
