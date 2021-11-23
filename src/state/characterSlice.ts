@@ -21,7 +21,6 @@ const initialState: CharacterState = {
 export const characterSlice = createSlice({
   name: "character",
   initialState,
-  // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     move: (state, action: PayloadAction<Position>) => {
       if (

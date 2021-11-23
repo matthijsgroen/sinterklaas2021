@@ -1,5 +1,7 @@
-import React, { useEffect, useCallback, useRef } from "react";
+import React, { useEffect, useCallback, useRef, useMemo } from "react";
 import { move, selectFollowers, selectPosition } from "../state/characterSlice";
+import { startEncounter } from "../state/combatSlice";
+import { encounter } from "../state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { Direction, LevelData, Position, TerrainTile } from "../types";
 import Character from "./Character";
@@ -50,6 +52,9 @@ const getTopTerrain = (
   });
   return result;
 };
+
+const samePosition = (a: Position, b: Position) =>
+  a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 
 const isRamp = (img: string): boolean =>
   ["blockDirtRamp", "blockSlope", "blockSnowSlope"].includes(img);
@@ -139,15 +144,35 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
   const followers = useAppSelector(selectFollowers);
   const dispatch = useAppDispatch();
   const posRef = useRef(position);
-  // const [playerPos, setPlayerPos] = useState(position);
+  const canMoveRef = useRef(true);
+  const levelCharacters = useMemo(
+    () =>
+      data.characters.filter(
+        (f) =>
+          !followers.some((follower) => f.characterSprite === follower.index)
+      ),
+    [data, followers]
+  );
 
   const movePlayer = useCallback(
     (direction: MoveDirection) => {
       const deltas = directionMap[direction];
-      posRef.current = calculateNewPos(data, posRef.current, ...deltas);
-      dispatch(move(posRef.current));
+      const newPos = calculateNewPos(data, posRef.current, ...deltas);
+      // Check if we are meeting a character;
+      const meetCharacter = levelCharacters.find((c) =>
+        samePosition(c.position, newPos)
+      );
+
+      if (meetCharacter) {
+        canMoveRef.current = false;
+        dispatch(encounter(meetCharacter.characterSprite));
+        dispatch(startEncounter());
+      } else {
+        posRef.current = newPos;
+        dispatch(move(posRef.current));
+      }
     },
-    [dispatch, data]
+    [dispatch, data, levelCharacters]
   );
 
   useEffect(() => {
@@ -156,17 +181,19 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
         event.preventDefault();
         event.stopImmediatePropagation();
       }
-      if (event.code === "ArrowUp") {
-        movePlayer(MoveDirection.Up);
-      }
-      if (event.code === "ArrowDown") {
-        movePlayer(MoveDirection.Down);
-      }
-      if (event.code === "ArrowLeft") {
-        movePlayer(MoveDirection.Left);
-      }
-      if (event.code === "ArrowRight") {
-        movePlayer(MoveDirection.Right);
+      if (canMoveRef.current) {
+        if (event.code === "ArrowUp") {
+          movePlayer(MoveDirection.Up);
+        }
+        if (event.code === "ArrowDown") {
+          movePlayer(MoveDirection.Down);
+        }
+        if (event.code === "ArrowLeft") {
+          movePlayer(MoveDirection.Left);
+        }
+        if (event.code === "ArrowRight") {
+          movePlayer(MoveDirection.Right);
+        }
       }
     };
 
@@ -184,6 +211,13 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
       ))}
       {data.decorations.map((tile, index) => (
         <Tile tile={tile} key={index} />
+      ))}
+      {levelCharacters.map((character, index) => (
+        <Character
+          position={character.position}
+          index={character.characterSprite}
+          key={index}
+        />
       ))}
       {followers.map(({ index, pos }) => (
         <Character position={pos} index={index} key={index} size="small" />
