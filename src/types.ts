@@ -37,7 +37,7 @@ export type LevelData = {
   characters: LevelCharacter[];
 };
 
-type ActionTarget =
+export type ActionTarget =
   | "weakness"
   | "minHealth"
   | "maxHealth"
@@ -47,7 +47,7 @@ type ActionTarget =
   | "allFriendlies"
   | "self";
 
-type Action = {
+export type Action = {
   name: string;
   damage: number;
   cost: number;
@@ -57,6 +57,8 @@ type Action = {
 
 export type CreatureCardId = string;
 
+export type CreatureType = "shoe" | "bag" | "rod";
+
 export type CreatureCard = {
   id: string;
   name: string;
@@ -65,7 +67,7 @@ export type CreatureCard = {
 
   xpResult: number;
 
-  type: "shoe" | "bag" | "rod";
+  type: CreatureType;
   health: number;
   energy: number;
 

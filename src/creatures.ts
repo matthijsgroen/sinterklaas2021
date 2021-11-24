@@ -9,7 +9,7 @@ const amerigo: CreatureCard = {
   initiative: 4,
 
   health: 50,
-  energy: 10,
+  energy: 6,
 
   actions: [
     {
@@ -21,7 +21,7 @@ const amerigo: CreatureCard = {
     },
     {
       name: "Zware aanval",
-      damage: 10,
+      damage: 15,
       cost: 2,
       cooldown: 0,
       targets: ["enemy"],
@@ -29,8 +29,8 @@ const amerigo: CreatureCard = {
     {
       name: "Genees zelf",
       damage: -20,
-      cost: 3,
-      cooldown: 1,
+      cost: 2,
+      cooldown: 2,
       targets: ["self"],
     },
   ],
@@ -164,7 +164,7 @@ const robot: CreatureCard = {
   level: 1,
   xpResult: 0,
   type: "bag",
-  initiative: 3,
+  initiative: 6,
 
   health: 40,
   energy: 0,
@@ -180,5 +180,9 @@ const robot: CreatureCard = {
   ],
 };
 
-const creatures = [amerigo, ameerigogo, ozosnel, ozoefsnel, robot];
+const creatures = [amerigo, ameerigogo, ozosnel, ozoefsnel, robot].reduce(
+  (result, creature) => ({ ...result, [creature.id]: creature }),
+  {} as Record<string, CreatureCard>
+);
+
 export default creatures;

@@ -1,0 +1,25 @@
+.partyStats {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 1em;
+}
+
+.partyBox {
+  border: 1px solid black;
+  padding: 0.5em;
+}
+
+.partyBox p {
+  margin: 0.25em;
+}
+
+.memberProps {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: min(30%, 200px) 1fr;
+  gap: 1em;
+}
+
+.memberProps progress {
+  width: 100%;
+}
