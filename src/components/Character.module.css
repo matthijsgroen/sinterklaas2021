@@ -1,9 +1,7 @@
 .character {
   position: absolute;
-  width: 64px;
-  height: 64px;
-  top: 30vh;
-  left: 10vw;
+  width: 128px;
+  height: 128px;
   transition: transform 128ms ease-in-out;
   transform-origin: 50% 100%;
   background-image: url("./tristan.png");

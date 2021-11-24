@@ -4,7 +4,7 @@ import { startEncounter } from "../state/combatSlice";
 import { encounter } from "../state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { Direction, LevelData, Position, TerrainTile } from "../types";
-import Character from "./Character";
+import Character, { calculateXy } from "./Character";
 import styles from "./Level.module.css";
 import Tile from "./Tile";
 
@@ -75,6 +75,9 @@ const inOppositeDirection = (
   (direction === "east" && xDelta === 1) ||
   (direction === "south" && yDelta === -1);
 
+const X_MARGIN = 300;
+const Y_MARGIN = 200;
+
 const calculateNewPos = (
   levelData: LevelData,
   position: Position,
@@ -144,6 +147,7 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
   const followers = useAppSelector(selectFollowers);
   const dispatch = useAppDispatch();
   const posRef = useRef(position);
+  const terrainRef = useRef<HTMLDivElement>(null);
   const canMoveRef = useRef(true);
   const levelCharacters = useMemo(
     () =>
@@ -158,11 +162,47 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
     (direction: MoveDirection) => {
       const deltas = directionMap[direction];
       const newPos = calculateNewPos(data, posRef.current, ...deltas);
+
+      // update scroll position
+      const screenPos = calculateXy(newPos);
+      if (terrainRef.current) {
+        const { width, height } = terrainRef.current.getBoundingClientRect();
+
+        let needsScroll = false;
+        const scrollSettings: ScrollToOptions = {
+          left: terrainRef.current.scrollLeft,
+          top: terrainRef.current.scrollTop,
+          behavior: "smooth",
+        };
+
+        if (screenPos.x - terrainRef.current.scrollLeft > width - X_MARGIN) {
+          scrollSettings.left = screenPos.x + X_MARGIN - width;
+          needsScroll = true;
+        }
+        if (screenPos.x - terrainRef.current.scrollLeft < X_MARGIN) {
+          scrollSettings.left = screenPos.x - X_MARGIN;
+          needsScroll = true;
+        }
+
+        if (screenPos.y - terrainRef.current.scrollTop > height - Y_MARGIN) {
+          scrollSettings.top = screenPos.y + Y_MARGIN - height;
+          needsScroll = true;
+        }
+
+        if (screenPos.y - terrainRef.current.scrollTop < Y_MARGIN) {
+          scrollSettings.top = screenPos.y - Y_MARGIN;
+          needsScroll = true;
+        }
+
+        if (needsScroll) {
+          terrainRef.current.scroll(scrollSettings);
+        }
+      }
+
       // Check if we are meeting a character;
       const meetCharacter = levelCharacters.find((c) =>
         samePosition(c.position, newPos)
       );
-
       if (meetCharacter) {
         canMoveRef.current = false;
         dispatch(encounter(meetCharacter.characterSprite));
@@ -205,7 +245,7 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
   }, [movePlayer]);
 
   return (
-    <div className={styles.terrain}>
+    <div className={styles.terrain} ref={terrainRef}>
       {data.tiles.map((tile, index) => (
         <Tile tile={tile} key={index} />
       ))}

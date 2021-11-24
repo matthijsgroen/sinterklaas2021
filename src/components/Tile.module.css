@@ -1,7 +1,5 @@
 .tile {
   position: absolute;
-  width: 256px;
-  height: 256px;
-  top: 30vh;
-  left: 10vw;
+  width: 512px;
+  height: 512px;
 }

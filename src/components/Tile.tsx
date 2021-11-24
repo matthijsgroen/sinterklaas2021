@@ -29,7 +29,7 @@ const getTile = (tile: TerrainTile): string => {
 
 const sizeMapping: Record<TileSize, number> = {
   normal: 0,
-  large: 32,
+  large: 60,
   small: -16,
 };
 
@@ -40,8 +40,8 @@ const getStyle = (
   const size = sizeMapping[tileSize];
 
   return {
-    transform: `translate(${32 * position[0] + 32 * position[1] + size}px, ${
-      16 * position[0] - 16 * position[1] - 40 * position[2]
+    transform: `translate(${64 * position[0] + 64 * position[1] + size}px, ${
+      32 * position[0] - 32 * position[1] - 78 * position[2]
     }px)`,
     zIndex: `${100 + position[0] - position[1] + 10 * position[2]}`,
   };

@@ -8,14 +8,20 @@ type Props = {
   size?: "normal" | "small";
 };
 
+export const calculateXy = (position: Position): { x: number; y: number } => ({
+  x: 64 * position[0] + 64 * position[1] + 200,
+  y: 32 * position[0] - 32 * position[1] - 78 * position[2] + 200,
+});
+
 const calculatePosition = (
   position: Position,
   size: "normal" | "small"
 ): React.CSSProperties => {
+  const { x, y } = calculateXy(position);
   return {
-    transform: `translate(${32 * position[0] + 32 * position[1] + 100}px, ${
-      16 * position[0] - 16 * position[1] - 40 * position[2] + 100
-    }px) ${size === "small" ? "scale(0.75)" : ""}`,
+    transform: `translate(${x}px, ${y}px) ${
+      size === "small" ? "scale(0.75)" : ""
+    }`,
     zIndex: `${100 + position[0] - position[1] + 10 * position[2]}`,
   };
 };
@@ -29,7 +35,7 @@ const Character: React.FunctionComponent<Props> = ({
     className={styles.character}
     style={{
       ...calculatePosition(position, size),
-      backgroundPosition: `-${index * 64}px 0px`,
+      backgroundPosition: `-${index * 128}px 0px`,
     }}
   />
 );
