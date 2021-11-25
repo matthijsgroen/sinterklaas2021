@@ -21,8 +21,9 @@ const CombatLogSentence: React.FunctionComponent<Props> = ({ sentence }) => (
   <p>
     <strong>{creatureName(sentence.source.card)}</strong>{" "}
     {actionMap[sentence.action]}{" "}
-    <strong>{creatureName(sentence.target.card)}</strong> voor {sentence.points}{" "}
-    {sentence.unit}
+    <strong>{creatureName(sentence.target.card)}</strong> met{" "}
+    <span style={{ textTransform: "lowercase" }}>{sentence.with}</span> voor{" "}
+    {sentence.points} {sentence.unit}
   </p>
 );
 

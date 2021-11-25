@@ -13,10 +13,13 @@ type Creature = {
   inTurn: number;
 };
 
+export type ActionType = "heals" | "hurts" | "stuns";
+
 export type ActionSentence = {
   source: Creature;
-  action: "heals" | "hurts" | "stuns";
+  action: ActionType;
   target: Creature;
+  with: string;
   points: number;
   unit: "points" | "turns";
 };
@@ -161,6 +164,7 @@ export const combatSlice = createSlice({
                 source: currentcreature,
                 action: "heals",
                 target: creature,
+                with: actionDetails.name,
                 points: healing,
                 unit: "points",
               });
@@ -177,6 +181,7 @@ export const combatSlice = createSlice({
               state.lastActionLog.push({
                 source: currentcreature,
                 action: "hurts",
+                with: actionDetails.name,
                 target: creature,
                 points: damage,
                 unit: "points",

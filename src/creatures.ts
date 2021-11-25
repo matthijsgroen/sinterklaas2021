@@ -13,21 +13,21 @@ const amerigo: CreatureCard = {
 
   actions: [
     {
-      name: "Lichte aanval",
+      name: "Kopstoot",
       damage: 5,
       cost: 0,
       cooldown: 0,
       targets: ["enemy"],
     },
     {
-      name: "Zware aanval",
+      name: "Hoeftrap",
       damage: 15,
       cost: 2,
       cooldown: 0,
       targets: ["enemy"],
     },
     {
-      name: "Genees zelf",
+      name: "Eet wortel",
       damage: -20,
       cost: 2,
       cooldown: 2,
@@ -171,8 +171,8 @@ const robot: CreatureCard = {
 
   actions: [
     {
-      name: "Lichte aanval",
-      damage: 8,
+      name: "Arm klap",
+      damage: 12,
       cost: 0,
       cooldown: 0,
       targets: ["maxHealth"],

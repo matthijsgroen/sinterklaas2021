@@ -38,7 +38,7 @@ const MemberStats: React.FunctionComponent<MemberProps> = ({
       </p>
       <p className={styles.memberProps}>
         <span>
-          HP: {member.health} / {member.card.health}
+          HP: {Math.max(member.health, 0)} / {member.card.health}
         </span>
         <progress value={member.health / member.card.health} />
       </p>
