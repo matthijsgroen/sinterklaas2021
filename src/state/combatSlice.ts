@@ -151,7 +151,6 @@ export const combatSlice = createSlice({
         .forEach((creature) => {
           if (!state.currentTurn) return;
           const card = creatures[creature.card];
-          console.log("applying", actionDetails.name, "on", creature.id);
 
           if (actionDetails.damage < 0) {
             const healing = Math.min(

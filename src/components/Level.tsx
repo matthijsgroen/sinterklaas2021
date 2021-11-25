@@ -163,7 +163,6 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
     [data, followers]
   );
   useEffect(() => {
-    console.log("synching position");
     posRef.current = position;
   }, [data, position]);
 
@@ -171,7 +170,6 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
     (direction: MoveDirection) => {
       const deltas = directionMap[direction];
       const newPos = calculateNewPos(data, posRef.current, ...deltas);
-      console.log(posRef.current, newPos, deltas);
 
       // update scroll position
       const screenPos = calculateXy(newPos);
@@ -212,7 +210,6 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
       // Check if we are meeting a character;
       const onExit = data.exits.find((c) => samePosition(c.coord, newPos));
       if (onExit) {
-        console.log("Switching level");
         dispatch(
           enterLevel({ level: onExit.level, position: onExit.startCoord })
         );

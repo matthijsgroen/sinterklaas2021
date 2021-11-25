@@ -100,7 +100,6 @@ function App() {
       // if there are not fights, go directly to the rewards and win dialog.
       if (character.fights.length > 0) {
         const activeFight = character.fights[encounter.fightsFinished];
-        console.log("start fight!");
         dispatch(startFight({ partyA: cardIds, partyB: activeFight.enemies }));
       }
     }
@@ -124,7 +123,6 @@ function App() {
           name={dialogData.characterName}
           color={dialogData.characterColor}
           onClick={() => {
-            console.log("Dialog state");
             setDialogState((state) => ({
               ...state,
               sentence: state.sentence + 1,
