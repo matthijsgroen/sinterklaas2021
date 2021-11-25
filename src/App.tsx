@@ -3,7 +3,8 @@ import "./App.css";
 import CombatArena from "./components/CombatArena";
 import Dialog from "./components/Dialog";
 import Level from "./components/Level";
-import data from "./stage1";
+import zones from "./data";
+import { selectCardIds, selectZone } from "./state/characterSlice";
 import { selectInCombat, startFight } from "./state/combatSlice";
 import { EncounterState, selectActiveEncounter } from "./state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "./state/hooks";
@@ -81,29 +82,43 @@ const selectEncounterCharacter = (
 function App() {
   const dispatch = useAppDispatch();
   const encounter = useAppSelector(selectActiveEncounter);
+  const zoneId = useAppSelector(selectZone);
+
+  const zone = zones[zoneId];
+
+  const cardIds = useAppSelector(selectCardIds);
   const inCombat = useAppSelector(selectInCombat);
   const [dialogState, setDialogState] = useState<DialogState>({
     type: "initial",
     sentence: 0,
   });
-  const character = selectEncounterCharacter(data, encounter);
+  const character = selectEncounterCharacter(zone, encounter);
 
   useEffect(() => {
     if (!inCombat && character && initialDialogEnded(character, dialogState)) {
-      const activeFight = character.fights[encounter.fightsFinished];
-      console.log("start fight!");
-      dispatch(
-        startFight({ partyA: ["amerigo"], partyB: activeFight.enemies })
-      );
+      // TODO: There will not always be fighting involved!
+      // if there are not fights, go directly to the rewards and win dialog.
+      if (character.fights.length > 0) {
+        const activeFight = character.fights[encounter.fightsFinished];
+        console.log("start fight!");
+        dispatch(startFight({ partyA: cardIds, partyB: activeFight.enemies }));
+      }
     }
-  }, [inCombat, character, dialogState, dispatch, encounter.fightsFinished]);
+  }, [
+    inCombat,
+    character,
+    dialogState,
+    dispatch,
+    encounter.fightsFinished,
+    cardIds,
+  ]);
 
   const dialogData = selectDialogData(character, dialogState);
 
   return (
     <main>
       {inCombat && <CombatArena />}
-      <Level data={data} />
+      <Level data={zone} />
       {dialogData && (
         <Dialog
           name={dialogData.characterName}

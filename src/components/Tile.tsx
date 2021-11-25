@@ -6,24 +6,33 @@ type TileMapping = {
   [Key in TerrainTile["set"]]: string;
 };
 
-type DirectionMapping = {
-  [Key in Direction]: string;
-};
-
 const tileMapping: TileMapping = {
   terrain: "kenney_platformerkit2",
+  furniture: "furniturekit_updated",
 };
 
-const directionMapping: DirectionMapping = {
+const directionMapping: Record<Direction, string> = {
   north: "NE",
   east: "SE",
   south: "SW",
   west: "NW",
 };
 
+const remapDirection: Record<string, Record<Direction, Direction>> = {
+  stairs: {
+    east: "west",
+    north: "west",
+    west: "south",
+    south: "east",
+  },
+};
+
 const getTile = (tile: TerrainTile): string => {
+  const direction = remapDirection[tile.img]
+    ? remapDirection[tile.img][tile.direction ?? "north"]
+    : tile.direction ?? "north";
   return `/images/${tileMapping[tile.set]}/Isometric/${tile.img}_${
-    directionMapping[tile.direction ?? "north"]
+    directionMapping[direction]
   }.png`;
 };
 
@@ -33,17 +42,116 @@ const sizeMapping: Record<TileSize, number> = {
   small: -16,
 };
 
+type TileData = {
+  width: number;
+  height: number;
+  offsetX: number;
+  offsetY: number;
+  offsetZ?: number;
+};
+
+type TileDirectionData = Record<string, TileData>;
+
+const furnitureLookup: Record<string, TileDirectionData> = {
+  floorFull: {
+    north: {
+      width: 128,
+      height: 67,
+      offsetX: 193,
+      offsetY: 204,
+    },
+  },
+  wall: {
+    north: {
+      width: 68,
+      height: 94,
+      offsetX: 254,
+      offsetY: 254,
+    },
+    west: {
+      width: 68,
+      height: 94,
+      offsetX: 194,
+      offsetY: 254,
+    },
+  },
+  bedSingle: {
+    east: {
+      width: 135,
+      height: 82,
+      offsetX: 206,
+      offsetY: 270,
+    },
+  },
+  desk: {
+    east: {
+      width: 112,
+      height: 85,
+      offsetX: 196,
+      offsetY: 250,
+    },
+  },
+  wallDoorway: {
+    west: {
+      width: 128,
+      height: 158,
+      offsetX: 154,
+      offsetY: 124,
+      offsetZ: 11,
+    },
+  },
+  stairs: {
+    east: {
+      width: 216,
+      height: 178,
+      offsetX: 192,
+      offsetY: 204,
+    },
+  },
+};
+
+const getDimensions = (tile: TerrainTile): TileData => {
+  if (tile.set === "terrain") {
+    const size = sizeMapping[tile.size ?? "normal"];
+
+    return {
+      width: 512,
+      height: 512,
+      offsetX: size,
+      offsetY: 0,
+    };
+  } else {
+    // furniture
+    const defaultSettings = {
+      width: 68,
+      height: 94,
+      offsetX: 194,
+      offsetY: 254,
+    };
+    const tileConfig = furnitureLookup[tile.img];
+    return tileConfig
+      ? tileConfig[tile.direction ?? "north"] ?? defaultSettings
+      : defaultSettings;
+  }
+};
+
 const getStyle = (
   position: Position,
-  tileSize: TileSize = "normal"
+  tileData: TileData
 ): React.CSSProperties => {
-  const size = sizeMapping[tileSize];
-
   return {
-    transform: `translate(${64 * position[0] + 64 * position[1] + size}px, ${
-      32 * position[0] - 32 * position[1] - 78 * position[2]
+    transform: `translate(${
+      64 * position[0] + 64 * position[1] + tileData.offsetX
+    }px, ${
+      32 * position[0] - 32 * position[1] - 78 * position[2] + tileData.offsetY
     }px)`,
-    zIndex: `${100 + position[0] - position[1] + 10 * position[2]}`,
+    zIndex: `${
+      100 +
+      position[0] -
+      position[1] +
+      10 * position[2] +
+      (tileData.offsetZ ?? 0)
+    }`,
   };
 };
 
@@ -51,13 +159,18 @@ type Props = {
   tile: TerrainTile;
 };
 
-const Tile: React.FunctionComponent<Props> = ({ tile }) => (
-  <img
-    src={getTile(tile)}
-    alt={tile.img}
-    className={styles.tile}
-    style={getStyle(tile.coord, tile.size)}
-  />
-);
+const Tile: React.FunctionComponent<Props> = ({ tile }) => {
+  const dimensions = getDimensions(tile);
+  return (
+    <img
+      src={getTile(tile)}
+      width={dimensions.width}
+      height={dimensions.height}
+      alt={tile.img}
+      className={styles.tile}
+      style={getStyle(tile.coord, dimensions)}
+    />
+  );
+};
 
 export default Tile;

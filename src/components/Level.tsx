@@ -1,5 +1,10 @@
 import React, { useEffect, useCallback, useRef, useMemo } from "react";
-import { move, selectFollowers, selectPosition } from "../state/characterSlice";
+import {
+  enterLevel,
+  move,
+  selectFollowers,
+  selectPosition,
+} from "../state/characterSlice";
 import { startEncounter } from "../state/combatSlice";
 import { encounter } from "../state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
@@ -57,7 +62,7 @@ const samePosition = (a: Position, b: Position) =>
   a[0] === b[0] && a[1] === b[1] && a[2] === b[2];
 
 const isRamp = (img: string): boolean =>
-  ["blockDirtRamp", "blockSlope", "blockSnowSlope"].includes(img);
+  ["blockDirtRamp", "blockSlope", "blockSnowSlope", "stairs"].includes(img);
 
 const inDirection = (
   direction: Direction,
@@ -157,11 +162,16 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
       ),
     [data, followers]
   );
+  useEffect(() => {
+    console.log("synching position");
+    posRef.current = position;
+  }, [data, position]);
 
   const movePlayer = useCallback(
     (direction: MoveDirection) => {
       const deltas = directionMap[direction];
       const newPos = calculateNewPos(data, posRef.current, ...deltas);
+      console.log(posRef.current, newPos, deltas);
 
       // update scroll position
       const screenPos = calculateXy(newPos);
@@ -200,6 +210,15 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
       }
 
       // Check if we are meeting a character;
+      const onExit = data.exits.find((c) => samePosition(c.coord, newPos));
+      if (onExit) {
+        console.log("Switching level");
+        dispatch(
+          enterLevel({ level: onExit.level, position: onExit.startCoord })
+        );
+        return;
+      }
+
       const meetCharacter = levelCharacters.find((c) =>
         samePosition(c.position, newPos)
       );

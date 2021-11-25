@@ -1,21 +1,27 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { Position } from "../types";
+import { CreatureCardId, Position } from "../types";
 
 export interface CharacterState {
   x: number;
   y: number;
   z: number;
+  level: string;
   positionHistory: Position[];
   followers: number[];
+  cards: CreatureCardId[];
+  encountersDone: number[];
 }
 
 const initialState: CharacterState = {
-  x: 2,
-  y: 2,
+  level: "Slaapkamer",
+  x: 3,
+  y: 1,
   z: 2,
   positionHistory: [],
   followers: [],
+  cards: [],
+  encountersDone: [],
 };
 
 export const characterSlice = createSlice({
@@ -36,16 +42,39 @@ export const characterSlice = createSlice({
       state.y = action.payload[1];
       state.z = action.payload[2];
     },
+    getCard: (state, action: PayloadAction<string>) => {
+      state.cards.push(action.payload);
+    },
+    enterLevel: (
+      state,
+      action: PayloadAction<{ level: string; position: Position }>
+    ) => {
+      state.level = action.payload.level;
+      const [x, y, z] = action.payload.position;
+      state.x = x;
+      state.y = y;
+      state.z = z;
+      state.positionHistory = [];
+    },
+    completeEncounter: (state, action: PayloadAction<number>) => {
+      state.encountersDone.push(action.payload);
+    },
   },
 });
 
-export const { move } = characterSlice.actions;
+export const { move, getCard, completeEncounter, enterLevel } =
+  characterSlice.actions;
 
 export const selectPosition = (state: RootState): Position => [
   state.character.x,
   state.character.y,
   state.character.z,
 ];
+
+export const selectZone = (state: RootState): string => state.character.level;
+
+export const selectCardIds = (state: RootState): CreatureCardId[] =>
+  state.character.cards;
 
 export const selectFollowers = (
   state: RootState

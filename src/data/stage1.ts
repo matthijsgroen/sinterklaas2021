@@ -1,8 +1,7 @@
-import { LevelData } from "./types";
+import { LevelData } from "../types";
 
 const stage1: LevelData = {
   name: "Stage1",
-  startPosition: [5, 2, 1],
   tiles: [
     { coord: [1, 1, 1], img: "block", set: "terrain" },
     { coord: [1, 1, 0], img: "blockDirt", set: "terrain" },
@@ -64,6 +63,9 @@ const stage1: LevelData = {
         },
       ],
       fights: [{ enemies: ["robot"] }],
+      rewards: {
+        follower: 1,
+      },
       winDialog: [
         {
           characterColor: "orange",
@@ -90,6 +92,7 @@ const stage1: LevelData = {
       ],
     },
   ],
+  exits: [],
 };
 
 export default stage1;

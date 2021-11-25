@@ -6,7 +6,7 @@ export type TerrainTile = {
   img: string;
   direction?: Direction;
   size?: TileSize;
-  set: "terrain";
+  set: "terrain" | "furniture";
 };
 
 export type Dialog = {
@@ -27,14 +27,24 @@ export type LevelCharacter = {
   characterSprite: number;
   position: Position;
   fights: Fight[];
+  rewards: {
+    follower?: number;
+    card?: string;
+  };
+};
+
+export type LevelExit = {
+  coord: Position;
+  level: string;
+  startCoord: Position;
 };
 
 export type LevelData = {
   name: string;
-  startPosition: Position;
   tiles: TerrainTile[];
   decorations: TerrainTile[];
   characters: LevelCharacter[];
+  exits: LevelExit[];
 };
 
 export type ActionTarget =
