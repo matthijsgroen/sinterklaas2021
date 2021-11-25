@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import creatures from "../creatures";
 import {
   actionTurn,
   CombatCreature,
@@ -9,6 +8,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { ActionTarget, CreatureCard, CreatureType } from "../types";
 import styles from "./CombatArena.module.css";
+import CombatLogSentence from "./CombatLogSentence";
 
 type MemberProps = {
   member: CombatCreature;
@@ -62,8 +62,6 @@ const actionRequiresTarget =
 
 const actionRequiresEnemyTarget = actionRequiresTarget("enemy");
 const actionRequiresFriendlyTarget = actionRequiresTarget("friendly");
-
-const creatureName = (cardId: string) => creatures[cardId].name;
 
 const CombatArena: React.FunctionComponent = () => {
   const combatStatus = useAppSelector(selectCombatStatus);
@@ -162,12 +160,7 @@ const CombatArena: React.FunctionComponent = () => {
       <h1>Gevecht</h1>
 
       {combatLog.map((sentence, index) => (
-        <p key={index}>
-          <strong>{creatureName(sentence.source.card)}</strong>{" "}
-          {sentence.action}{" "}
-          <strong>{creatureName(sentence.target.card)}</strong> for{" "}
-          {sentence.points} {sentence.unit}
-        </p>
+        <CombatLogSentence sentence={sentence} key={index} />
       ))}
       {combatStatus.turn && (
         <p>
