@@ -20,7 +20,7 @@ const initialState: CharacterState = {
   z: 2,
   positionHistory: [],
   followers: [],
-  cards: [],
+  cards: ["amerigo"],
   encountersDone: [],
 };
 
@@ -45,6 +45,9 @@ export const characterSlice = createSlice({
     getCard: (state, action: PayloadAction<string>) => {
       state.cards.push(action.payload);
     },
+    removeCard: (state, action: PayloadAction<string>) => {
+      state.cards = state.cards.filter((c) => c !== action.payload);
+    },
     enterLevel: (
       state,
       action: PayloadAction<{ level: string; position: Position }>
@@ -62,7 +65,7 @@ export const characterSlice = createSlice({
   },
 });
 
-export const { move, getCard, completeEncounter, enterLevel } =
+export const { move, getCard, removeCard, completeEncounter, enterLevel } =
   characterSlice.actions;
 
 export const selectPosition = (state: RootState): Position => [

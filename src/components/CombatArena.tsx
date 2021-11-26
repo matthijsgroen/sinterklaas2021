@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import className from "../className";
 import {
   actionTurn,
   CombatCreature,
@@ -70,6 +71,7 @@ const CombatArena: React.FunctionComponent = () => {
 
   const [actionSelection, setActionSelection] = useState<string | null>(null);
   const [targetSelection, setTargetSelection] = useState<string | null>(null);
+  const [actionFocus, setActionFocus] = useState(0);
 
   useEffect(() => {
     setActionSelection(null);
@@ -155,6 +157,90 @@ const CombatArena: React.FunctionComponent = () => {
     }
   }, [actionSelection, targetSelection, dispatch, combatStatus.turn]);
 
+  useEffect(() => {
+    if (
+      combatStatus.turn &&
+      combatStatus.turn.creature.party === "left" &&
+      actionSelection === null
+    ) {
+      const actionIndices = combatStatus.turn.actions.reduce(
+        (result, action, index) =>
+          action.disabled ? result : result.concat(index),
+
+        [] as number[]
+      );
+
+      const keyHandling = (ev: KeyboardEvent) => {
+        if (ev.code === "ArrowDown") {
+          setActionFocus(
+            (state) => actionIndices[(state + 1) % actionIndices.length]
+          );
+        }
+        if (ev.code === "ArrowUp") {
+          setActionFocus(
+            (state) =>
+              actionIndices[
+                (actionIndices.length + state - 1) % actionIndices.length
+              ]
+          );
+        }
+        if ((ev.code === "Space" || ev.code === "Enter") && combatStatus.turn) {
+          setActionSelection(combatStatus.turn.actions[actionFocus].name);
+          setActionFocus(0);
+        }
+      };
+      window.addEventListener("keydown", keyHandling);
+      return () => {
+        window.removeEventListener("keydown", keyHandling);
+      };
+    }
+
+    if (
+      combatStatus.turn &&
+      combatStatus.turn.creature.party === "left" &&
+      actionSelection &&
+      targetSelection === null
+    ) {
+      const party = actionRequiresEnemyTarget(
+        combatStatus.turn.creature.card,
+        actionSelection
+      )
+        ? combatStatus.partyB
+        : actionRequiresFriendlyTarget(
+            combatStatus.turn.creature.card,
+            actionSelection
+          )
+        ? combatStatus.partyA
+        : [];
+
+      const keyHandling = (ev: KeyboardEvent) => {
+        if (ev.code === "ArrowDown") {
+          setActionFocus((state) => (state + 1) % party.length);
+        }
+        if (ev.code === "ArrowUp") {
+          setActionFocus((state) => (party.length + state - 1) % party.length);
+        }
+        if ((ev.code === "Space" || ev.code === "Enter") && combatStatus.turn) {
+          setTargetSelection(party[actionFocus].id);
+          setActionFocus(0);
+        }
+      };
+      window.addEventListener("keydown", keyHandling);
+      return () => {
+        window.removeEventListener("keydown", keyHandling);
+      };
+    }
+  }, [
+    actionSelection,
+    combatStatus.turn,
+    combatStatus.partyB,
+    combatStatus.partyA,
+    setActionFocus,
+    actionFocus,
+    setTargetSelection,
+    targetSelection,
+  ]);
+
   return (
     <div>
       <h1>Gevecht</h1>
@@ -206,14 +292,17 @@ const CombatArena: React.FunctionComponent = () => {
           <div>
             <h2>Acties</h2>
             <ul>
-              {combatStatus.turn.actions.map((action) => (
-                <li key={action.name}>
-                  <button
-                    disabled={action.disabled}
-                    onClick={() => setActionSelection(action.name)}
-                  >
-                    {action.name}
-                  </button>
+              {combatStatus.turn.actions.map((action, index) => (
+                <li
+                  key={action.name}
+                  className={className({
+                    [styles.focusAction]: index === actionFocus,
+                    [styles.disabledAction]: action.disabled,
+                  })}
+                >
+                  <p>
+                    <strong>{action.name}</strong>
+                  </p>
                   {action.inCooldown > 0 && (
                     <span>(in cooldown: {action.inCooldown} turns)</span>
                   )}
@@ -239,11 +328,16 @@ const CombatArena: React.FunctionComponent = () => {
           <div>
             <h2>Actie "{actionSelection}" doelwit:</h2>
             <ul>
-              {combatStatus.partyB.map((target) => (
-                <li key={target.id}>
-                  <button onClick={() => setTargetSelection(target.id)}>
-                    {target.card.name}
-                  </button>
+              {combatStatus.partyB.map((target, index) => (
+                <li
+                  key={target.id}
+                  className={className({
+                    [styles.focusAction]: index === actionFocus,
+                  })}
+                >
+                  <p>
+                    <strong>{target.card.name}</strong>
+                  </p>
                   <p>
                     HP: {target.health} / {target.card.health}
                   </p>
@@ -263,11 +357,16 @@ const CombatArena: React.FunctionComponent = () => {
           <div>
             <h2>Actie "{actionSelection}" doelwit:</h2>
             <ul>
-              {combatStatus.partyA.map((target) => (
-                <li key={target.id}>
-                  <button onClick={() => setTargetSelection(target.id)}>
-                    {target.card.name}
-                  </button>
+              {combatStatus.partyA.map((target, index) => (
+                <li
+                  key={target.id}
+                  className={className({
+                    [styles.focusAction]: index === actionFocus,
+                  })}
+                >
+                  <p>
+                    <strong>{target.card.name}</strong>
+                  </p>
                   <p>
                     HP: {target.health} / {target.card.health}
                   </p>

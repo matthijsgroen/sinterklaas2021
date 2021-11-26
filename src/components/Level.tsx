@@ -235,7 +235,6 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
     const keyHandler = (event: KeyboardEvent) => {
       if (preventEvents.includes(event.code)) {
         event.preventDefault();
-        event.stopImmediatePropagation();
       }
       if (canMoveRef.current) {
         if (event.code === "ArrowUp") {

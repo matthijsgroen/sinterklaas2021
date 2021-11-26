@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 type Props = {
   color: string;
@@ -11,11 +11,25 @@ const Dialog: React.FunctionComponent<Props> = ({
   name,
   onClick,
   children,
-}) => (
-  <div onClick={onClick}>
-    <p style={{ color }}>{name}</p>
-    <p>{children}</p>
-  </div>
-);
+}) => {
+  useEffect(() => {
+    const keyListener = (event: KeyboardEvent) => {
+      if (event.code === "Enter" || event.code === "Space") {
+        onClick();
+      }
+    };
+    window.addEventListener("keydown", keyListener);
+
+    return () => {
+      window.removeEventListener("keydown", keyListener);
+    };
+  }, [onClick]);
+  return (
+    <div onClick={onClick}>
+      <p style={{ color }}>{name}</p>
+      <p>{children}</p>
+    </div>
+  );
+};
 
 export default Dialog;
