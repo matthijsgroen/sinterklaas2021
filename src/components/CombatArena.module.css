@@ -1,11 +1,36 @@
+.fightScreen {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  z-index: 800;
+  background: limegreen;
+  color: white;
+}
+
+.log {
+  position: absolute;
+  z-index: 802;
+  text-align: center;
+  width: 100%;
+  font-size: 1.5em;
+  text-shadow: black 1px 1px 2px;
+}
+
 .partyStats {
+  position: absolute;
+  bottom: 0;
+  width: calc(100vw - 2em);
   display: grid;
   grid-auto-flow: column;
   gap: 1em;
+  background: black;
+  padding: 1em;
 }
 
 .partyBox {
-  border: 1px solid black;
+  border: 2px solid white;
   padding: 0.5em;
 }
 
@@ -24,10 +49,39 @@
   width: 100%;
 }
 
-.focusAction {
-  border: 1px solid black;
+.actionsMenu li.focusAction {
+  border: 2px solid white;
 }
 
-.disabledAction {
+.actionsMenu li.disabledAction {
   color: darkgray;
+}
+
+.actionsMenu {
+  position: absolute;
+  z-index: 50000;
+  left: 5vw;
+  bottom: 30vw;
+  background: black;
+  border: 2px solid white;
+  padding: 1em;
+}
+
+.actionsMenu h2 {
+  font-size: 1rem;
+}
+
+.actionsMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.actionsMenu li {
+  padding: 0.5em;
+  border: 2px solid black;
+}
+
+.actionsMenu li p {
+  margin: 0em;
 }

@@ -290,18 +290,18 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   ]);
 
   return (
-    <div>
-      <h1>Gevecht</h1>
-
-      {combatLog.map((sentence, index) => (
-        <CombatLogSentence sentence={sentence} key={index} />
-      ))}
-      {combatStatus.turn && (
-        <p>
-          <strong>{combatStatus.turn.creature.card.name}</strong> is aan de
-          beurt!
-        </p>
-      )}
+    <div className={styles.fightScreen}>
+      <div className={styles.log}>
+        {combatLog.map((sentence, index) => (
+          <CombatLogSentence sentence={sentence} key={index} />
+        ))}
+        {combatStatus.turn && (
+          <p>
+            <strong>{combatStatus.turn.creature.card.name}</strong> is aan de
+            beurt!
+          </p>
+        )}
+      </div>
 
       <div className={styles.partyStats}>
         <div className={styles.partyBox}>
@@ -337,7 +337,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       {combatStatus.turn &&
         combatStatus.turn.creature.party === "left" &&
         actionSelection === null && (
-          <div>
+          <div className={styles.actionsMenu}>
             <h2>Acties</h2>
             <ul>
               {combatStatus.turn.actions.map((action, index) => (
@@ -352,13 +352,17 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                     <strong>{action.name}</strong>
                   </p>
                   {action.inCooldown > 0 && (
-                    <span>(in cooldown: {action.inCooldown} turns)</span>
+                    <span>(Afkoelen: {action.inCooldown} beurten)</span>
                   )}
                   <p>
-                    {action.damage > 0 ? `Damage: ${action.damage} ` : ""}
-                    {action.damage < 0 ? `Healing: ${action.damage * -1} ` : ""}
-                    {action.cooldown > 0 ? `Cooldown: ${action.cooldown} ` : ""}
-                    {action.cost > 0 ? `Cost: ${action.cost} E` : ""}
+                    {action.damage > 0 ? `Schade: ${action.damage}. ` : ""}
+                    {action.damage < 0
+                      ? `Genezing: ${action.damage * -1} HP. `
+                      : ""}
+                    {action.cooldown > 0
+                      ? `Afkoeling: ${action.cooldown} beurten. `
+                      : ""}
+                    {action.cost > 0 ? `Kosten: ${action.cost} energie.` : ""}
                   </p>
                 </li>
               ))}
@@ -373,7 +377,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           actionSelection
         ) &&
         targetSelection === null && (
-          <div>
+          <div className={styles.actionsMenu}>
             <h2>Actie "{actionSelection}" doelwit:</h2>
             <ul>
               {combatStatus.partyB.map((target, index) => (
@@ -402,7 +406,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           actionSelection
         ) &&
         targetSelection === null && (
-          <div>
+          <div className={styles.actionsMenu}>
             <h2>Actie "{actionSelection}" doelwit:</h2>
             <ul>
               {combatStatus.partyA.map((target, index) => (

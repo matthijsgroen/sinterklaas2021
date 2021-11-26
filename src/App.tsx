@@ -199,8 +199,8 @@ function App() {
 
   return (
     <main>
-      {inCombat && character && <CombatArena character={character} />}
       <Level data={zone} />
+      {inCombat && character && <CombatArena character={character} />}
       {dialogData && (
         <Dialog
           name={dialogData.characterName}

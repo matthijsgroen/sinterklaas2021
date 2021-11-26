@@ -1,0 +1,18 @@
+.dialogBox {
+  position: absolute;
+  z-index: 100000;
+  bottom: 5vh;
+  left: 20vh;
+  right: 20vh;
+  background: #fff3;
+  color: white;
+  padding: 1em;
+  border: 2px solid white;
+  font-size: 1.5em;
+}
+.dialogBox p {
+  margin: 0.5em 0;
+}
+.dialogBox h3 {
+  margin: 0em 0;
+}

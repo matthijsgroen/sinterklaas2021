@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import styles from "./Dialog.module.css";
 
 type Props = {
   color: string;
@@ -25,8 +26,8 @@ const Dialog: React.FunctionComponent<Props> = ({
     };
   }, [onClick]);
   return (
-    <div onClick={onClick}>
-      <p style={{ color }}>{name}</p>
+    <div className={styles.dialogBox} onClick={onClick}>
+      <h3 style={{ color }}>{name}</h3>
       <p>{children}</p>
     </div>
   );

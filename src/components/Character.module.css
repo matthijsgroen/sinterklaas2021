@@ -5,4 +5,23 @@
   transition: transform 128ms ease-in-out;
   transform-origin: 50% 100%;
   background-image: url("./tristan.png");
+  animation: walking 1.2s linear 0s infinite;
+}
+
+@keyframes walking {
+  0% {
+    background-position-y: 0px;
+  }
+  49.999% {
+    background-position-y: 0px;
+  }
+  50% {
+    background-position-y: 128px;
+  }
+  99.999% {
+    background-position-y: 128px;
+  }
+  100% {
+    background-position-y: 0px;
+  }
 }

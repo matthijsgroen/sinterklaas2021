@@ -17,6 +17,11 @@ const actionMap: ActionMap = {
   stuns: "verdoofd",
 };
 
+const unitMap: Record<"turns" | "points", string> = {
+  turns: "beurten",
+  points: "punten",
+};
+
 const CombatLogSentence: React.FunctionComponent<Props> = ({ sentence }) => (
   <p>
     <strong>{creatureName(sentence.source.card)}</strong>{" "}
@@ -27,7 +32,7 @@ const CombatLogSentence: React.FunctionComponent<Props> = ({ sentence }) => (
         : creatureName(sentence.target.card)}
     </strong>{" "}
     met <span style={{ textTransform: "lowercase" }}>{sentence.with}</span> voor{" "}
-    {sentence.points} {sentence.unit}
+    {sentence.points} {unitMap[sentence.unit]}
   </p>
 );
 
