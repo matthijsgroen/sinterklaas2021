@@ -24,9 +24,11 @@ export type ActionSentence = {
   unit: "points" | "turns";
 };
 
+type CombatResult = "inProgress" | "retreat" | "won" | "lost";
+
 export interface CombatState {
   inCombat: boolean;
-  combatResult: "inProgress" | "retreat" | "won" | "lost";
+  combatResult: CombatResult;
   creatures: Creature[];
   currentTurn: string | null;
   lastActionLog: ActionSentence[];
@@ -74,18 +76,12 @@ export const combatSlice = createSlice({
   name: "character",
   initialState,
   reducers: {
-    startFight: (
-      state,
-      action: PayloadAction<{
-        partyA: CreatureCardId[];
-        partyB: CreatureCardId[];
-      }>
-    ) => {
+    startFight: (state, action: PayloadAction<CreatureCardId[]>) => {
       state.inCombat = true;
       state.combatResult = "inProgress";
-      state.creatures = ([] as Creature[])
-        .concat(action.payload.partyA.map(createCombatCreature("left")))
-        .concat(action.payload.partyB.map(createCombatCreature("right")));
+      state.creatures = state.creatures
+        .filter((c) => c.party === "left")
+        .concat(action.payload.map(createCombatCreature("right")));
 
       state.currentTurn = state.creatures.sort((a, b) => {
         const cA = creatures[a.card];
@@ -95,8 +91,14 @@ export const combatSlice = createSlice({
         );
       })[0].id;
     },
-    startEncounter: (state) => {
+    startEncounter: (state, action: PayloadAction<CreatureCardId[]>) => {
       state.combatResult = "inProgress";
+      state.creatures = ([] as Creature[]).concat(
+        action.payload.map(createCombatCreature("left"))
+      );
+    },
+    endEncounter: (state) => {
+      state.inCombat = false;
     },
     actionTurn: (
       state,
@@ -191,18 +193,33 @@ export const combatSlice = createSlice({
           }
         });
 
-      state.currentTurn = state.creatures.sort((a, b) => {
-        const cA = creatures[a.card];
-        const cB = creatures[b.card];
-        return (
-          a.inTurn * 100 + cA.initiative - (b.inTurn * 100 + cB.initiative)
-        );
-      })[0].id;
+      // Need a next turn?
+
+      const leftAlive = state.creatures.some(
+        (c) => c.party === "left" && c.health > 0
+      );
+      const rightAlive = state.creatures.some(
+        (c) => c.party === "right" && c.health > 0
+      );
+
+      if (leftAlive && rightAlive) {
+        state.currentTurn = state.creatures.sort((a, b) => {
+          const cA = creatures[a.card];
+          const cB = creatures[b.card];
+          return (
+            a.inTurn * 100 + cA.initiative - (b.inTurn * 100 + cB.initiative)
+          );
+        })[0].id;
+      } else {
+        state.currentTurn = null;
+        state.combatResult = leftAlive && !rightAlive ? "won" : "lost";
+      }
     },
   },
 });
 
-export const { startFight, startEncounter, actionTurn } = combatSlice.actions;
+export const { startFight, startEncounter, actionTurn, endEncounter } =
+  combatSlice.actions;
 
 export const selectInCombat = (state: RootState) => state.combat.inCombat;
 
@@ -211,6 +228,7 @@ export type CombatCreature = Omit<Creature, "card"> & {
 };
 
 type CombatStatus = {
+  outcome: CombatResult;
   partyA: CombatCreature[];
   partyB: CombatCreature[];
   turn?: {
@@ -237,6 +255,7 @@ export const selectCombatStatus = (state: RootState): CombatStatus => {
       }))
     : [];
   return {
+    outcome: state.combat.combatResult,
     partyA: state.combat.creatures
       .filter((c) => c.party === "left")
       .map<CombatCreature>((c) => ({

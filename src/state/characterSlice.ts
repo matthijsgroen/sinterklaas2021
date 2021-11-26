@@ -48,6 +48,9 @@ export const characterSlice = createSlice({
     removeCard: (state, action: PayloadAction<string>) => {
       state.cards = state.cards.filter((c) => c !== action.payload);
     },
+    addFollower: (state, action: PayloadAction<number>) => {
+      state.followers.push(action.payload);
+    },
     enterLevel: (
       state,
       action: PayloadAction<{ level: string; position: Position }>
@@ -65,8 +68,14 @@ export const characterSlice = createSlice({
   },
 });
 
-export const { move, getCard, removeCard, completeEncounter, enterLevel } =
-  characterSlice.actions;
+export const {
+  move,
+  getCard,
+  removeCard,
+  completeEncounter,
+  enterLevel,
+  addFollower,
+} = characterSlice.actions;
 
 export const selectPosition = (state: RootState): Position => [
   state.character.x,

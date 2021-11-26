@@ -4,9 +4,19 @@ import CombatArena from "./components/CombatArena";
 import Dialog from "./components/Dialog";
 import Level from "./components/Level";
 import zones from "./data";
-import { selectCardIds, selectZone } from "./state/characterSlice";
-import { selectInCombat, startFight } from "./state/combatSlice";
-import { EncounterState, selectActiveEncounter } from "./state/encounterSlice";
+import {
+  addFollower,
+  getCard,
+  removeCard,
+  selectZone,
+} from "./state/characterSlice";
+import { endEncounter, selectInCombat, startFight } from "./state/combatSlice";
+import {
+  closeEncounter,
+  EncounterState,
+  selectActiveEncounter,
+  winEncounter,
+} from "./state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "./state/hooks";
 import { LevelCharacter, LevelData } from "./types";
 
@@ -21,12 +31,13 @@ type DialogProps = {
   text: string;
 };
 
-const initialDialogEnded = (
+const hasDialogEnded = (
+  dialogType: "initial" | "lose" | "win",
   character: LevelCharacter | undefined,
   dialogState: DialogState
 ): boolean => {
   if (!character) return false;
-  if (dialogState.type !== "initial") return false;
+  if (dialogState.type !== dialogType) return false;
 
   const dialogData = selectDialogData(character, dialogState);
   return dialogData === false;
@@ -42,6 +53,12 @@ const selectDialogData = (
 
   if (dialogState.type === "initial") {
     dialogList = character.initialDialog;
+  }
+  if (dialogState.type === "lose") {
+    dialogList = character.loseDialog;
+  }
+  if (dialogState.type === "win") {
+    dialogList = character.winDialog;
   }
 
   let sentencesConsumed = dialogState.sentence;
@@ -86,7 +103,6 @@ function App() {
 
   const zone = zones[zoneId];
 
-  const cardIds = useAppSelector(selectCardIds);
   const inCombat = useAppSelector(selectInCombat);
   const [dialogState, setDialogState] = useState<DialogState>({
     type: "initial",
@@ -95,28 +111,63 @@ function App() {
   const character = selectEncounterCharacter(zone, encounter);
 
   useEffect(() => {
-    if (!inCombat && character && initialDialogEnded(character, dialogState)) {
-      // TODO: There will not always be fighting involved!
-      // if there are not fights, go directly to the rewards and win dialog.
-      if (character.fights.length > 0) {
-        const activeFight = character.fights[encounter.fightsFinished];
-        dispatch(startFight({ partyA: cardIds, partyB: activeFight.enemies }));
+    if (
+      !inCombat &&
+      character &&
+      hasDialogEnded("initial", character, dialogState)
+    ) {
+      const activeFight = character.fights[encounter.fightsFinished];
+      if (activeFight) {
+        dispatch(startFight(activeFight.enemies));
+      } else {
+        dispatch(winEncounter());
       }
     }
-  }, [
-    inCombat,
-    character,
-    dialogState,
-    dispatch,
-    encounter.fightsFinished,
-    cardIds,
-  ]);
+    if (character && hasDialogEnded("lose", character, dialogState)) {
+      dispatch(closeEncounter(false));
+      setDialogState({ type: "initial", sentence: 0 });
+    }
+    if (character && hasDialogEnded("win", character, dialogState)) {
+      dispatch(closeEncounter(true));
+      setDialogState({ type: "initial", sentence: 0 });
+      // Give rewards!!
+      console.log("Here, it is dangerous to go alone!");
+      if (character.rewards.card) {
+        dispatch(getCard(character.rewards.card));
+      }
+      if (character.rewards.removeCard) {
+        dispatch(removeCard(character.rewards.removeCard));
+      }
+      if (character.rewards.follower) {
+        dispatch(addFollower(character.characterSprite));
+      }
+    }
+  }, [inCombat, character, dialogState, dispatch, encounter.fightsFinished]);
+
+  useEffect(() => {
+    if (
+      character &&
+      encounter.result === "lost" &&
+      dialogState.type === "initial"
+    ) {
+      setDialogState({ type: "lose", sentence: 0 });
+      dispatch(endEncounter());
+    }
+    if (
+      character &&
+      encounter.result === "won" &&
+      dialogState.type === "initial"
+    ) {
+      setDialogState({ type: "win", sentence: 0 });
+      dispatch(endEncounter());
+    }
+  }, [encounter.result, character, dialogState.type, dispatch]);
 
   const dialogData = selectDialogData(character, dialogState);
 
   return (
     <main>
-      {inCombat && <CombatArena />}
+      {inCombat && character && <CombatArena character={character} />}
       <Level data={zone} />
       {dialogData && (
         <Dialog

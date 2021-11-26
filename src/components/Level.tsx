@@ -2,11 +2,12 @@ import React, { useEffect, useCallback, useRef, useMemo } from "react";
 import {
   enterLevel,
   move,
+  selectCardIds,
   selectFollowers,
   selectPosition,
 } from "../state/characterSlice";
 import { startEncounter } from "../state/combatSlice";
-import { encounter } from "../state/encounterSlice";
+import { encounter, selectActiveEncounter } from "../state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { Direction, LevelData, Position, TerrainTile } from "../types";
 import Character, { calculateXy } from "./Character";
@@ -149,8 +150,10 @@ const directionMap: DirectionMap = {
 
 const Level: React.FunctionComponent<Props> = ({ data }) => {
   const position = useAppSelector(selectPosition);
+  const cardIds = useAppSelector(selectCardIds);
   const followers = useAppSelector(selectFollowers);
   const dispatch = useAppDispatch();
+  const activeEncounter = useAppSelector(selectActiveEncounter);
   const posRef = useRef(position);
   const terrainRef = useRef<HTMLDivElement>(null);
   const canMoveRef = useRef(true);
@@ -158,13 +161,21 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
     () =>
       data.characters.filter(
         (f) =>
-          !followers.some((follower) => f.characterSprite === follower.index)
+          !activeEncounter.encountersCompleted.some(
+            (follower) => f.characterSprite === follower
+          )
       ),
-    [data, followers]
+    [data, activeEncounter.encountersCompleted]
   );
   useEffect(() => {
     posRef.current = position;
   }, [data, position]);
+
+  useEffect(() => {
+    if (activeEncounter.encounterCharacter === -1) {
+      canMoveRef.current = true;
+    }
+  }, [activeEncounter.encounterCharacter]);
 
   const movePlayer = useCallback(
     (direction: MoveDirection) => {
@@ -222,13 +233,13 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
       if (meetCharacter) {
         canMoveRef.current = false;
         dispatch(encounter(meetCharacter.characterSprite));
-        dispatch(startEncounter());
+        dispatch(startEncounter(cardIds));
       } else {
         posRef.current = newPos;
         dispatch(move(posRef.current));
       }
     },
-    [dispatch, data, levelCharacters]
+    [dispatch, data, levelCharacters, cardIds]
   );
 
   useEffect(() => {

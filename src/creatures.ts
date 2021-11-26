@@ -172,9 +172,16 @@ const robot: CreatureCard = {
   actions: [
     {
       name: "Arm klap",
-      damage: 12,
+      damage: 30,
       cost: 0,
       cooldown: 0,
+      targets: ["maxHealth"],
+    },
+    {
+      name: "Arm stomper",
+      damage: 50,
+      cost: 0,
+      cooldown: 3,
       targets: ["maxHealth"],
     },
   ],

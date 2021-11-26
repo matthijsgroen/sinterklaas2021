@@ -30,6 +30,7 @@ export type LevelCharacter = {
   rewards: {
     follower?: number;
     card?: string;
+    removeCard?: string;
   };
 };
 

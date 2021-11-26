@@ -3,11 +3,23 @@ import className from "../className";
 import {
   actionTurn,
   CombatCreature,
+  endEncounter,
   selectCombatLog,
   selectCombatStatus,
 } from "../state/combatSlice";
+import {
+  completeFight,
+  loseEncounter,
+  selectActiveEncounter,
+  winEncounter,
+} from "../state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import { ActionTarget, CreatureCard, CreatureType } from "../types";
+import {
+  ActionTarget,
+  CreatureCard,
+  CreatureType,
+  LevelCharacter,
+} from "../types";
 import styles from "./CombatArena.module.css";
 import CombatLogSentence from "./CombatLogSentence";
 
@@ -64,14 +76,50 @@ const actionRequiresTarget =
 const actionRequiresEnemyTarget = actionRequiresTarget("enemy");
 const actionRequiresFriendlyTarget = actionRequiresTarget("friendly");
 
-const CombatArena: React.FunctionComponent = () => {
+type Props = {
+  character: LevelCharacter;
+};
+
+const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   const combatStatus = useAppSelector(selectCombatStatus);
   const combatLog = useAppSelector(selectCombatLog);
+  const encounter = useAppSelector(selectActiveEncounter);
   const dispatch = useAppDispatch();
 
   const [actionSelection, setActionSelection] = useState<string | null>(null);
   const [targetSelection, setTargetSelection] = useState<string | null>(null);
   const [actionFocus, setActionFocus] = useState(0);
+
+  useEffect(() => {
+    if (combatStatus.outcome === "lost") {
+      const timeoutId = setTimeout(() => {
+        dispatch(loseEncounter());
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+    if (combatStatus.outcome === "won") {
+      const timeoutId = setTimeout(() => {
+        dispatch(completeFight());
+      }, 3000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [combatStatus.outcome, dispatch]);
+
+  useEffect(() => {
+    if (combatStatus.outcome !== "inProgress") {
+      const nextFightDetails = character.fights[encounter.fightsFinished];
+
+      if (!nextFightDetails && combatStatus.outcome === "won") {
+        dispatch(endEncounter());
+        dispatch(winEncounter());
+      }
+    }
+  }, [
+    combatStatus.outcome,
+    encounter.fightsFinished,
+    character.fights,
+    dispatch,
+  ]);
 
   useEffect(() => {
     setActionSelection(null);
