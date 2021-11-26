@@ -47,6 +47,24 @@ const stage1: LevelData = {
     {
       characterSprite: 1,
       position: [7, 6, 2],
+      conditions: {
+        minimalCards: 1,
+      },
+      conditionDialog: [
+        {
+          characterColor: "pink",
+          characterName: "Catootje",
+          text: [
+            "Help grote broer! Ik wordt door speelgoed gevangen gehouden!",
+            "Kan jij deze robot verslaan?",
+          ],
+        },
+        {
+          characterColor: "orange",
+          characterName: "Tristan",
+          text: ["Ik heb niets om mee te vechten!", " Ik kom later terug."],
+        },
+      ],
       initialDialog: [
         {
           characterColor: "pink",
@@ -90,6 +108,41 @@ const stage1: LevelData = {
           text: ["Je kan het!"],
         },
       ],
+    },
+    {
+      characterSprite: 7,
+      position: [4, -2, 1],
+      conditionDialog: [],
+      initialDialog: [
+        {
+          characterColor: "blue",
+          characterName: "Amerigo",
+          text: [
+            "Tristan help!",
+            "Al het speelgoed van Sinterklaas is tot leven gekomen!",
+            "En nu houden ze de Sint, Hoofdpiet en jouw familie gevangen!",
+            "We moeten ze redden",
+          ],
+        },
+        {
+          characterColor: "orange",
+          characterName: "Tristan",
+          text: [
+            "Dat gaan we doen! Ik ben tenslotte en goede Pokemon trainer!",
+          ],
+        },
+        {
+          characterColor: "blue",
+          characterName: "Amerigo",
+          text: ["Amerigo, go!"],
+        },
+      ],
+      fights: [],
+      rewards: {
+        card: "amerigo",
+      },
+      winDialog: [],
+      loseDialog: [],
     },
   ],
   exits: [],

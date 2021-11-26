@@ -20,7 +20,7 @@ const initialState: CharacterState = {
   z: 2,
   positionHistory: [],
   followers: [],
-  cards: ["amerigo"],
+  cards: [],
   encountersDone: [],
 };
 

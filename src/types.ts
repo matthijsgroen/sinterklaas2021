@@ -24,6 +24,10 @@ export type LevelCharacter = {
   initialDialog: Dialog[];
   winDialog: Dialog[];
   loseDialog: Dialog[];
+  conditions?: {
+    minimalCards?: number;
+  };
+  conditionDialog: Dialog[];
   characterSprite: number;
   position: Position;
   fights: Fight[];

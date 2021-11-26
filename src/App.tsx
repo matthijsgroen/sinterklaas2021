@@ -8,6 +8,7 @@ import {
   addFollower,
   getCard,
   removeCard,
+  selectCardIds,
   selectZone,
 } from "./state/characterSlice";
 import { endEncounter, selectInCombat, startFight } from "./state/combatSlice";
@@ -20,8 +21,10 @@ import {
 import { useAppDispatch, useAppSelector } from "./state/hooks";
 import { LevelCharacter, LevelData } from "./types";
 
+type DialogType = "initial" | "conditional" | "win" | "lose" | "none";
+
 type DialogState = {
-  type: "initial" | "win" | "lose";
+  type: DialogType;
   sentence: number;
 };
 
@@ -32,7 +35,7 @@ type DialogProps = {
 };
 
 const hasDialogEnded = (
-  dialogType: "initial" | "lose" | "win",
+  dialogType: DialogType,
   character: LevelCharacter | undefined,
   dialogState: DialogState
 ): boolean => {
@@ -59,6 +62,9 @@ const selectDialogData = (
   }
   if (dialogState.type === "win") {
     dialogList = character.winDialog;
+  }
+  if (dialogState.type === "conditional") {
+    dialogList = character.conditionDialog;
   }
 
   let sentencesConsumed = dialogState.sentence;
@@ -100,17 +106,34 @@ function App() {
   const dispatch = useAppDispatch();
   const encounter = useAppSelector(selectActiveEncounter);
   const zoneId = useAppSelector(selectZone);
+  const cardIds = useAppSelector(selectCardIds);
 
   const zone = zones[zoneId];
 
   const inCombat = useAppSelector(selectInCombat);
   const [dialogState, setDialogState] = useState<DialogState>({
-    type: "initial",
+    type: "none",
     sentence: 0,
   });
   const character = selectEncounterCharacter(zone, encounter);
 
   useEffect(() => {
+    if (character && dialogState.type === "none") {
+      let metConditions = true;
+      if (character.conditions) {
+        if (
+          character.conditions.minimalCards &&
+          character.conditions.minimalCards > cardIds.length
+        ) {
+          metConditions = false;
+        }
+      }
+
+      setDialogState({
+        type: metConditions ? "initial" : "conditional",
+        sentence: 0,
+      });
+    }
     if (
       !inCombat &&
       character &&
@@ -123,15 +146,17 @@ function App() {
         dispatch(winEncounter());
       }
     }
-    if (character && hasDialogEnded("lose", character, dialogState)) {
+    if (
+      character &&
+      (hasDialogEnded("lose", character, dialogState) ||
+        hasDialogEnded("conditional", character, dialogState))
+    ) {
       dispatch(closeEncounter(false));
-      setDialogState({ type: "initial", sentence: 0 });
+      setDialogState({ type: "none", sentence: 0 });
     }
     if (character && hasDialogEnded("win", character, dialogState)) {
       dispatch(closeEncounter(true));
-      setDialogState({ type: "initial", sentence: 0 });
-      // Give rewards!!
-      console.log("Here, it is dangerous to go alone!");
+      setDialogState({ type: "none", sentence: 0 });
       if (character.rewards.card) {
         dispatch(getCard(character.rewards.card));
       }
@@ -142,7 +167,14 @@ function App() {
         dispatch(addFollower(character.characterSprite));
       }
     }
-  }, [inCombat, character, dialogState, dispatch, encounter.fightsFinished]);
+  }, [
+    inCombat,
+    character,
+    dialogState,
+    dispatch,
+    encounter.fightsFinished,
+    cardIds.length,
+  ]);
 
   useEffect(() => {
     if (
