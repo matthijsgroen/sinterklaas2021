@@ -159,7 +159,6 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       const specialAbilities = combatStatus.turn.actions
         .filter((a) => a.damageType && !a.disabled)
         .sort((a, b) => a.cost - b.cost)[0];
-      console.log("special", specialAbilities);
 
       // max offence!
       const offensiveAction = combatStatus.turn.actions

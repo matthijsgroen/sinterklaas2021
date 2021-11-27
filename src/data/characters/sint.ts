@@ -4,36 +4,43 @@ export const sint: LevelCharacter = {
   characterSprite: CharacterSprites.Sint,
   position: [9, -3, 1],
   conditions: {
-    minimalCards: 1,
+    minimalCards: 2,
   },
   conditionDialog: [
     {
-      characterColor: "pink",
-      characterName: "Catootje",
+      characterColor: "yellow",
+      characterName: "Sinterklaas",
       text: [
-        "Help grote broer! Ik wordt door speelgoed gevangen gehouden!",
-        "Kan jij deze robot verslaan?",
+        "Hoi Tristan, begrijp ik goed dat jij me van dit...",
+        "...probleempje kan verlossen?",
+        "Normaal ben ik juist blij met speelgoed, maar dit loopt een beetje uit de hand...",
       ],
     },
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Ik heb niets om mee te vechten!", " Ik kom later terug."],
+      text: ["Ik kom terug zodra ik beter kan vechten!"],
     },
   ],
   initialDialog: [
     {
-      characterColor: "pink",
-      characterName: "Catootje",
+      characterColor: "yellow",
+      characterName: "Sinterklaas",
       text: [
-        "Help grote broer! Ik wordt door speelgoed gevangen gehouden!",
-        "Kan jij deze robot verslaan?",
+        "Hoi Tristan, begrijp ik goed dat jij me van dit...",
+        "...probleempje kan verlossen?",
+        "Normaal ben ik juist blij met speelgoed, maar dit loopt een beetje uit de hand...",
       ],
     },
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Natuurlijk kan ik dat!"],
+      text: [
+        "Ik ben de beste Pokémon trainer van het land Sinterklaas!",
+        "Hier ben ik weer hoor!",
+        "Bereid je maar voor!",
+        "OP EEN EPISCH GEVECHT!!",
+      ],
     },
   ],
   fights: [
@@ -42,7 +49,7 @@ export const sint: LevelCharacter = {
     { enemies: ["robot", "robot", "bear"] },
   ],
   rewards: {
-    follower: CharacterSprites.Catoo,
+    follower: CharacterSprites.Sint,
   },
   winDialog: [
     {
@@ -51,21 +58,40 @@ export const sint: LevelCharacter = {
       text: ["Ha! Daar heb ik mooi van gewonnen!"],
     },
     {
-      characterColor: "pink",
-      characterName: "Catootje",
-      text: ["Goed gedaan broer!"],
+      characterColor: "yellow",
+      characterName: "Sinterklaas",
+      text: [
+        "Fantastisch gedaan jongen! Dat was...",
+        "GEWELDIG!",
+        "(en geweldadig)",
+        "Nou, euhm, goed... laten we nu fijn mijn verjaardag gaan vieren!",
+        "Zullen we naar dat gezellige huisje bovenaan de berg gaan?",
+      ],
     },
   ],
   loseDialog: [
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Oei dat moet ik nog maar eens proberen"],
+      text: ["Jikes! Dat was echt moeilijk!"],
     },
     {
-      characterColor: "pink",
-      characterName: "Catootje",
-      text: ["Je kan het!"],
+      characterColor: "yellow",
+      characterName: "Sinterklaas",
+      text: [
+        "Ik lees hier net wat tips in mijn grote boek.",
+        "Let op dat Zak altijd sterker is tegen Roe",
+        "en Roe sterker is tegen Schoen",
+        "en Schoen sterker is tegen Zak.",
+        "Oja. En wees zuinig met waar je je energie aan uitgeeft!",
+        "Ik kwam er net achter dat de beren pas gaan genezen onder",
+        "15 punten. Dus misschien net daarboven een grote aanval plannen?",
+      ],
+    },
+    {
+      characterColor: "orange",
+      characterName: "Tristan",
+      text: ["Dat zijn goede tips Sinterklaas, bedankt!"],
     },
   ],
 };

@@ -14,17 +14,13 @@ export interface CharacterState {
 }
 
 const initialState: CharacterState = {
-  // level: "Slaapkamer",
-  // x: 3,
-  // y: 1,
-  // z: 2,
-  level: "Stage1",
-  x: 2,
-  y: 2,
+  level: "Slaapkamer",
+  x: 3,
+  y: 1,
   z: 2,
   positionHistory: [],
   followers: [],
-  cards: ["ameerigogo", "ozoefsnel"],
+  cards: [],
   xp: {},
 };
 

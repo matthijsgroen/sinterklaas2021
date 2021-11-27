@@ -12,7 +12,7 @@ const initialState: EncounterState = {
   encounterCharacter: -1,
   fightsFinished: 0,
   result: "inProgress",
-  encountersCompleted: [1, 2, 3, 4, 5, 7],
+  encountersCompleted: [],
 };
 
 export const encounterSlice = createSlice({
