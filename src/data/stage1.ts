@@ -1,4 +1,5 @@
 import { LevelData } from "../types";
+import { amerigo } from "./characters/amerigo";
 import { carl } from "./characters/carl";
 import { catoo } from "./characters/catoo";
 import { gina } from "./characters/gina";
@@ -54,7 +55,15 @@ const stage1: LevelData = {
     { coord: [6, -1, 1], img: "treePine", set: "terrain" },
   ],
   decorations: [{ coord: [6, 1, 1], img: "plant", set: "terrain" }],
-  characters: [catoo, tinka, carl, piet, gina, sint],
+  characters: [
+    { ...amerigo, position: [1, 1, 2] },
+    { ...catoo, position: [7, 6, 2] },
+    { ...tinka, position: [4, -2, 1] },
+    { ...carl, position: [7, -1, 1] },
+    { ...piet, position: [7, 1, 1] },
+    { ...gina, position: [9, 0, 1] },
+    { ...sint, position: [9, -3, 1] },
+  ],
   exits: [],
 };
 
