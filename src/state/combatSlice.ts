@@ -1,30 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import creatures from "../creatures";
-import { Action, CreatureCard, CreatureCardId, CreatureType } from "../types";
+import {
+  Action,
+  ActionSentence,
+  CombatResult,
+  Creature,
+  CreatureCard,
+  CreatureCardId,
+  CreatureType,
+} from "../types";
 import { RootState } from "./store";
-
-type Creature = {
-  card: CreatureCardId;
-  id: string;
-  health: number;
-  energy: number;
-  cooldowns: Record<string, number>;
-  party: "left" | "right";
-  inTurn: number;
-};
-
-export type ActionType = "heals" | "hurts" | "stuns";
-
-export type ActionSentence = {
-  source: Creature;
-  action: ActionType;
-  target: Creature;
-  with: string;
-  points: number;
-  unit: "points" | "turns";
-};
-
-type CombatResult = "inProgress" | "retreat" | "won" | "lost";
 
 export interface CombatState {
   inCombat: boolean;

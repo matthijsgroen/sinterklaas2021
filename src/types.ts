@@ -1,3 +1,37 @@
+export enum CharacterSprites {
+  Tristan = 0,
+  Catoo = 1,
+  Tinka = 2,
+  Carl = 3,
+  Gina = 4,
+  Piet = 5,
+  Sint = 6,
+  Amerigo = 7,
+}
+
+export type Creature = {
+  card: CreatureCardId;
+  id: string;
+  health: number;
+  energy: number;
+  cooldowns: Record<string, number>;
+  party: "left" | "right";
+  inTurn: number;
+};
+
+export type ActionType = "heals" | "hurts" | "stuns";
+
+export type ActionSentence = {
+  source: Creature;
+  action: ActionType;
+  target: Creature;
+  with: string;
+  points: number;
+  unit: "points" | "turns";
+};
+
+export type CombatResult = "inProgress" | "retreat" | "won" | "lost";
+
 export type Direction = "north" | "east" | "south" | "west";
 export type Position = [number, number, number];
 export type TileSize = "normal" | "small" | "large";
@@ -28,11 +62,11 @@ export type LevelCharacter = {
     minimalCards?: number;
   };
   conditionDialog: Dialog[];
-  characterSprite: number;
+  characterSprite: CharacterSprites;
   position: Position;
   fights: Fight[];
   rewards: {
-    follower?: number;
+    follower?: CharacterSprites;
     card?: string;
     removeCard?: string;
   };

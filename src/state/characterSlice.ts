@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { CreatureCardId, Position } from "../types";
+import { CharacterSprites, CreatureCardId, Position } from "../types";
 
 export interface CharacterState {
   x: number;
@@ -8,7 +8,7 @@ export interface CharacterState {
   z: number;
   level: string;
   positionHistory: Position[];
-  followers: number[];
+  followers: CharacterSprites[];
   cards: CreatureCardId[];
   encountersDone: number[];
 }
@@ -48,7 +48,7 @@ export const characterSlice = createSlice({
     removeCard: (state, action: PayloadAction<string>) => {
       state.cards = state.cards.filter((c) => c !== action.payload);
     },
-    addFollower: (state, action: PayloadAction<number>) => {
+    addFollower: (state, action: PayloadAction<CharacterSprites>) => {
       state.followers.push(action.payload);
     },
     enterLevel: (
@@ -90,7 +90,7 @@ export const selectCardIds = (state: RootState): CreatureCardId[] =>
 
 export const selectFollowers = (
   state: RootState
-): { pos: Position; index: number }[] =>
+): { pos: Position; index: CharacterSprites }[] =>
   state.character.followers.map((id, index) => ({
     index: id,
     pos: state.character.positionHistory[index] || [

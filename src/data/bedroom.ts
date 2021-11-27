@@ -1,4 +1,4 @@
-import { LevelData } from "../types";
+import { CharacterSprites, LevelData } from "../types";
 
 const bedroom: LevelData = {
   name: "Slaapkamer",
@@ -70,7 +70,7 @@ const bedroom: LevelData = {
   decorations: [],
   characters: [
     {
-      characterSprite: 7,
+      characterSprite: CharacterSprites.Amerigo,
       position: [4, 2, 2],
       conditionDialog: [],
       initialDialog: [

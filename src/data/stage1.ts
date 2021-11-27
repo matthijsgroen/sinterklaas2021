@@ -1,4 +1,4 @@
-import { LevelData } from "../types";
+import { CharacterSprites, LevelData } from "../types";
 
 const stage1: LevelData = {
   name: "Stage1",
@@ -50,7 +50,7 @@ const stage1: LevelData = {
   decorations: [{ coord: [6, 1, 1], img: "plant", set: "terrain" }],
   characters: [
     {
-      characterSprite: 1,
+      characterSprite: CharacterSprites.Catoo,
       position: [7, 6, 2],
       conditions: {
         minimalCards: 1,
@@ -87,7 +87,7 @@ const stage1: LevelData = {
       ],
       fights: [{ enemies: ["robot"] }],
       rewards: {
-        follower: 1,
+        follower: CharacterSprites.Catoo,
       },
       winDialog: [
         {

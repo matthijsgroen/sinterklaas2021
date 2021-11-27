@@ -1,5 +1,5 @@
 import creatures from "../creatures";
-import { ActionSentence, ActionType } from "../state/combatSlice";
+import { ActionSentence, ActionType } from "../types";
 
 const creatureName = (cardId: string) => creatures[cardId].name;
 
