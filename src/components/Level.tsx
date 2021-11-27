@@ -1,4 +1,11 @@
-import React, { useEffect, useCallback, useRef, useMemo } from "react";
+import React, {
+  useEffect,
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+} from "react";
+import className from "../className";
 import {
   enterLevel,
   move,
@@ -148,7 +155,9 @@ const directionMap: DirectionMap = {
   [MoveDirection.Right]: [0, 1],
 };
 
-const Level: React.FunctionComponent<Props> = ({ data }) => {
+type LevelSwitchState = "fadeout" | "levelSwitch" | "fadein";
+
+const Level: React.FunctionComponent<Props> = ({ data: levelData }) => {
   const position = useAppSelector(selectPosition);
   const cardIds = useAppSelector(selectCardIds);
   const followers = useAppSelector(selectFollowers);
@@ -157,6 +166,29 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
   const posRef = useRef(position);
   const terrainRef = useRef<HTMLDivElement>(null);
   const canMoveRef = useRef(true);
+
+  const levelSwitchRef = useRef(levelData);
+  const [levelSwitchState, setLevelSwitchState] =
+    useState<LevelSwitchState>("fadeout");
+  const data = levelSwitchRef.current;
+
+  useEffect(() => {
+    if (levelSwitchState === "fadein" && levelData !== levelSwitchRef.current) {
+      setLevelSwitchState("fadeout");
+    }
+    if (levelSwitchState === "fadeout") {
+      const timeId = setTimeout(() => {
+        levelSwitchRef.current = levelData;
+        setLevelSwitchState("levelSwitch");
+      }, 500);
+      return () => clearTimeout(timeId);
+    }
+    if (levelSwitchState === "levelSwitch") {
+      setLevelSwitchState("fadein");
+      return;
+    }
+  }, [levelSwitchState, levelData]);
+
   const levelCharacters = useMemo(
     () =>
       data.characters.filter(
@@ -271,7 +303,13 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
   }, [movePlayer]);
 
   return (
-    <div className={styles.terrain} ref={terrainRef}>
+    <div
+      className={className({
+        [styles.terrain]: true,
+        [styles.fadeout]: levelSwitchState !== "fadein",
+      })}
+      ref={terrainRef}
+    >
       {data.tiles.map((tile, index) => (
         <Tile tile={tile} key={index} />
       ))}
