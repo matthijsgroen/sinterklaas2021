@@ -282,7 +282,7 @@ const Level: React.FunctionComponent<Props> = ({ data }) => {
         <Character
           position={character.position}
           index={character.characterSprite}
-          key={index}
+          key={character.characterSprite}
         />
       ))}
       {followers.map(({ index, pos }) => (
