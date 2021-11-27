@@ -49,7 +49,7 @@ export const characterSlice = createSlice({
       state.cards = state.cards.filter((c) => c !== action.payload);
     },
     addFollower: (state, action: PayloadAction<CharacterSprites>) => {
-      state.followers.push(action.payload);
+      state.followers.unshift(action.payload);
     },
     enterLevel: (
       state,
