@@ -2,7 +2,7 @@ import { CharacterSprites, LevelCharacter } from "../../types";
 
 export const catoo: LevelCharacter = {
   characterSprite: CharacterSprites.Catoo,
-  position: [7, 6, 2],
+  position: [10, 2, 1],
   conditions: {
     minimalCards: 1,
   },

@@ -34,7 +34,7 @@ export type CombatResult = "inProgress" | "retreat" | "won" | "lost";
 
 export type Direction = "north" | "east" | "south" | "west";
 export type Position = [number, number, number];
-export type TileSize = "normal" | "small" | "large";
+export type TileSize = "normal" | "small" | "large" | "wide";
 export type TerrainTile = {
   coord: Position;
   img: string;

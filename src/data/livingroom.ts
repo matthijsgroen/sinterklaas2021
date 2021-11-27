@@ -1,0 +1,80 @@
+import { LevelData } from "../types";
+import { catoo } from "./characters/catoo";
+
+const livingroom: LevelData = {
+  name: "Woonkamer",
+  tiles: [
+    {
+      coord: [6, -3, 1],
+      img: "stairs",
+      set: "furniture",
+      direction: "east",
+      size: "wide",
+    },
+    { coord: [7, -2, 1], img: "wall", set: "furniture", direction: "west" },
+    { coord: [7, -2, 1], img: "wall", set: "furniture", direction: "north" },
+    { coord: [6, -1, 1], img: "wall", set: "furniture", direction: "north" },
+    { coord: [7, -4, 1], img: "wall", set: "furniture", direction: "north" },
+    { coord: [6, 0, 1], img: "wall", set: "furniture", direction: "north" },
+    { coord: [6, 1, 1], img: "wall", set: "furniture", direction: "north" },
+    { coord: [6, 2, 1], img: "wall", set: "furniture", direction: "north" },
+    { coord: [7, 3, 1], img: "wall", set: "furniture", direction: "west" },
+    { coord: [8, 3, 1], img: "wall", set: "furniture", direction: "west" },
+    { coord: [9, 3, 1], img: "wall", set: "furniture", direction: "west" },
+    { coord: [10, 3, 1], img: "wall", set: "furniture", direction: "west" },
+    { coord: [8, -3, 0], img: "floorFull", set: "furniture" },
+    { coord: [8, -4, 0], img: "floorFull", set: "furniture" },
+    { coord: [8, -2, 0], img: "floorFull", set: "furniture" },
+    { coord: [8, -1, 0], img: "floorFull", set: "furniture" },
+    { coord: [8, 0, 0], img: "floorFull", set: "furniture" },
+    { coord: [8, 1, 0], img: "floorFull", set: "furniture" },
+    { coord: [8, 2, 0], img: "floorFull", set: "furniture" },
+    { coord: [7, -1, 0], img: "floorFull", set: "furniture" },
+    { coord: [7, 2, 0], img: "floorFull", set: "furniture" },
+    { coord: [7, 1, 0], img: "floorFull", set: "furniture" },
+    { coord: [7, 0, 0], img: "floorFull", set: "furniture" },
+    { coord: [9, 2, 0], img: "floorFull", set: "furniture" },
+    { coord: [9, 2, 0], img: "floorFull", set: "furniture" },
+    { coord: [9, 1, 0], img: "floorFull", set: "furniture" },
+    { coord: [9, 0, 0], img: "floorFull", set: "furniture" },
+    { coord: [9, -1, 0], img: "floorFull", set: "furniture" },
+    { coord: [10, 2, 0], img: "floorFull", set: "furniture" },
+    { coord: [10, 2, 0], img: "floorFull", set: "furniture" },
+    { coord: [10, 1, 0], img: "floorFull", set: "furniture" },
+    { coord: [10, 0, 0], img: "floorFull", set: "furniture" },
+    { coord: [10, -1, 0], img: "floorFull", set: "furniture" },
+    {
+      coord: [8, 1, 1],
+      img: "loungeDesignSofa",
+      set: "furniture",
+      size: "wide",
+    },
+    {
+      coord: [7, -1, 1],
+      img: "bookcaseOpen",
+      set: "furniture",
+    },
+    { coord: [8, -5, 0], img: "blockDirt", set: "terrain" },
+  ],
+  decorations: [
+    {
+      coord: [8, -1, 1],
+      img: "doorwayOpen",
+      set: "furniture",
+      direction: "west",
+    },
+    {
+      coord: [8, -4, 1],
+      img: "doorwayOpen",
+      set: "furniture",
+      direction: "west",
+    },
+  ],
+  characters: [catoo],
+  exits: [
+    { coord: [7, -3, 1.5], level: "Slaapkamer", startCoord: [5, -3, 2] },
+    { coord: [8, -5, 1], level: "Stage1", startCoord: [2, 2, 2] },
+  ],
+};
+
+export default livingroom;

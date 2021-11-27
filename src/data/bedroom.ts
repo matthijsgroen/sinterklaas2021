@@ -60,6 +60,7 @@ const bedroom: LevelData = {
       img: "stairs",
       set: "furniture",
       direction: "east",
+      size: "wide",
     },
     {
       coord: [5, 0, 1],
@@ -70,7 +71,7 @@ const bedroom: LevelData = {
   ],
   decorations: [],
   characters: [amerigo],
-  exits: [{ coord: [6, -3, 1.5], level: "Stage1", startCoord: [2, 2, 2] }],
+  exits: [{ coord: [6, -3, 1.5], level: "Woonkamer", startCoord: [8, -3, 1] }],
 };
 
 export default bedroom;

@@ -37,6 +37,7 @@ const getTile = (tile: TerrainTile): string => {
 };
 
 const sizeMapping: Record<TileSize, number> = {
+  wide: 0,
   normal: 0,
   large: 60,
   small: -16,
@@ -102,10 +103,28 @@ const furnitureLookup: Record<string, TileDirectionData> = {
   },
   stairs: {
     east: {
-      width: 216,
+      width: 190,
       height: 178,
-      offsetX: 192,
+      offsetX: 195,
       offsetY: 204,
+      offsetZ: 1,
+    },
+  },
+  loungeDesignSofa: {
+    north: {
+      width: 150,
+      height: 110,
+      offsetX: 195,
+      offsetY: 224,
+    },
+  },
+  doorwayOpen: {
+    west: {
+      width: 68,
+      height: 130,
+      offsetX: 194,
+      offsetY: 220,
+      offsetZ: 1,
     },
   },
 };

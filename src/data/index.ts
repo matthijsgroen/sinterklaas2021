@@ -1,8 +1,9 @@
 import { LevelData } from "../types";
 import stage1 from "./stage1";
 import bedroom from "./bedroom";
+import livingroom from "./livingroom";
 
-const zones = [stage1, bedroom].reduce(
+const zones = [stage1, bedroom, livingroom].reduce(
   (r, e) => ({ ...r, [e.name]: e }),
   {} as Record<string, LevelData>
 );

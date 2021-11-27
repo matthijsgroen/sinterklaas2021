@@ -62,6 +62,17 @@ const getTopTerrain = (
       topZ = tile.coord[2];
       result = tile;
     }
+    if (
+      tile.size === "wide" &&
+      (tile.coord[0] === x ||
+        (tile.coord[0] + 1 === x && tile.direction === "east")) &&
+      (tile.coord[1] === y ||
+        (tile.coord[1] + 1 === y && (tile.direction ?? "north") === "north")) &&
+      tile.coord[2] > topZ
+    ) {
+      topZ = tile.coord[2];
+      result = tile;
+    }
   });
   return result;
 };
