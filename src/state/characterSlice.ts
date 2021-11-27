@@ -10,7 +10,7 @@ export interface CharacterState {
   positionHistory: Position[];
   followers: CharacterSprites[];
   cards: CreatureCardId[];
-  encountersDone: number[];
+  xp: Record<CreatureCardId, number>;
 }
 
 const initialState: CharacterState = {
@@ -21,7 +21,7 @@ const initialState: CharacterState = {
   positionHistory: [],
   followers: [],
   cards: [],
-  encountersDone: [],
+  xp: {},
 };
 
 export const characterSlice = createSlice({
@@ -51,6 +51,12 @@ export const characterSlice = createSlice({
     addFollower: (state, action: PayloadAction<CharacterSprites>) => {
       state.followers.unshift(action.payload);
     },
+    giveXP: (state, action: PayloadAction<number>) => {
+      state.cards.forEach((card) => {
+        state.xp[card] = state.xp[card] || 0;
+        state.xp[card] += action.payload;
+      });
+    },
     enterLevel: (
       state,
       action: PayloadAction<{ level: string; position: Position }>
@@ -62,20 +68,11 @@ export const characterSlice = createSlice({
       state.z = z;
       state.positionHistory = [];
     },
-    completeEncounter: (state, action: PayloadAction<number>) => {
-      state.encountersDone.push(action.payload);
-    },
   },
 });
 
-export const {
-  move,
-  getCard,
-  removeCard,
-  completeEncounter,
-  enterLevel,
-  addFollower,
-} = characterSlice.actions;
+export const { move, getCard, removeCard, enterLevel, addFollower, giveXP } =
+  characterSlice.actions;
 
 export const selectPosition = (state: RootState): Position => [
   state.character.x,

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { modifier } from "../combatHelpers";
 import creatures from "../creatures";
 import {
   Action,
@@ -7,7 +8,6 @@ import {
   Creature,
   CreatureCard,
   CreatureCardId,
-  CreatureType,
 } from "../types";
 import { RootState } from "./store";
 
@@ -46,17 +46,6 @@ const createCombatCreature =
     };
   };
 
-const modifier = (from: CreatureType, to: CreatureType): number =>
-  (from === "shoe" && to === "bag") ||
-  (from === "bag" && to === "rod") ||
-  (from === "rod" && to === "shoe")
-    ? 1.3
-    : (from === "shoe" && to === "rod") ||
-      (from === "rod" && to === "bag") ||
-      (from === "bag" && to === "shoe")
-    ? 0.5
-    : 1.0;
-
 export const combatSlice = createSlice({
   name: "character",
   initialState,
@@ -75,6 +64,7 @@ export const combatSlice = createSlice({
           a.inTurn * 100 + cA.initiative - (b.inTurn * 100 + cB.initiative)
         );
       })[0].id;
+      state.lastActionLog = [];
     },
     startEncounter: (state, action: PayloadAction<CreatureCardId[]>) => {
       state.combatResult = "inProgress";
@@ -160,8 +150,9 @@ export const combatSlice = createSlice({
           }
 
           if (actionDetails.damage > 0) {
-            const damage =
-              modifier(ownCard.type, card.type) * actionDetails.damage;
+            const damage = Math.round(
+              modifier(ownCard.type, card.type) * actionDetails.damage
+            );
 
             if (state.currentTurn && damage > 0) {
               state.lastActionLog.push({
@@ -188,13 +179,15 @@ export const combatSlice = createSlice({
       );
 
       if (leftAlive && rightAlive) {
-        state.currentTurn = state.creatures.sort((a, b) => {
-          const cA = creatures[a.card];
-          const cB = creatures[b.card];
-          return (
-            a.inTurn * 100 + cA.initiative - (b.inTurn * 100 + cB.initiative)
-          );
-        })[0].id;
+        state.currentTurn = state.creatures
+          .filter((a) => a.health > 0)
+          .sort((a, b) => {
+            const cA = creatures[a.card];
+            const cB = creatures[b.card];
+            return (
+              a.inTurn * 100 + cA.initiative - (b.inTurn * 100 + cB.initiative)
+            );
+          })[0].id;
       } else {
         state.currentTurn = null;
         state.combatResult = leftAlive && !rightAlive ? "won" : "lost";
@@ -223,6 +216,13 @@ type CombatStatus = {
 };
 
 export const selectCombatLog = (state: RootState) => state.combat.lastActionLog;
+
+export const selectLevelingUp = (state: RootState) =>
+  state.character.cards.find(
+    (card) =>
+      state.character.xp[card] >= creatures[card].xpResult &&
+      creatures[card].xpResult > 0
+  );
 
 export const selectCombatStatus = (state: RootState): CombatStatus => {
   const currentCreature = state.combat.creatures.find(

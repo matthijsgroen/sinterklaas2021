@@ -69,6 +69,7 @@ export type LevelCharacter = {
     follower?: CharacterSprites;
     card?: string;
     removeCard?: string;
+    xp?: number;
   };
 };
 

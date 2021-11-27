@@ -1,17 +1,24 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import CombatArena from "./components/CombatArena";
-import Dialog from "./components/Dialog";
+import DialogView from "./components/Dialog";
 import Level from "./components/Level";
+import { evolutions } from "./creatures";
 import zones from "./data";
 import {
   addFollower,
   getCard,
+  giveXP,
   removeCard,
   selectCardIds,
   selectZone,
 } from "./state/characterSlice";
-import { endEncounter, selectInCombat, startFight } from "./state/combatSlice";
+import {
+  endEncounter,
+  selectInCombat,
+  selectLevelingUp,
+  startFight,
+} from "./state/combatSlice";
 import {
   closeEncounter,
   EncounterState,
@@ -19,9 +26,15 @@ import {
   winEncounter,
 } from "./state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "./state/hooks";
-import { LevelCharacter, LevelData } from "./types";
+import { LevelCharacter, LevelData, Dialog } from "./types";
 
-type DialogType = "initial" | "conditional" | "win" | "lose" | "none";
+type DialogType =
+  | "initial"
+  | "conditional"
+  | "win"
+  | "lose"
+  | "evolve"
+  | "none";
 
 type DialogState = {
   type: DialogType;
@@ -37,35 +50,40 @@ type DialogProps = {
 const hasDialogEnded = (
   dialogType: DialogType,
   character: LevelCharacter | undefined,
-  dialogState: DialogState
+  dialogState: DialogState,
+  evolving?: string
 ): boolean => {
-  if (!character) return false;
   if (dialogState.type !== dialogType) return false;
 
-  const dialogData = selectDialogData(character, dialogState);
+  const dialogData = selectDialogData(character, dialogState, evolving);
   return dialogData === false;
 };
 
 const selectDialogData = (
   character: LevelCharacter | undefined,
-  dialogState: DialogState
+  dialogState: DialogState,
+  evolving?: string
 ): DialogProps | false => {
-  if (!character) return false;
-
-  let dialogList: typeof character.initialDialog = [];
-
-  if (dialogState.type === "initial") {
-    dialogList = character.initialDialog;
+  let dialogList: Dialog[] = [];
+  if (character) {
+    if (dialogState.type === "initial") {
+      dialogList = character.initialDialog;
+    }
+    if (dialogState.type === "lose") {
+      dialogList = character.loseDialog;
+    }
+    if (dialogState.type === "win") {
+      dialogList = character.winDialog;
+    }
+    if (dialogState.type === "conditional") {
+      dialogList = character.conditionDialog;
+    }
   }
-  if (dialogState.type === "lose") {
-    dialogList = character.loseDialog;
+  if (evolving) {
+    const evolveData = evolutions[evolving];
+    dialogList = evolveData.dialog;
   }
-  if (dialogState.type === "win") {
-    dialogList = character.winDialog;
-  }
-  if (dialogState.type === "conditional") {
-    dialogList = character.conditionDialog;
-  }
+  if (dialogList.length === 0) return false;
 
   let sentencesConsumed = dialogState.sentence;
   let dialogIndex = 0;
@@ -107,6 +125,7 @@ function App() {
   const encounter = useAppSelector(selectActiveEncounter);
   const zoneId = useAppSelector(selectZone);
   const cardIds = useAppSelector(selectCardIds);
+  const evolving = useAppSelector(selectLevelingUp);
 
   const zone = zones[zoneId];
 
@@ -154,6 +173,16 @@ function App() {
       dispatch(closeEncounter(false));
       setDialogState({ type: "none", sentence: 0 });
     }
+    if (
+      evolving &&
+      hasDialogEnded("evolve", character, dialogState, evolving)
+    ) {
+      setDialogState({ type: "none", sentence: 0 });
+
+      const evolveData = evolutions[evolving];
+      dispatch(removeCard(evolving));
+      dispatch(getCard(evolveData.newCard));
+    }
     if (character && hasDialogEnded("win", character, dialogState)) {
       dispatch(closeEncounter(true));
       setDialogState({ type: "none", sentence: 0 });
@@ -164,7 +193,10 @@ function App() {
         dispatch(removeCard(character.rewards.removeCard));
       }
       if (character.rewards.follower) {
-        dispatch(addFollower(character.characterSprite));
+        dispatch(addFollower(character.rewards.follower));
+      }
+      if (character.rewards.xp) {
+        dispatch(giveXP(character.rewards.xp));
       }
     }
   }, [
@@ -174,6 +206,7 @@ function App() {
     dispatch,
     encounter.fightsFinished,
     cardIds.length,
+    evolving,
   ]);
 
   useEffect(() => {
@@ -195,25 +228,26 @@ function App() {
     }
   }, [encounter.result, character, dialogState.type, dispatch]);
 
-  const dialogData = selectDialogData(character, dialogState);
+  const dialogData = selectDialogData(character, dialogState, evolving);
 
   return (
     <main>
       <Level data={zone} />
       {inCombat && character && <CombatArena character={character} />}
       {dialogData && (
-        <Dialog
+        <DialogView
           name={dialogData.characterName}
           color={dialogData.characterColor}
           onClick={() => {
             setDialogState((state) => ({
               ...state,
+              type: evolving ? "evolve" : state.type,
               sentence: state.sentence + 1,
             }));
           }}
         >
           {dialogData.text}
-        </Dialog>
+        </DialogView>
       )}
     </main>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import className from "../className";
+import { isWeakFor } from "../combatHelpers";
 import {
   actionTurn,
   CombatCreature,
@@ -127,23 +128,65 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   }, [combatStatus.turn]);
 
   useEffect(() => {
-    if (combatStatus.turn?.creature.party === "right") {
-      // handle enemy action!
-
+    if (combatStatus.turn && combatStatus.turn.creature.party === "right") {
       // weak team mates? heal!
+      const needsHealing = combatStatus.partyB
+        .filter((c) => c.health < 15)
+        .sort((a, b) => a.health - b.health);
+      const healingAbilities = combatStatus.turn.actions
+        .filter((a) => !a.disabled && a.damage < 0)
+        .sort((a, b) => a.cost - b.cost);
+
+      if (needsHealing.length > 0 && healingAbilities.length > 0) {
+        const defensiveAction = healingAbilities[0];
+
+        const target =
+          defensiveAction.targets[0] === "allFriendlies"
+            ? "all"
+            : needsHealing[0].id;
+
+        const timeoutId = setTimeout(() => {
+          dispatch(actionTurn({ action: defensiveAction.name, target }));
+          setActionSelection(null);
+          setTargetSelection(null);
+        }, 3000);
+        return () => clearTimeout(timeoutId);
+      }
 
       // max offence!
       const offensiveAction = combatStatus.turn.actions
         .filter((a) => !a.disabled)
-        .sort((a, b) => b.damage - a.damage)[0];
+        .sort((a, b) => b.damage + b.cost - (a.damage + a.cost))[0];
       if (offensiveAction) {
         const target = offensiveAction.targets.reduce<null | string>(
           (result, targetType) => {
+            if (targetType === "allEnemies") {
+              return "all";
+            }
             if (targetType === "maxHealth") {
               const target = combatStatus.partyA.reduce((r, current) =>
                 current.health > r.health ? current : r
               );
               return target.id;
+            }
+            if (targetType === "minHealth") {
+              const target = combatStatus.partyA.reduce((r, current) =>
+                current.health < r.health ? current : r
+              );
+              return target.id;
+            }
+            if (targetType === "weakness") {
+              const target = combatStatus.partyA.find((enemy) =>
+                combatStatus.turn
+                  ? isWeakFor(
+                      enemy.card.type,
+                      combatStatus.turn.creature.card.type
+                    )
+                  : false
+              );
+              console.log(target);
+
+              if (target) return target.id;
             }
             return result;
           },
@@ -249,17 +292,19 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       actionSelection &&
       targetSelection === null
     ) {
-      const party = actionRequiresEnemyTarget(
-        combatStatus.turn.creature.card,
-        actionSelection
-      )
-        ? combatStatus.partyB
-        : actionRequiresFriendlyTarget(
-            combatStatus.turn.creature.card,
-            actionSelection
-          )
-        ? combatStatus.partyA
-        : [];
+      const party = (
+        actionRequiresEnemyTarget(
+          combatStatus.turn.creature.card,
+          actionSelection
+        )
+          ? combatStatus.partyB
+          : actionRequiresFriendlyTarget(
+              combatStatus.turn.creature.card,
+              actionSelection
+            )
+          ? combatStatus.partyA
+          : []
+      ).filter((a) => a.health > 0);
 
       const keyHandling = (ev: KeyboardEvent) => {
         if (ev.code === "ArrowDown") {
@@ -380,21 +425,23 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           <div className={styles.actionsMenu}>
             <h2>Actie "{actionSelection}" doelwit:</h2>
             <ul>
-              {combatStatus.partyB.map((target, index) => (
-                <li
-                  key={target.id}
-                  className={className({
-                    [styles.focusAction]: index === actionFocus,
-                  })}
-                >
-                  <p>
-                    <strong>{target.card.name}</strong>
-                  </p>
-                  <p>
-                    HP: {target.health} / {target.card.health}
-                  </p>
-                </li>
-              ))}
+              {combatStatus.partyB
+                .filter((a) => a.health > 0)
+                .map((target, index) => (
+                  <li
+                    key={target.id}
+                    className={className({
+                      [styles.focusAction]: index === actionFocus,
+                    })}
+                  >
+                    <p>
+                      <strong>{target.card.name}</strong>
+                    </p>
+                    <p>
+                      HP: {target.health} / {target.card.health}
+                    </p>
+                  </li>
+                ))}
             </ul>
           </div>
         )}
@@ -409,21 +456,23 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           <div className={styles.actionsMenu}>
             <h2>Actie "{actionSelection}" doelwit:</h2>
             <ul>
-              {combatStatus.partyA.map((target, index) => (
-                <li
-                  key={target.id}
-                  className={className({
-                    [styles.focusAction]: index === actionFocus,
-                  })}
-                >
-                  <p>
-                    <strong>{target.card.name}</strong>
-                  </p>
-                  <p>
-                    HP: {target.health} / {target.card.health}
-                  </p>
-                </li>
-              ))}
+              {combatStatus.partyA
+                .filter((a) => a.health > 0)
+                .map((target, index) => (
+                  <li
+                    key={target.id}
+                    className={className({
+                      [styles.focusAction]: index === actionFocus,
+                    })}
+                  >
+                    <p>
+                      <strong>{target.card.name}</strong>
+                    </p>
+                    <p>
+                      HP: {target.health} / {target.card.health}
+                    </p>
+                  </li>
+                ))}
             </ul>
           </div>
         )}

@@ -1,15 +1,15 @@
-import { CreatureCard } from "./types";
+import { CreatureCard, CreatureCardId, Dialog } from "./types";
 
 const amerigo: CreatureCard = {
   id: "amerigo",
   name: "Amerigo",
   level: 1,
-  xpResult: 0,
+  xpResult: 50,
   type: "shoe",
   initiative: 4,
 
-  health: 50,
-  energy: 6,
+  health: 60,
+  energy: 4,
 
   actions: [
     {
@@ -23,12 +23,12 @@ const amerigo: CreatureCard = {
       name: "Hoeftrap",
       damage: 15,
       cost: 2,
-      cooldown: 0,
+      cooldown: 1,
       targets: ["enemy"],
     },
     {
       name: "Eet wortel",
-      damage: -20,
+      damage: -40,
       cost: 2,
       cooldown: 2,
       targets: ["self"],
@@ -37,7 +37,7 @@ const amerigo: CreatureCard = {
 };
 
 const ameerigogo: CreatureCard = {
-  id: "ameerigo",
+  id: "ameerigogo",
   name: "Ameerigogo",
   level: 2,
   xpResult: 0,
@@ -45,35 +45,35 @@ const ameerigogo: CreatureCard = {
   initiative: 4,
 
   health: 80,
-  energy: 15,
+  energy: 8,
 
   actions: [
     {
-      name: "Lichte aanval",
-      damage: 8,
+      name: "Kopstoot",
+      damage: 10,
       cost: 0,
       cooldown: 0,
       targets: ["enemy"],
     },
     {
-      name: "Zware aanval",
-      damage: 20,
+      name: "Hoeftrap",
+      damage: 24,
       cost: 2,
-      cooldown: 0,
+      cooldown: 1,
       targets: ["enemy"],
     },
     {
-      name: "Genees",
-      damage: -20,
-      cost: 3,
-      cooldown: 1,
+      name: "Eet wortel",
+      damage: -60,
+      cost: 2,
+      cooldown: 2,
       targets: ["friendly"],
     },
     {
-      name: "Genees iedereen",
-      damage: -10,
-      cost: 5,
-      cooldown: 2,
+      name: "Wortelfeest",
+      damage: -40,
+      cost: 4,
+      cooldown: 4,
       targets: ["allFriendlies"],
     },
   ],
@@ -163,23 +163,23 @@ const robot: CreatureCard = {
   name: "Robot",
   level: 1,
   xpResult: 0,
-  type: "bag",
+  type: "rod",
   initiative: 6,
 
-  health: 40,
+  health: 30,
   energy: 0,
 
   actions: [
     {
       name: "Arm klap",
-      damage: 30,
+      damage: 8,
       cost: 0,
       cooldown: 0,
       targets: ["maxHealth"],
     },
     {
       name: "Arm stomper",
-      damage: 50,
+      damage: 12,
       cost: 0,
       cooldown: 3,
       targets: ["maxHealth"],
@@ -187,9 +187,80 @@ const robot: CreatureCard = {
   ],
 };
 
-const creatures = [amerigo, ameerigogo, ozosnel, ozoefsnel, robot].reduce(
+const bear: CreatureCard = {
+  id: "bear",
+  name: "Teddybeer",
+  level: 1,
+  xpResult: 0,
+  type: "shoe",
+  initiative: 3,
+
+  health: 30,
+  energy: 4,
+
+  actions: [
+    {
+      name: "Knuffel",
+      damage: 6,
+      cost: 0,
+      cooldown: 0,
+      targets: ["weakness", "minHealth"],
+    },
+    {
+      name: "Knuffel sprong",
+      damage: 12,
+      cost: 0,
+      cooldown: 3,
+      targets: ["maxHealth"],
+    },
+    {
+      name: "Groepsknuffel",
+      damage: -30,
+      cost: 2,
+      cooldown: 4,
+      targets: ["allFriendlies"],
+    },
+  ],
+};
+
+const creatures = [amerigo, ameerigogo, ozosnel, ozoefsnel, robot, bear].reduce(
   (result, creature) => ({ ...result, [creature.id]: creature }),
   {} as Record<string, CreatureCard>
 );
+
+export const evolutions: Record<
+  string,
+  { dialog: Dialog[]; newCard: CreatureCardId }
+> = {
+  amerigo: {
+    newCard: "ameerigogo",
+    dialog: [
+      {
+        characterName: "Amerigo",
+        characterColor: "lightblue",
+        text: ["Tristan! Ik... Ik ben aan het veranderen...."],
+      },
+      {
+        characterName: "Tristan",
+        characterColor: "orange",
+        text: ["Ojee... gaat alles goed???"],
+      },
+      {
+        characterName: "Amerigo",
+        characterColor: "lightblue",
+        text: ["Ik... Ik... "],
+      },
+      {
+        characterName: "Ameerigogo",
+        characterColor: "lightblue",
+        text: [
+          "Evolueer!! Ik ben nu Ameerigogo!",
+          "Go! Go! Meer Go!",
+          "Ameerigogo!",
+        ],
+      },
+    ],
+  },
+};
 
 export default creatures;
