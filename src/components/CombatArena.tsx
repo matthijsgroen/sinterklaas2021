@@ -41,12 +41,15 @@ const MemberStats: React.FunctionComponent<MemberProps> = ({
   member,
   inTurn,
 }) => {
+  const stunned =
+    member.cooldowns["stunned"] && member.cooldowns["stunned"] > 0;
   return (
-    <div>
+    <div style={{ opacity: member.health > 0 ? 1 : 0.5 }}>
       <p>
         <strong>
           {inTurn ? "➡️ " : ""}
           {member.card.name}
+          {stunned && "🌪"}
         </strong>{" "}
         ({member.card.type} {iconFor(member.card.type)})
       </p>
@@ -99,10 +102,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       return () => clearTimeout(timeoutId);
     }
     if (combatStatus.outcome === "won") {
-      const timeoutId = setTimeout(() => {
-        dispatch(completeFight());
-      }, 3000);
-      return () => clearTimeout(timeoutId);
+      dispatch(completeFight());
     }
   }, [combatStatus.outcome, dispatch]);
 
@@ -111,8 +111,11 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       const nextFightDetails = character.fights[encounter.fightsFinished];
 
       if (!nextFightDetails && combatStatus.outcome === "won") {
-        dispatch(endEncounter());
-        dispatch(winEncounter());
+        const timeoutId = setTimeout(() => {
+          dispatch(endEncounter());
+          dispatch(winEncounter());
+        }, 3000);
+        return () => clearTimeout(timeoutId);
       }
     }
   }, [
@@ -153,12 +156,20 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         return () => clearTimeout(timeoutId);
       }
 
+      const specialAbilities = combatStatus.turn.actions
+        .filter((a) => a.damageType && !a.disabled)
+        .sort((a, b) => a.cost - b.cost)[0];
+      console.log("special", specialAbilities);
+
       // max offence!
       const offensiveAction = combatStatus.turn.actions
         .filter((a) => !a.disabled)
         .sort((a, b) => b.damage + b.cost - (a.damage + a.cost))[0];
-      if (offensiveAction) {
-        const target = offensiveAction.targets.reduce<null | string>(
+
+      const action = specialAbilities || offensiveAction;
+
+      if (action) {
+        const target = action.targets.reduce<null | string>(
           (result, targetType) => {
             if (targetType === "allEnemies") {
               return "all";
@@ -184,7 +195,6 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                     )
                   : false
               );
-              console.log(target);
 
               if (target) return target.id;
             }
@@ -194,7 +204,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         );
         if (target) {
           const timeoutId = setTimeout(() => {
-            dispatch(actionTurn({ action: offensiveAction.name, target }));
+            dispatch(actionTurn({ action: action.name, target }));
             setActionSelection(null);
             setTargetSelection(null);
           }, 3000);
@@ -205,6 +215,14 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   }, [combatStatus, dispatch]);
 
   useEffect(() => {
+    if (combatStatus.turn?.isStunned) {
+      const timeoutId = setTimeout(() => {
+        dispatch(actionTurn({ action: "wait", target: "" }));
+        setActionSelection(null);
+        setTargetSelection(null);
+      }, 2000);
+      return () => clearTimeout(timeoutId);
+    }
     if (actionSelection && targetSelection) {
       dispatch(
         actionTurn({ action: actionSelection, target: targetSelection })
@@ -257,21 +275,24 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       const actionIndices = combatStatus.turn.actions.reduce(
         (result, action, index) =>
           action.disabled ? result : result.concat(index),
-
         [] as number[]
       );
 
       const keyHandling = (ev: KeyboardEvent) => {
         if (ev.code === "ArrowDown") {
           setActionFocus(
-            (state) => actionIndices[(state + 1) % actionIndices.length]
+            (state) =>
+              actionIndices[
+                (actionIndices.indexOf(state) + 1) % actionIndices.length
+              ]
           );
         }
         if (ev.code === "ArrowUp") {
           setActionFocus(
             (state) =>
               actionIndices[
-                (actionIndices.length + state - 1) % actionIndices.length
+                (actionIndices.length + actionIndices.indexOf(state) - 1) %
+                  actionIndices.length
               ]
           );
         }
@@ -381,6 +402,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
 
       {combatStatus.turn &&
         combatStatus.turn.creature.party === "left" &&
+        !combatStatus.turn.isStunned &&
         actionSelection === null && (
           <div className={styles.actionsMenu}>
             <h2>Acties</h2>
@@ -400,9 +422,20 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                     <span>(Afkoelen: {action.inCooldown} beurten)</span>
                   )}
                   <p>
-                    {action.damage > 0 ? `Schade: ${action.damage}. ` : ""}
+                    {action.damage > 0 && action.damageType === undefined
+                      ? action.targets.includes("allEnemies")
+                        ? `Schade iedereen: ${action.damage}. `
+                        : `Schade: ${action.damage}. `
+                      : ""}
+                    {action.damage > 0 && action.damageType === "stun"
+                      ? action.targets.includes("allEnemies")
+                        ? `Verdoof iedereen: ${action.damage} beurten. `
+                        : `Verdoof: ${action.damage} beurten. `
+                      : ""}
                     {action.damage < 0
-                      ? `Genezing: ${action.damage * -1} HP. `
+                      ? action.targets.includes("allFriendlies")
+                        ? `Genees iedereen: ${action.damage * -1} HP. `
+                        : `Genezing: ${action.damage * -1} HP. `
                       : ""}
                     {action.cooldown > 0
                       ? `Afkoeling: ${action.cooldown} beurten. `

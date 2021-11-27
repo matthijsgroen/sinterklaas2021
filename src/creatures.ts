@@ -4,7 +4,7 @@ const amerigo: CreatureCard = {
   id: "amerigo",
   name: "Amerigo",
   level: 1,
-  xpResult: 50,
+  xpResult: 75,
   type: "shoe",
   initiative: 4,
 
@@ -83,33 +83,26 @@ const ozosnel: CreatureCard = {
   id: "ozosnel",
   name: "Ozosnel",
   level: 1,
-  xpResult: 0,
+  xpResult: 100,
   type: "rod",
   initiative: 2,
 
-  health: 60,
-  energy: 10,
+  health: 50,
+  energy: 4,
 
   actions: [
     {
-      name: "Lichte aanval",
+      name: "Hoefzoef",
       damage: 6,
       cost: 0,
       cooldown: 0,
       targets: ["enemy"],
     },
     {
-      name: "Zware aanval",
-      damage: 10,
-      cost: 1,
-      cooldown: 1,
-      targets: ["enemy"],
-    },
-    {
       name: "Stormloop",
-      damage: -10,
-      cost: 3,
-      cooldown: 2,
+      damage: 10,
+      cost: 2,
+      cooldown: 4,
       targets: ["allEnemies"],
     },
   ],
@@ -124,35 +117,29 @@ const ozoefsnel: CreatureCard = {
   initiative: 2,
 
   health: 70,
-  energy: 15,
+  energy: 12,
 
   actions: [
     {
-      name: "Lichte aanval",
+      name: "Hoefzoef",
       damage: 6,
       cost: 0,
       cooldown: 0,
       targets: ["enemy"],
     },
     {
-      name: "Zware aanval",
-      damage: 14,
-      cost: 1,
+      name: "Zoefstomp",
+      damage: 2,
+      damageType: "stun",
+      cost: 3,
       cooldown: 1,
       targets: ["enemy"],
     },
     {
-      name: "Stormloop",
-      damage: 10,
-      cost: 2,
-      cooldown: 2,
-      targets: ["allEnemies"],
-    },
-    {
       name: "Pepernoten storm",
       damage: 20,
-      cost: 6,
-      cooldown: 2,
+      cost: 3,
+      cooldown: 4,
       targets: ["allEnemies"],
     },
   ],
@@ -223,7 +210,45 @@ const bear: CreatureCard = {
   ],
 };
 
-const creatures = [amerigo, ameerigogo, ozosnel, ozoefsnel, robot, bear].reduce(
+const slime: CreatureCard = {
+  id: "slime",
+  name: "Slijm",
+  level: 1,
+  xpResult: 0,
+  type: "bag",
+  initiative: 8,
+
+  health: 40,
+  energy: 4,
+
+  actions: [
+    {
+      name: "Klodder",
+      damage: 10,
+      cost: 0,
+      cooldown: 0,
+      targets: ["weakness", "maxHealth"],
+    },
+    {
+      name: "Plakkerigheid",
+      damage: 2,
+      damageType: "stun",
+      cost: 2,
+      cooldown: 4,
+      targets: ["maxHealth"],
+    },
+  ],
+};
+
+const creatures = [
+  amerigo,
+  ameerigogo,
+  ozosnel,
+  ozoefsnel,
+  robot,
+  bear,
+  slime,
+].reduce(
   (result, creature) => ({ ...result, [creature.id]: creature }),
   {} as Record<string, CreatureCard>
 );
@@ -258,6 +283,31 @@ export const evolutions: Record<
           "Go! Go! Meer Go!",
           "Ameerigogo!",
         ],
+      },
+    ],
+  },
+  ozosnel: {
+    newCard: "ozoefsnel",
+    dialog: [
+      {
+        characterName: "Ozosnel",
+        characterColor: "sandybrown",
+        text: ["Tristan! Ik... Ik ben aan het veranderen...."],
+      },
+      {
+        characterName: "Tristan",
+        characterColor: "orange",
+        text: ["Evolueer je nu al??"],
+      },
+      {
+        characterName: "Ozosnel",
+        characterColor: "sandybrown",
+        text: ["Ik... Ik... denk het... "],
+      },
+      {
+        characterName: "Ozoefsnel",
+        characterColor: "sandybrown",
+        text: ["Evolueer!! Ik ben nu Ozoefsnel!", "Zoef zoef!!", "Ozoefsnel!"],
       },
     ],
   },

@@ -50,7 +50,7 @@ export type Dialog = {
 };
 
 export type Fight = {
-  dialog?: Dialog;
+  dialog?: Dialog[];
   enemies: CreatureCardId[];
 };
 
@@ -100,6 +100,7 @@ export type ActionTarget =
 export type Action = {
   name: string;
   damage: number;
+  damageType?: "stun";
   cost: number;
   cooldown: number;
   targets: ActionTarget[];

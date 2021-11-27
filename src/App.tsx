@@ -15,6 +15,7 @@ import {
 } from "./state/characterSlice";
 import {
   endEncounter,
+  selectFightWon,
   selectInCombat,
   selectLevelingUp,
   startFight,
@@ -130,6 +131,7 @@ function App() {
   const zone = zones[zoneId];
 
   const inCombat = useAppSelector(selectInCombat);
+  const fightWon = useAppSelector(selectFightWon);
   const [dialogState, setDialogState] = useState<DialogState>({
     type: "none",
     sentence: 0,
@@ -213,20 +215,39 @@ function App() {
     if (
       character &&
       encounter.result === "lost" &&
-      dialogState.type === "initial"
+      dialogState.type !== "lose"
     ) {
       setDialogState({ type: "lose", sentence: 0 });
       dispatch(endEncounter());
     }
-    if (
-      character &&
-      encounter.result === "won" &&
-      dialogState.type === "initial"
-    ) {
+    if (character && encounter.result === "won" && dialogState.type !== "win") {
       setDialogState({ type: "win", sentence: 0 });
       dispatch(endEncounter());
     }
-  }, [encounter.result, character, dialogState.type, dispatch]);
+    if (
+      inCombat &&
+      character &&
+      encounter.result === "inProgress" &&
+      fightWon &&
+      encounter.fightsFinished > 0 &&
+      character.fights[encounter.fightsFinished]
+    ) {
+      const timeoutId = setTimeout(() => {
+        dispatch(
+          startFight(character.fights[encounter.fightsFinished].enemies)
+        );
+      }, 1000);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [
+    encounter.result,
+    character,
+    dialogState.type,
+    dispatch,
+    fightWon,
+    inCombat,
+    encounter.fightsFinished,
+  ]);
 
   const dialogData = selectDialogData(character, dialogState, evolving);
 

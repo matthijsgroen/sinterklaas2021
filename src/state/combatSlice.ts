@@ -55,7 +55,8 @@ export const combatSlice = createSlice({
       state.combatResult = "inProgress";
       state.creatures = state.creatures
         .filter((c) => c.party === "left")
-        .concat(action.payload.map(createCombatCreature("right")));
+        .concat(action.payload.map(createCombatCreature("right")))
+        .map((c) => ({ ...c, inTurn: 0 }));
 
       state.currentTurn = state.creatures.sort((a, b) => {
         const cA = creatures[a.card];
@@ -86,10 +87,6 @@ export const combatSlice = createSlice({
 
       const team = currentcreature.party;
       const ownCard = creatures[currentcreature.card];
-      const actionDetails = ownCard.actions.find(
-        (a) => a.name === action.payload.action
-      );
-      if (!actionDetails) return;
       state.lastActionLog = [];
 
       currentcreature.inTurn += 1;
@@ -104,70 +101,102 @@ export const combatSlice = createSlice({
         {}
       );
 
-      if (actionDetails.cost > 0) {
-        currentcreature.energy -= actionDetails.cost;
-      }
-      if (actionDetails.cooldown > 0) {
-        currentcreature.cooldowns[actionDetails.name] = actionDetails.cooldown;
-      }
+      const actionDetails = ownCard.actions.find(
+        (a) => a.name === action.payload.action
+      );
+      if (actionDetails) {
+        if (actionDetails.cost > 0) {
+          currentcreature.energy -= actionDetails.cost;
+        }
+        if (actionDetails.cooldown > 0) {
+          currentcreature.cooldowns[actionDetails.name] =
+            actionDetails.cooldown;
+        }
 
-      state.creatures
-        .filter((creature) => {
-          const isEnemy = creature.party !== team;
+        state.creatures
+          .filter((creature) => {
+            const isEnemy = creature.party !== team;
 
-          return (
-            action.payload.target === creature.id ||
-            (actionDetails.targets.includes("allEnemies") &&
-              isEnemy &&
-              action.payload.target === "all") ||
-            (actionDetails.targets.includes("allFriendlies") &&
-              !isEnemy &&
-              action.payload.target === "all")
-          );
-        })
-        .forEach((creature) => {
-          if (!state.currentTurn) return;
-          const card = creatures[creature.card];
-
-          if (actionDetails.damage < 0) {
-            const healing = Math.min(
-              card.health - creature.health,
-              actionDetails.damage * -1
+            return (
+              action.payload.target === creature.id ||
+              (actionDetails.targets.includes("allEnemies") &&
+                isEnemy &&
+                creature.health > 0 &&
+                action.payload.target === "all") ||
+              (actionDetails.targets.includes("allFriendlies") &&
+                !isEnemy &&
+                creature.health > 0 &&
+                action.payload.target === "all")
             );
+          })
+          .forEach((creature) => {
+            if (!state.currentTurn) return;
+            const card = creatures[creature.card];
 
-            if (healing > 0) {
-              state.lastActionLog.push({
-                source: currentcreature,
-                action: "heals",
-                target: creature,
-                with: actionDetails.name,
-                points: healing,
-                unit: "points",
-              });
-              // healing
-              creature.health += healing;
+            if (actionDetails.damage < 0) {
+              const healing = Math.min(
+                card.health - creature.health,
+                actionDetails.damage * -1
+              );
+
+              if (healing > 0) {
+                state.lastActionLog.push({
+                  source: currentcreature,
+                  action: "heals",
+                  target: creature,
+                  with: actionDetails.name,
+                  points: healing,
+                  unit: "points",
+                });
+                // healing
+                creature.health += healing;
+              }
             }
-          }
 
-          if (actionDetails.damage > 0) {
-            const damage = Math.round(
-              modifier(ownCard.type, card.type) * actionDetails.damage
-            );
+            if (
+              actionDetails.damage > 0 &&
+              actionDetails.damageType === undefined
+            ) {
+              const damage = Math.round(
+                modifier(ownCard.type, card.type) * actionDetails.damage
+              );
 
-            if (state.currentTurn && damage > 0) {
-              state.lastActionLog.push({
-                source: currentcreature,
-                action: "hurts",
-                with: actionDetails.name,
-                target: creature,
-                points: damage,
-                unit: "points",
-              });
-              // healing
-              creature.health -= damage;
+              if (state.currentTurn && damage > 0) {
+                state.lastActionLog.push({
+                  source: currentcreature,
+                  action: "hurts",
+                  with: actionDetails.name,
+                  target: creature,
+                  points: damage,
+                  unit: "points",
+                });
+                // dealing damage
+                creature.health -= damage;
+              }
             }
-          }
-        });
+
+            if (
+              actionDetails.damage > 0 &&
+              actionDetails.damageType === "stun"
+            ) {
+              if (state.currentTurn) {
+                state.lastActionLog.push({
+                  source: currentcreature,
+                  action: "stuns",
+                  with: actionDetails.name,
+                  target: creature,
+                  points: actionDetails.damage,
+                  unit: "turns",
+                });
+                // dealing damage
+                creature.cooldowns = {
+                  ...creature.cooldowns,
+                  stunned: actionDetails.damage,
+                };
+              }
+            }
+          });
+      }
 
       // Need a next turn?
 
@@ -200,6 +229,8 @@ export const { startFight, startEncounter, actionTurn, endEncounter } =
   combatSlice.actions;
 
 export const selectInCombat = (state: RootState) => state.combat.inCombat;
+export const selectFightWon = (state: RootState) =>
+  state.combat.combatResult === "won";
 
 export type CombatCreature = Omit<Creature, "card"> & {
   card: CreatureCard;
@@ -211,6 +242,7 @@ type CombatStatus = {
   partyB: CombatCreature[];
   turn?: {
     creature: CombatCreature;
+    isStunned: boolean;
     actions: (Action & { disabled: boolean; inCooldown: number })[];
   };
 };
@@ -257,6 +289,10 @@ export const selectCombatStatus = (state: RootState): CombatStatus => {
       currentCard && currentCreature
         ? {
             creature: { ...currentCreature, card: currentCard },
+            isStunned: !!(
+              currentCreature.cooldowns["stunned"] &&
+              currentCreature.cooldowns["stunned"] > 0
+            ),
             actions,
           }
         : undefined,
