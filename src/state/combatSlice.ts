@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { modifier } from "../combatHelpers";
-import creatures from "../creatures";
+import creatures from "../data/creatures";
 import {
   Action,
   ActionSentence,

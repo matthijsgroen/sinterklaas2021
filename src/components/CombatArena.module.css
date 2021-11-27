@@ -38,17 +38,6 @@
   margin: 0.25em;
 }
 
-.memberProps {
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: min(30%, 200px) 1fr;
-  gap: 1em;
-}
-
-.memberProps progress {
-  width: 100%;
-}
-
 .actionsMenu li.focusAction {
   border: 2px solid white;
 }

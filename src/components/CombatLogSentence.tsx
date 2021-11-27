@@ -1,4 +1,4 @@
-import creatures from "../creatures";
+import creatures from "../data/creatures";
 import { ActionSentence, ActionType } from "../types";
 
 const creatureName = (cardId: string) => creatures[cardId].name;

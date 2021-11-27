@@ -50,7 +50,10 @@ export const catoo: LevelCharacter = {
     {
       characterColor: "pink",
       characterName: "Catootje",
-      text: ["Goed gedaan broer!"],
+      text: [
+        "Goed gedaan broer!",
+        "Ik ga met je mee! Dan gaan we de anderen redden!",
+      ],
     },
   ],
   loseDialog: [

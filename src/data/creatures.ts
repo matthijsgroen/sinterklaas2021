@@ -1,4 +1,4 @@
-import { CreatureCard, CreatureCardId, Dialog } from "./types";
+import { CreatureCard, CreatureCardId, Dialog } from "../types";
 
 const amerigo: CreatureCard = {
   id: "amerigo",

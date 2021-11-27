@@ -3,7 +3,7 @@ import "./App.css";
 import CombatArena from "./components/CombatArena";
 import DialogView from "./components/Dialog";
 import Level from "./components/Level";
-import { evolutions } from "./creatures";
+import { evolutions } from "./data/creatures";
 import zones from "./data";
 import {
   addFollower,

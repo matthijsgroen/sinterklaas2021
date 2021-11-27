@@ -3,7 +3,6 @@ import className from "../className";
 import { isWeakFor } from "../combatHelpers";
 import {
   actionTurn,
-  CombatCreature,
   endEncounter,
   selectCombatLog,
   selectCombatStatus,
@@ -15,61 +14,11 @@ import {
   winEncounter,
 } from "../state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "../state/hooks";
-import {
-  ActionTarget,
-  CreatureCard,
-  CreatureType,
-  LevelCharacter,
-} from "../types";
+import { ActionTarget, CreatureCard, LevelCharacter } from "../types";
 import styles from "./CombatArena.module.css";
 import CombatLogSentence from "./CombatLogSentence";
+import MemberStats from "./MemberStats";
 
-type MemberProps = {
-  member: CombatCreature;
-  inTurn: boolean;
-};
-
-const iconMap: Record<CreatureType, string> = {
-  shoe: "✂️",
-  bag: "📄",
-  rod: "🪨",
-};
-
-const iconFor = (name: CreatureType): string => iconMap[name];
-
-const MemberStats: React.FunctionComponent<MemberProps> = ({
-  member,
-  inTurn,
-}) => {
-  const stunned =
-    member.cooldowns["stunned"] && member.cooldowns["stunned"] > 0;
-  return (
-    <div style={{ opacity: member.health > 0 ? 1 : 0.5 }}>
-      <p>
-        <strong>
-          {inTurn ? "➡️ " : ""}
-          {member.card.name}
-          {stunned && "🌪"}
-        </strong>{" "}
-        ({member.card.type} {iconFor(member.card.type)})
-      </p>
-      <p className={styles.memberProps}>
-        <span>
-          HP: {Math.max(member.health, 0)} / {member.card.health}
-        </span>
-        <progress value={member.health / member.card.health} />
-      </p>
-      {member.card.energy > 0 && (
-        <p className={styles.memberProps}>
-          <span>
-            E: {member.energy} / {member.card.energy}
-          </span>
-          <progress value={member.energy / member.card.energy} />
-        </p>
-      )}
-    </div>
-  );
-};
 const actionRequiresTarget =
   (type: ActionTarget) =>
   (card: CreatureCard, actionSelection: string): boolean =>
