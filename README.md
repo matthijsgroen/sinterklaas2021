@@ -5,7 +5,7 @@ An small RPG game as present!
 ## Setup
 
 1. Clone repo
-2. Follow instructions of [README.md](./public/images/README.md) in images folder
+2. `./bin/setup-assets.sh`
 3. `yarn install`
 4. `yarn start`
 
