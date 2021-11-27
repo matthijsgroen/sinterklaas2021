@@ -236,7 +236,7 @@ export type CombatCreature = Omit<Creature, "card"> & {
   card: CreatureCard;
 };
 
-type CombatStatus = {
+export type CombatStatus = {
   outcome: CombatResult;
   partyA: CombatCreature[];
   partyB: CombatCreature[];

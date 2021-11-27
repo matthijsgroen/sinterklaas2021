@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import className from "../className";
-import { isWeakFor } from "../combatHelpers";
+import { enemyActionSelection } from "../combat";
 import {
   actionTurn,
   endEncounter,
@@ -81,84 +81,14 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
 
   useEffect(() => {
     if (combatStatus.turn && combatStatus.turn.creature.party === "right") {
-      // weak team mates? heal!
-      const needsHealing = combatStatus.partyB
-        .filter((c) => c.health < 15)
-        .sort((a, b) => a.health - b.health);
-      const healingAbilities = combatStatus.turn.actions
-        .filter((a) => !a.disabled && a.damage < 0)
-        .sort((a, b) => a.cost - b.cost);
+      const actionData = enemyActionSelection(combatStatus);
 
-      if (needsHealing.length > 0 && healingAbilities.length > 0) {
-        const defensiveAction = healingAbilities[0];
-
-        const target =
-          defensiveAction.targets[0] === "allFriendlies"
-            ? "all"
-            : needsHealing[0].id;
-
-        const timeoutId = setTimeout(() => {
-          dispatch(actionTurn({ action: defensiveAction.name, target }));
-          setActionSelection(null);
-          setTargetSelection(null);
-        }, 3000);
-        return () => clearTimeout(timeoutId);
-      }
-
-      const specialAbilities = combatStatus.turn.actions
-        .filter((a) => a.damageType && !a.disabled)
-        .sort((a, b) => a.cost - b.cost)[0];
-
-      // max offence!
-      const offensiveAction = combatStatus.turn.actions
-        .filter((a) => !a.disabled)
-        .sort((a, b) => b.damage + b.cost - (a.damage + a.cost))[0];
-
-      const action = specialAbilities || offensiveAction;
-
-      if (action) {
-        const target = action.targets.reduce<null | string>(
-          (result, targetType) => {
-            if (targetType === "allEnemies") {
-              return "all";
-            }
-            if (targetType === "maxHealth") {
-              const target = combatStatus.partyA.reduce((r, current) =>
-                current.health > r.health ? current : r
-              );
-              return target.id;
-            }
-            if (targetType === "minHealth") {
-              const target = combatStatus.partyA.reduce((r, current) =>
-                current.health < r.health ? current : r
-              );
-              return target.id;
-            }
-            if (targetType === "weakness") {
-              const target = combatStatus.partyA.find((enemy) =>
-                combatStatus.turn
-                  ? isWeakFor(
-                      enemy.card.type,
-                      combatStatus.turn.creature.card.type
-                    )
-                  : false
-              );
-
-              if (target) return target.id;
-            }
-            return result;
-          },
-          null
-        );
-        if (target) {
-          const timeoutId = setTimeout(() => {
-            dispatch(actionTurn({ action: action.name, target }));
-            setActionSelection(null);
-            setTargetSelection(null);
-          }, 3000);
-          return () => clearTimeout(timeoutId);
-        }
-      }
+      const timeoutId = setTimeout(() => {
+        dispatch(actionTurn(actionData));
+        setActionSelection(null);
+        setTargetSelection(null);
+      }, 3000);
+      return () => clearTimeout(timeoutId);
     }
   }, [combatStatus, dispatch]);
 
