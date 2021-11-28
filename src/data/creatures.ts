@@ -108,9 +108,9 @@ const ozosnel: CreatureCard = {
   ],
 };
 
-const ozoefsnel: CreatureCard = {
-  id: "ozoefsnel",
-  name: "Ozoefsnel",
+const ozoveelsneller: CreatureCard = {
+  id: "ozoveelsneller",
+  name: "Ozoveelsneller",
   level: 2,
   xpResult: 0,
   type: "rod",
@@ -244,7 +244,7 @@ const creatures = [
   amerigo,
   ameerigogo,
   ozosnel,
-  ozoefsnel,
+  ozoveelsneller,
   robot,
   bear,
   slime,
@@ -287,7 +287,7 @@ export const evolutions: Record<
     ],
   },
   ozosnel: {
-    newCard: "ozoefsnel",
+    newCard: "ozoveelsneller",
     dialog: [
       {
         characterName: "Ozosnel",
@@ -305,9 +305,13 @@ export const evolutions: Record<
         text: ["Ik... Ik... denk het... "],
       },
       {
-        characterName: "Ozoefsnel",
+        characterName: "Ozoveelsneller",
         characterColor: "sandybrown",
-        text: ["Evolueer!! Ik ben nu Ozoefsnel!", "Zoef zoef!!", "Ozoefsnel!"],
+        text: [
+          "Evolueer!! Ik ben nu Ozoveelsneller!",
+          "Snel snel!!",
+          "Ozoveelsneller!",
+        ],
       },
     ],
   },

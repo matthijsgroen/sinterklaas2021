@@ -23,8 +23,14 @@ const MemberStats: React.FunctionComponent<MemberProps> = ({
   const stunned =
     member.cooldowns["stunned"] && member.cooldowns["stunned"] > 0;
   return (
-    <div style={{ opacity: member.health > 0 ? 1 : 0.5 }}>
-      <p>
+    <div
+      style={{
+        opacity: member.health > 0 ? 1 : 0.5,
+        background: inTurn ? "#222" : "#000",
+        padding: "0.5em",
+      }}
+    >
+      <p style={{ color: member.party === "left" ? "lightgreen" : "white" }}>
         <strong>
           {inTurn ? "➡️ " : ""}
           {member.card.name}

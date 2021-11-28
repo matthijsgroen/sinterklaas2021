@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import className from "../className";
 import { enemyActionSelection } from "../combat";
 import {
@@ -42,6 +42,11 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   const [actionSelection, setActionSelection] = useState<string | null>(null);
   const [targetSelection, setTargetSelection] = useState<string | null>(null);
   const [actionFocus, setActionFocus] = useState(0);
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const characterOrder = combatStatus.partyA
+    .concat(combatStatus.partyB)
+    .sort((a, b) => a.card.initiative - b.card.initiative);
 
   useEffect(() => {
     if (combatStatus.outcome === "lost") {
@@ -246,24 +251,11 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           </p>
         )}
       </div>
+      <canvas className={styles.arena} ref={canvasRef} />
 
       <div className={styles.partyStats}>
         <div className={styles.partyBox}>
-          {combatStatus.partyA.map((member) => (
-            <MemberStats
-              member={member}
-              key={member.id}
-              inTurn={
-                !!(
-                  combatStatus.turn &&
-                  combatStatus.turn.creature.id === member.id
-                )
-              }
-            />
-          ))}
-        </div>
-        <div className={styles.partyBox}>
-          {combatStatus.partyB.map((member) => (
+          {characterOrder.map((member) => (
             <MemberStats
               member={member}
               key={member.id}

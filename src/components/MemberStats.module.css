@@ -1,8 +1,8 @@
 .memberProps {
   display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: min(30%, 200px) 1fr;
-  gap: 1em;
+  grid-auto-flow: row;
+  /* grid-template-rows: min(30%, 200px) 1fr; */
+  /* gap: 1em; */
 }
 
 .memberProps progress {
