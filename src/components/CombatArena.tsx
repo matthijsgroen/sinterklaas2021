@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import className from "../className";
 import { enemyActionSelection } from "../combat";
 import {
@@ -17,7 +17,10 @@ import { useAppDispatch, useAppSelector } from "../state/hooks";
 import { ActionTarget, CreatureCard, LevelCharacter } from "../types";
 import styles from "./CombatArena.module.css";
 import CombatLogSentence from "./CombatLogSentence";
+import CombatView from "./CombatView";
 import MemberStats from "./MemberStats";
+
+const DELAY_FOR_CPU_OPPONENT = 5000;
 
 const actionRequiresTarget =
   (type: ActionTarget) =>
@@ -43,7 +46,6 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   const [targetSelection, setTargetSelection] = useState<string | null>(null);
   const [actionFocus, setActionFocus] = useState(0);
 
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const characterOrder = combatStatus.partyA
     .concat(combatStatus.partyB)
     .sort((a, b) => a.card.initiative - b.card.initiative);
@@ -92,7 +94,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         dispatch(actionTurn(actionData));
         setActionSelection(null);
         setTargetSelection(null);
-      }, 3000);
+      }, DELAY_FOR_CPU_OPPONENT);
       return () => clearTimeout(timeoutId);
     }
   }, [combatStatus, dispatch]);
@@ -251,7 +253,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           </p>
         )}
       </div>
-      <canvas className={styles.arena} ref={canvasRef} />
+      <CombatView />
 
       <div className={styles.partyStats}>
         <div className={styles.partyBox}>

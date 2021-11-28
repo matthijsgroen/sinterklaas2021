@@ -1,3 +1,5 @@
+import { PreparedImageDefinition } from "geppetto-player";
+
 export enum CharacterSprites {
   Tristan = 0,
   Catoo = 1,
@@ -101,6 +103,7 @@ export type Action = {
   name: string;
   damage: number;
   damageType?: "stun";
+  animationTrack?: string;
   cost: number;
   cooldown: number;
   targets: ActionTarget[];
@@ -121,6 +124,9 @@ export type CreatureCard = {
   type: CreatureType;
   health: number;
   energy: number;
+
+  texture: Promise<HTMLImageElement>;
+  animation: PreparedImageDefinition;
 
   actions: Action[];
 };

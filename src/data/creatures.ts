@@ -1,4 +1,17 @@
+import { ImageDefinition, prepareAnimation } from "geppetto-player";
 import { CreatureCard, CreatureCardId, Dialog } from "../types";
+import amerigoTexture from "./geppetto/combat_characters.png";
+import amerigoAnimation from "./geppetto/amerigo.json";
+
+const loadTexture = async (url: string): Promise<HTMLImageElement> =>
+  new Promise((resolve) => {
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = url;
+    image.onload = () => resolve(image);
+  });
+
+export const genericCombatTexture = loadTexture(amerigoTexture);
 
 const amerigo: CreatureCard = {
   id: "amerigo",
@@ -11,9 +24,13 @@ const amerigo: CreatureCard = {
   health: 60,
   energy: 4,
 
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+
   actions: [
     {
       name: "Kopstoot",
+      animationTrack: "headbutt",
       damage: 5,
       cost: 0,
       cooldown: 0,
@@ -21,6 +38,7 @@ const amerigo: CreatureCard = {
     },
     {
       name: "Hoeftrap",
+      animationTrack: "kick",
       damage: 15,
       cost: 2,
       cooldown: 1,
@@ -46,6 +64,9 @@ const ameerigogo: CreatureCard = {
 
   health: 80,
   energy: 8,
+
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
 
   actions: [
     {
@@ -90,6 +111,9 @@ const ozosnel: CreatureCard = {
   health: 50,
   energy: 4,
 
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+
   actions: [
     {
       name: "Hoefzoef",
@@ -118,6 +142,9 @@ const ozoveelsneller: CreatureCard = {
 
   health: 70,
   energy: 12,
+
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
 
   actions: [
     {
@@ -156,6 +183,9 @@ const robot: CreatureCard = {
   health: 30,
   energy: 0,
 
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+
   actions: [
     {
       name: "Arm klap",
@@ -184,6 +214,9 @@ const bear: CreatureCard = {
 
   health: 30,
   energy: 4,
+
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
 
   actions: [
     {
@@ -220,6 +253,9 @@ const slime: CreatureCard = {
 
   health: 40,
   energy: 4,
+
+  texture: genericCombatTexture,
+  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
 
   actions: [
     {
