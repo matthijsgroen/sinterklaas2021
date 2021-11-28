@@ -48,6 +48,20 @@ type DialogProps = {
   text: string;
 };
 
+const processText = (text: string): React.ReactNode =>
+  text
+    .replaceAll(":rock:", "|rockIcon|")
+    .replaceAll(":paper:", "|paperIcon|")
+    .replaceAll(":scissors:", "|scissorsIcon|")
+    .split("|")
+    .map((element) => {
+      // TODO: Replace with Shoe, Bag, Rod
+      if (element === "rockIcon") return "🪨";
+      if (element === "paperIcon") return "📄";
+      if (element === "scissorsIcon") return "✂️";
+      return element;
+    });
+
 const hasDialogEnded = (
   dialogType: DialogType,
   character: LevelCharacter | undefined,
@@ -267,7 +281,7 @@ function App() {
             }));
           }}
         >
-          {dialogData.text}
+          {processText(dialogData.text)}
         </DialogView>
       )}
     </main>

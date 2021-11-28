@@ -41,18 +41,13 @@ const synchronizeAnimations = (
     if (!animationsRef.current[creature.id]) {
       const img = await creature.card.texture;
 
-      const texIndex = Object.keys(animationsRef.current).length;
-      const animation = player.addAnimation(
-        creature.card.animation,
-        img,
-        1 + texIndex,
-        {
-          panX: creature.party === "left" ? -0.5 : 0.4,
-          panY: 0.2 + index * -0.2,
-          zoom: 1.5,
-          zIndex: 2 + index,
-        }
-      );
+      //   const texIndex = Object.keys(animationsRef.current).length;
+      const animation = player.addAnimation(creature.card.animation, img, 0, {
+        panX: creature.party === "left" ? -0.5 : 0.4,
+        panY: 0.2 + index * -0.2,
+        zoom: 1.5,
+        zIndex: 2 + index,
+      });
       animation.startTrack("idle");
       animationsRef.current[creature.id] = {
         controls: animation,

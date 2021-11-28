@@ -45,7 +45,17 @@ export const catoo: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Ha! Daar heb ik mooi van gewonnen!"],
+      text: ["Ha! Daar hebben we mooi van gewonnen Amerigo!"],
+    },
+    {
+      characterColor: "lightblue",
+      characterName: "Amerigo",
+      text: [
+        "Ja zeker. Maar mijn schade kwam niet volledig aan.",
+        "Dit komt omdat ik een :scissors: type ben, en deze robot is van het type :rock:",
+        ":rock: is sterker tegen :scissors:, :scissors: is sterker tegen :paper:, en :paper: is weer sterker tegen :rock:.",
+        "Gebruik die informatie voor tactische keuzes!",
+      ],
     },
     {
       characterColor: "pink",

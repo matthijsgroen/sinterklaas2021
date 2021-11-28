@@ -17,7 +17,7 @@ export const amerigo: LevelCharacter = {
         "Tristan help!",
         "Al het speelgoed van Sinterklaas is tot leven gekomen!",
         "En nu houden ze de Sint, Hoofdpiet en jouw familie gevangen!",
-        "We moeten ze redden",
+        "We moeten ze redden. Ik zal je helpen.",
       ],
     },
     {
