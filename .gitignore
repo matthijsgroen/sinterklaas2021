@@ -21,6 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+bin/*.zip
 public/images/kenney_*/**
-public/images/*.zip
 public/images/furniture*/**

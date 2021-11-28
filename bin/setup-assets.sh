@@ -1,7 +1,18 @@
 #!/bin/bash
 
-curl -o public/images/kenney_platformerkit2.zip https://kenney.nl/content/3-assets/20-platformer-kit/kenney_platformerkit2.zip
-curl -o public/images/furniturekit_updated.zip https://kenney.nl/content/3-assets/48-furniture-kit/furniturekit_updated.zip
+# When new asset packs are released, these numbers are increased...
 
-unzip -d public/images/kenney_platformerkit2 public/images/kenney_platformerkit2.zip 
-unzip -d public/images/furniturekit_updated public/images/furniturekit_updated.zip 
+NUMBER=21
+FILE=kenney_platformerkit2
+if [ ! -f "bin/$FILE.zip" ]; then
+    curl -o "bin/$FILE.zip" "https://kenney.nl/content/3-assets/$NUMBER-platformer-kit/kenney_platformerkit2.zip"
+fi
+unzip -u -d "public/images/$FILE" "bin/$FILE.zip" Isometric/*
+
+
+NUMBER=49
+FILE=furniturekit_updated
+if [ ! -f "bin/$FILE.zip" ]; then
+    curl -o "bin/$FILE.zip" "https://kenney.nl/content/3-assets/$NUMBER-furniture-kit/furniturekit_updated.zip"
+fi
+unzip -u -d "public/images/$FILE" "bin/$FILE.zip" Isometric/*
