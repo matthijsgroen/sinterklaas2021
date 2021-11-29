@@ -122,7 +122,7 @@ const CombatView: React.FunctionComponent = () => {
 
         const controls = player.addAnimation(background, img, 0, {
           panX: 0,
-          zoom: 4,
+          zoom: 4.5,
         });
         animationsRef.current["background"] = {
           controls,

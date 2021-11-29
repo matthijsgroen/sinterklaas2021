@@ -28,6 +28,7 @@ import {
 } from "./state/encounterSlice";
 import { useAppDispatch, useAppSelector } from "./state/hooks";
 import { LevelCharacter, LevelData, Dialog } from "./types";
+import Icon from "./components/Icon";
 
 type DialogType =
   | "initial"
@@ -54,12 +55,12 @@ const processText = (text: string): React.ReactNode =>
     .replaceAll(":paper:", "|paperIcon|")
     .replaceAll(":scissors:", "|scissorsIcon|")
     .split("|")
-    .map((element) => {
-      // TODO: Replace with Shoe, Bag, Rod
-      if (element === "rockIcon") return "🪨";
-      if (element === "paperIcon") return "📄";
-      if (element === "scissorsIcon") return "✂️";
-      return element;
+    .map((element, index) => {
+      if (element === "rockIcon") return <Icon symbol={"rod"} key={index} />;
+      if (element === "paperIcon") return <Icon symbol={"bag"} key={index} />;
+      if (element === "scissorsIcon")
+        return <Icon symbol={"shoe"} key={index} />;
+      return <React.Fragment key={index}>{element}</React.Fragment>;
     });
 
 const hasDialogEnded = (

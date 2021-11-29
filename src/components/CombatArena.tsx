@@ -19,6 +19,8 @@ import styles from "./CombatArena.module.css";
 import CombatLogSentence from "./CombatLogSentence";
 import CombatView from "./CombatView";
 import MemberStats from "./MemberStats";
+import systeemImage from "../data/geppetto/systeem.png";
+import Icon from "./Icon";
 
 const DELAY_FOR_CPU_OPPONENT = 5000;
 
@@ -242,6 +244,13 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
 
   return (
     <div className={styles.fightScreen}>
+      <img
+        src={systeemImage}
+        width={100}
+        height={100}
+        alt={"Schoen -> Zak -> Roe"}
+        style={{ position: "absolute", top: "10px", left: "10px" }}
+      />
       <div className={styles.log}>
         {combatLog.map((sentence, index) => (
           <CombatLogSentence sentence={sentence} key={index} />
@@ -340,7 +349,9 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                     })}
                   >
                     <p>
-                      <strong>{target.card.name}</strong>
+                      <strong>
+                        <Icon symbol={target.card.type} /> {target.card.name}
+                      </strong>
                     </p>
                     <p>
                       HP: {target.health} / {target.card.health}

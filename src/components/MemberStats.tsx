@@ -1,15 +1,8 @@
 import React from "react";
 import { CombatCreature } from "../state/combatSlice";
 import { CreatureType } from "../types";
+import Icon from "./Icon";
 import styles from "./MemberStats.module.css";
-
-const iconMap: Record<CreatureType, string> = {
-  shoe: "✂️",
-  bag: "📄",
-  rod: "🪨",
-};
-
-const iconFor = (name: CreatureType): string => iconMap[name];
 
 type MemberProps = {
   member: CombatCreature;
@@ -32,11 +25,10 @@ const MemberStats: React.FunctionComponent<MemberProps> = ({
     >
       <p style={{ color: member.party === "left" ? "lightgreen" : "white" }}>
         <strong>
-          {inTurn ? "➡️ " : ""}
-          {member.card.name}
+          <Icon symbol={member.card.type} /> {member.card.name}
           {stunned && "🌪"}
-        </strong>{" "}
-        ({member.card.type} {iconFor(member.card.type)})
+          {inTurn ? "️ ⬅️" : ""}
+        </strong>
       </p>
       <p className={styles.memberProps}>
         <span>
