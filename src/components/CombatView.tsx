@@ -83,7 +83,12 @@ const getAnimationStates = (log: ActionSentence[]): Record<string, string> => {
     const sourceCard = creatures[entry.source.card];
     const sourceAction = sourceCard.actions.find((a) => a.name === entry.with);
     if (sourceAction && sourceAction.animationTrack) {
-      states[entry.source.id] = sourceAction.animationTrack;
+      if (sourceAction.animationTrack.target === "self") {
+        states[entry.source.id] = sourceAction.animationTrack.track;
+      }
+      if (sourceAction.animationTrack.target === "environment") {
+        states["background"] = sourceAction.animationTrack.track;
+      }
     }
 
     states[entry.target.id] = trackMapping[entry.action];

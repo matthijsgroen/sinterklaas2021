@@ -103,7 +103,7 @@ export type Action = {
   name: string;
   damage: number;
   damageType?: "stun";
-  animationTrack?: string;
+  animationTrack?: { track: string; target: "self" | "environment" };
   cost: number;
   cooldown: number;
   targets: ActionTarget[];

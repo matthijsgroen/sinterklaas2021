@@ -2,6 +2,7 @@ import { ImageDefinition, prepareAnimation } from "geppetto-player";
 import { CreatureCard, CreatureCardId, Dialog } from "../types";
 import amerigoTexture from "./geppetto/combat_characters.png";
 import amerigoAnimation from "./geppetto/amerigo.json";
+import ameerigogoAnimation from "./geppetto/ameerigogo.json";
 
 const loadTexture = async (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve) => {
@@ -30,7 +31,7 @@ const amerigo: CreatureCard = {
   actions: [
     {
       name: "Kopstoot",
-      animationTrack: "headbutt",
+      animationTrack: { track: "headbutt", target: "self" },
       damage: 5,
       cost: 0,
       cooldown: 0,
@@ -38,7 +39,7 @@ const amerigo: CreatureCard = {
     },
     {
       name: "Hoeftrap",
-      animationTrack: "kick",
+      animationTrack: { track: "kick", target: "self" },
       damage: 15,
       cost: 2,
       cooldown: 1,
@@ -66,11 +67,14 @@ const ameerigogo: CreatureCard = {
   energy: 8,
 
   texture: genericCombatTexture,
-  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+  animation: prepareAnimation(
+    ameerigogoAnimation as unknown as ImageDefinition
+  ),
 
   actions: [
     {
       name: "Kopstoot",
+      animationTrack: { track: "headbutt", target: "self" },
       damage: 10,
       cost: 0,
       cooldown: 0,
@@ -78,6 +82,7 @@ const ameerigogo: CreatureCard = {
     },
     {
       name: "Hoeftrap",
+      animationTrack: { track: "kick", target: "self" },
       damage: 24,
       cost: 2,
       cooldown: 1,
@@ -92,6 +97,8 @@ const ameerigogo: CreatureCard = {
     },
     {
       name: "Wortelfeest",
+      // animationTrack: { track: "healing", target: "environment" },
+
       damage: -40,
       cost: 4,
       cooldown: 4,
