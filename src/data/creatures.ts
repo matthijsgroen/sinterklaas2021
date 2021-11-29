@@ -2,7 +2,9 @@ import { ImageDefinition, prepareAnimation } from "geppetto-player";
 import { CreatureCard, CreatureCardId, Dialog } from "../types";
 import amerigoTexture from "./geppetto/combat_characters.png";
 import amerigoAnimation from "./geppetto/amerigo.json";
+import ozosnelAnimation from "./geppetto/ozosnel.json";
 import ameerigogoAnimation from "./geppetto/ameerigogo.json";
+import robotAnimation from "./geppetto/robot.json";
 
 const loadTexture = async (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve) => {
@@ -97,7 +99,7 @@ const ameerigogo: CreatureCard = {
     },
     {
       name: "Wortelfeest",
-      // animationTrack: { track: "healing", target: "environment" },
+      animationTrack: { track: "massHeal", target: "environment" },
 
       damage: -40,
       cost: 4,
@@ -119,11 +121,12 @@ const ozosnel: CreatureCard = {
   energy: 4,
 
   texture: genericCombatTexture,
-  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+  animation: prepareAnimation(ozosnelAnimation as unknown as ImageDefinition),
 
   actions: [
     {
       name: "Hoefzoef",
+      animationTrack: { track: "kick", target: "self" },
       damage: 6,
       cost: 0,
       cooldown: 0,
@@ -131,6 +134,7 @@ const ozosnel: CreatureCard = {
     },
     {
       name: "Stormloop",
+      animationTrack: { target: "self", track: "zoef" },
       damage: 10,
       cost: 2,
       cooldown: 4,
@@ -156,6 +160,7 @@ const ozoveelsneller: CreatureCard = {
   actions: [
     {
       name: "Hoefzoef",
+      animationTrack: { track: "kick", target: "self" },
       damage: 6,
       cost: 0,
       cooldown: 0,
@@ -163,6 +168,7 @@ const ozoveelsneller: CreatureCard = {
     },
     {
       name: "Zoefstomp",
+      animationTrack: { track: "stomp", target: "self" },
       damage: 2,
       damageType: "stun",
       cost: 3,
@@ -171,6 +177,7 @@ const ozoveelsneller: CreatureCard = {
     },
     {
       name: "Pepernoten storm",
+      animationTrack: { track: "massAttack", target: "environment" },
       damage: 20,
       cost: 3,
       cooldown: 4,
@@ -191,11 +198,12 @@ const robot: CreatureCard = {
   energy: 0,
 
   texture: genericCombatTexture,
-  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+  animation: prepareAnimation(robotAnimation as unknown as ImageDefinition),
 
   actions: [
     {
       name: "Arm klap",
+      animationTrack: { target: "self", track: "armklap" },
       damage: 8,
       cost: 0,
       cooldown: 0,
@@ -203,6 +211,7 @@ const robot: CreatureCard = {
     },
     {
       name: "Arm stomper",
+      animationTrack: { target: "self", track: "stomper" },
       damage: 12,
       cost: 0,
       cooldown: 3,
