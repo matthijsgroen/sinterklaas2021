@@ -2,7 +2,7 @@ import { CharacterSprites, LevelCharacter } from "../../types";
 
 export const tinka: LevelCharacter = {
   characterSprite: CharacterSprites.Tinka,
-  position: [4, -2, 1],
+  position: [11, -4, 1],
   conditions: {
     minimalCards: 1,
   },

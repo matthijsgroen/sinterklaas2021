@@ -2,7 +2,7 @@ import { CharacterSprites, LevelCharacter } from "../../types";
 
 export const gina: LevelCharacter = {
   characterSprite: CharacterSprites.Gina,
-  position: [9, 0, 1],
+  position: [14, 3, 2],
   conditions: {
     minimalCards: 1,
   },

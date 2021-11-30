@@ -42,7 +42,7 @@ export type TerrainTile = {
   img: string;
   direction?: Direction;
   size?: TileSize;
-  set: "terrain" | "furniture";
+  set: "terrain" | "furniture" | "fantasy";
 };
 
 export type Dialog = {

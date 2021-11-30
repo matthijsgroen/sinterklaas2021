@@ -7,15 +7,33 @@ type TileMapping = {
 };
 
 const tileMapping: TileMapping = {
-  terrain: "kenney_platformerkit2",
-  furniture: "furniturekit_updated",
+  terrain: "kenney_platformerkit",
+  furniture: "kenney_furniturekit",
+  fantasy: "kenney_fantasytownkit",
 };
 
-const directionMapping: Record<Direction, string> = {
-  north: "NE",
-  east: "SE",
-  south: "SW",
-  west: "NW",
+const directionMapping: Record<
+  TerrainTile["set"],
+  Record<Direction, string>
+> = {
+  terrain: {
+    north: "NE",
+    east: "SE",
+    south: "SW",
+    west: "NW",
+  },
+  furniture: {
+    north: "NE",
+    east: "SE",
+    south: "SW",
+    west: "NW",
+  },
+  fantasy: {
+    north: "N",
+    east: "E",
+    south: "S",
+    west: "W",
+  },
 };
 
 const remapDirection: Record<string, Record<Direction, Direction>> = {
@@ -32,7 +50,7 @@ const getTile = (tile: TerrainTile): string => {
     ? remapDirection[tile.img][tile.direction ?? "north"]
     : tile.direction ?? "north";
   return `/images/${tileMapping[tile.set]}/Isometric/${tile.img}_${
-    directionMapping[direction]
+    directionMapping[tile.set][direction]
   }.png`;
 };
 
@@ -139,6 +157,28 @@ const getDimensions = (tile: TerrainTile): TileData => {
       offsetX: size,
       offsetY: 0,
     };
+  } else if (tile.set === "fantasy") {
+    const size = sizeMapping[tile.size ?? "normal"];
+    const defaultSettings = {
+      width: 512,
+      height: 512,
+      offsetX: tile.direction === "south" ? size + 4 : size,
+      offsetY: tile.direction === "south" ? 4 : 0,
+      offsetZ: tile.direction === "south" ? 1 : 0,
+    };
+
+    const elevatedSettings = {
+      width: 512,
+      height: 512,
+      offsetX: 0,
+      offsetY: -70,
+      offsetZ: 1,
+    };
+
+    if (["roadCurb", "roadEdge", "road", "planks"].includes(tile.img))
+      return elevatedSettings;
+
+    return defaultSettings;
   } else {
     // furniture
     const defaultSettings = {

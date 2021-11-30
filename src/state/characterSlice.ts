@@ -14,6 +14,10 @@ export interface CharacterState {
 }
 
 const initialState: CharacterState = {
+  // level: "Berg",
+  // x: 18,
+  // y: 0,
+  // z: 1,
   level: "Slaapkamer",
   x: 3,
   y: 1,

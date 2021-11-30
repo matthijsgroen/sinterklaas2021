@@ -23,4 +23,3 @@ yarn-debug.log*
 yarn-error.log*
 bin/*.zip
 public/images/kenney_*/**
-public/images/furniture*/**

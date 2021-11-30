@@ -1,0 +1,196 @@
+import { LevelData } from "../types";
+import { gina } from "./characters/gina";
+
+const mountain: LevelData = {
+  name: "Berg",
+  tiles: [
+    { coord: [18, -2, 0], img: "planks", set: "fantasy" },
+    { coord: [18, -1, 0], img: "planks", set: "fantasy" },
+    { coord: [19, -2, 1], img: "fence", set: "fantasy", direction: "north" },
+    { coord: [19, -1, 1], img: "fence", set: "fantasy", direction: "north" },
+    { coord: [17, -2, 1], img: "fence", set: "fantasy", direction: "south" },
+    { coord: [17, -1, 1], img: "fence", set: "fantasy", direction: "south" },
+    {
+      coord: [18, -2, 0],
+      img: "wallWoodArchTopDetail",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [19, -1, 0],
+      img: "wallWoodArchTopDetail",
+      set: "fantasy",
+      direction: "north",
+    },
+    { coord: [18, 0, 0], img: "planks", set: "fantasy" },
+    { coord: [18, 1, 0], img: "planks", set: "fantasy" },
+
+    { coord: [19, 0, 1], img: "fence", set: "fantasy", direction: "north" },
+    { coord: [19, 1, 1], img: "fence", set: "fantasy", direction: "north" },
+    { coord: [17, 0, 1], img: "fence", set: "fantasy", direction: "south" },
+    { coord: [17, 1, 1], img: "fence", set: "fantasy", direction: "south" },
+    {
+      coord: [18, -2, 0],
+      img: "wallWood",
+      set: "fantasy",
+      direction: "west",
+    },
+    {
+      coord: [18, 0, 0],
+      img: "wallWoodArchTopDetail",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [19, 1, 0],
+      img: "wallWoodArchTopDetail",
+      set: "fantasy",
+      direction: "north",
+    },
+    { coord: [19, 2, 0], img: "block", set: "terrain" },
+    { coord: [18, 2, 0], img: "blockDirt", set: "terrain" },
+    { coord: [17, 2, 0], img: "block", set: "terrain" },
+    { coord: [16, 2, 0], img: "block", set: "terrain" },
+    { coord: [15, 2, 0], img: "block", set: "terrain" },
+
+    { coord: [19, 3, 0], img: "block", set: "terrain" },
+    { coord: [18, 3, 0], img: "blockDirt", set: "terrain" },
+    { coord: [17, 3, 0], img: "blockDirt", set: "terrain" },
+    { coord: [16, 3, 0], img: "blockDirt", set: "terrain" },
+    { coord: [15, 3, 0], img: "block", set: "terrain" },
+
+    { coord: [19, 4, 0], img: "block", set: "terrain" },
+    { coord: [18, 4, 0], img: "block", set: "terrain" },
+    { coord: [17, 4, 0], img: "block", set: "terrain" },
+    { coord: [16, 4, 0], img: "blockDirt", set: "terrain" },
+    { coord: [15, 4, 0], img: "blockDirt", set: "terrain" },
+
+    { coord: [19, 5, 0], img: "block", set: "terrain" },
+    { coord: [18, 5, 0], img: "block", set: "terrain" },
+    { coord: [17, 5, 0], img: "blockSnow", set: "terrain" },
+    { coord: [16, 5, 0], img: "blockDirt", set: "terrain" },
+    { coord: [15, 5, 0], img: "blockSnow", set: "terrain" },
+
+    { coord: [19, 4, 1], img: "treePine", set: "terrain" },
+    { coord: [17, 2, 1], img: "treePine", set: "terrain" },
+    { coord: [14, 5, 2], img: "treePineSnow", set: "terrain" },
+
+    {
+      coord: [14, 4, 1],
+      img: "blockDirtRamp",
+      set: "terrain",
+      direction: "east",
+    },
+    { coord: [14, 5, 1], img: "blockSnow", set: "terrain" },
+    { coord: [14, 3, 1], img: "blockSnow", set: "terrain" },
+    { coord: [14, 2, 1], img: "blockSnow", set: "terrain" },
+    { coord: [14, 2, 0], img: "blockDirt", set: "terrain" },
+
+    { coord: [13, 2, 0], img: "blockDirt", set: "terrain" },
+    { coord: [12, 2, 0], img: "blockDirt", set: "terrain" },
+
+    { coord: [13, 2, 1], img: "blockSnow", set: "terrain" },
+    { coord: [12, 2, 1], img: "blockSnow", set: "terrain" },
+    { coord: [13, 3, 1], img: "blockSnow", set: "terrain" },
+    { coord: [12, 3, 1], img: "blockSnow", set: "terrain" },
+    { coord: [13, 4, 1], img: "blockSnow", set: "terrain" },
+    { coord: [12, 4, 1], img: "blockSnow", set: "terrain" },
+    { coord: [13, 5, 1], img: "blockSnow", set: "terrain" },
+    { coord: [12, 5, 1], img: "blockSnow", set: "terrain" },
+
+    {
+      coord: [11, 5, 2],
+      img: "wallDetailCross",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [11, 3, 2],
+      img: "wallDetailCross",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [11, 4, 2],
+      img: "wallDoor",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [11, 3, 2],
+      img: "wallDetailDiagonal",
+      set: "fantasy",
+      direction: "west",
+    },
+    {
+      coord: [11, 3, 3],
+      img: "wallDetailCross",
+      set: "fantasy",
+      direction: "west",
+    },
+    {
+      coord: [11, 3, 3],
+      img: "wallWindowGlass",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [11, 4, 3],
+      img: "wallWindowGlass",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [11, 5, 3],
+      img: "wallWindowGlass",
+      set: "fantasy",
+      direction: "south",
+    },
+    { coord: [12, 5, 1], img: "planks", set: "fantasy" },
+    { coord: [12, 4, 1], img: "planks", set: "fantasy" },
+    { coord: [12, 3, 1], img: "planks", set: "fantasy" },
+    { coord: [12, 3, 1], img: "planks", set: "fantasy" },
+    {
+      coord: [11, 2, 2],
+      img: "wallBroken",
+      set: "fantasy",
+      direction: "south",
+    },
+    {
+      coord: [11, 3, 4],
+      img: "roofHighWindow",
+      set: "fantasy",
+      direction: "north",
+    },
+    {
+      coord: [11, 4, 4],
+      img: "roofHigh",
+      set: "fantasy",
+      direction: "north",
+    },
+    {
+      coord: [11, 5, 4],
+      img: "roofHighWindow",
+      set: "fantasy",
+      direction: "north",
+    },
+  ],
+  decorations: [
+    {
+      coord: [12, 5, 2],
+      img: "overhang",
+      set: "fantasy",
+      direction: "north",
+    },
+    {
+      coord: [12, 4, 2],
+      img: "overhang",
+      set: "fantasy",
+      direction: "north",
+    },
+  ],
+  characters: [gina],
+  exits: [{ coord: [18, -2, 1], level: "Straat", startCoord: [13, 7, 1] }],
+};
+
+export default mountain;

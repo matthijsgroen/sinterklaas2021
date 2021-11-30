@@ -39,6 +39,7 @@ enum MoveDirection {
   Down,
   Left,
   Right,
+  None,
 }
 
 const getTopTerrain = (
@@ -164,6 +165,7 @@ const directionMap: DirectionMap = {
   [MoveDirection.Down]: [1, 0],
   [MoveDirection.Left]: [0, -1],
   [MoveDirection.Right]: [0, 1],
+  [MoveDirection.None]: [0, 0],
 };
 
 type LevelSwitchState = "fadeout" | "levelSwitch" | "fadein";
@@ -305,6 +307,7 @@ const Level: React.FunctionComponent<Props> = ({ data: levelData }) => {
         }
       }
     };
+    movePlayer(MoveDirection.None);
 
     window.addEventListener("keydown", keyHandler);
 

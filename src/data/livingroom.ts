@@ -73,7 +73,7 @@ const livingroom: LevelData = {
   characters: [catoo],
   exits: [
     { coord: [7, -3, 1.5], level: "Slaapkamer", startCoord: [5, -3, 2] },
-    { coord: [8, -5, 1], level: "Stage1", startCoord: [2, 2, 2] },
+    { coord: [8, -5, 1], level: "Straat", startCoord: [8, -5, 1] },
   ],
 };
 
