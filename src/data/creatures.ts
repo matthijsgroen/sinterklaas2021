@@ -7,6 +7,7 @@ import ozoveelsnellerAnimation from "./geppetto/ozoveelsneller.json";
 import ameerigogoAnimation from "./geppetto/ameerigogo.json";
 import robotAnimation from "./geppetto/robot.json";
 import bearAnimation from "./geppetto/beer.json";
+import slimeAnimation from "./geppetto/slime.json";
 
 const loadTexture = async (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve) => {
@@ -278,11 +279,12 @@ const slime: CreatureCard = {
   energy: 4,
 
   texture: genericCombatTexture,
-  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+  animation: prepareAnimation(slimeAnimation as unknown as ImageDefinition),
 
   actions: [
     {
       name: "Klodder",
+      animationTrack: { target: "self", track: "klodder" },
       damage: 10,
       cost: 0,
       cooldown: 0,
@@ -290,6 +292,7 @@ const slime: CreatureCard = {
     },
     {
       name: "Plakkerigheid",
+      animationTrack: { target: "self", track: "stun" },
       damage: 2,
       damageType: "stun",
       cost: 2,
