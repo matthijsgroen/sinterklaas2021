@@ -38,7 +38,10 @@ export const amerigo: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Wow! Amerigo is nu in mijn Pokébal gegaan!"],
+      text: [
+        "Wow! Amerigo is nu in mijn Pokébal gegaan!",
+        "Nu op zoek naar mijn familie!",
+      ],
     },
   ],
   fights: [],

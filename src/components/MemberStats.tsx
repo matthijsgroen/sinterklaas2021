@@ -1,6 +1,5 @@
 import React from "react";
 import { CombatCreature } from "../state/combatSlice";
-import { CreatureType } from "../types";
 import Icon from "./Icon";
 import styles from "./MemberStats.module.css";
 

@@ -80,9 +80,9 @@ export const sint: LevelCharacter = {
       characterName: "Sinterklaas",
       text: [
         "Ik lees hier net wat tips in mijn grote boek.",
-        "Let op dat Zak altijd sterker is tegen Roe",
-        "en Roe sterker is tegen Schoen",
-        "en Schoen sterker is tegen Zak.",
+        "Let op dat Zak :paper: altijd sterker is tegen Roe :rock:",
+        "en Roe :rock: sterker is tegen Schoen :scissors:",
+        "en Schoen :scissors: sterker is tegen Zak :paper:.",
         "Oja. En wees zuinig met waar je je energie aan uitgeeft!",
         "Ik kwam er net achter dat de beren pas gaan genezen onder",
         "15 punten. Dus misschien net daarboven een grote aanval plannen?",

@@ -24,6 +24,7 @@ type AnimationAdministration = Record<
   {
     controls: AnimationControls;
     stateTrack: string;
+    current: string;
   }
 >;
 const background = prepareAnimation(
@@ -35,15 +36,15 @@ const synchronizeAnimations = (
   animationsRef: MutableRefObject<AnimationAdministration>,
   player: GeppettoPlayer
 ) => {
-  // TODO: Add cleanup as well... (when replacing fights, or creatures died)
-
   const checkSetup = async (creature: CombatCreature, index: number) => {
+    if (creature.health <= 0) return;
     if (!animationsRef.current[creature.id]) {
       const img = await creature.card.texture;
 
       //   const texIndex = Object.keys(animationsRef.current).length;
       const animation = player.addAnimation(creature.card.animation, img, 0, {
-        panX: creature.party === "left" ? -0.5 : 0.4,
+        panX:
+          creature.party === "left" ? -0.3 + index * -0.1 : 0.2 + index * 0.15,
         panY: 0.2 + index * -0.2,
         zoom: 1.5,
         zIndex: 2 + index,
@@ -52,11 +53,18 @@ const synchronizeAnimations = (
       animationsRef.current[creature.id] = {
         controls: animation,
         stateTrack: "idle",
+        current: "idle",
       };
       animation.onTrackStopped((track) => {
-        if (track !== "idle" && track !== "stunned") {
+        if (track !== "idle" && track !== "stunned" && track !== "dead") {
           const stateTrack = animationsRef.current[creature.id].stateTrack;
+          animationsRef.current[creature.id].current = stateTrack;
           animation.startTrack(stateTrack);
+        }
+        if (track === "dead") {
+          console.log("dead");
+          animation.destroy();
+          delete animationsRef.current[creature.id];
         }
       });
     } else {
@@ -91,7 +99,12 @@ const getAnimationStates = (log: ActionSentence[]): Record<string, string> => {
       }
     }
 
-    states[entry.target.id] = trackMapping[entry.action];
+    states[entry.target.id] =
+      states[entry.target.id] || trackMapping[entry.action];
+
+    if (entry.target.health <= 0) {
+      states[entry.target.id] = "dead";
+    }
   });
 
   return states;
@@ -127,6 +140,7 @@ const CombatView: React.FunctionComponent = () => {
         animationsRef.current["background"] = {
           controls,
           stateTrack: "",
+          current: "",
         };
       };
       setupBackground();
@@ -174,7 +188,11 @@ const CombatView: React.FunctionComponent = () => {
     const animationStates = getAnimationStates(combatLog);
 
     Object.entries(animationStates).forEach(([animationId, track]) => {
-      if (animationsRef.current[animationId]) {
+      if (
+        animationsRef.current[animationId] &&
+        animationsRef.current[animationId].current !== track
+      ) {
+        animationsRef.current[animationId].current = track;
         animationsRef.current[animationId].controls.startTrack(track);
       }
     });

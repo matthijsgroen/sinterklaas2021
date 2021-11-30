@@ -3,8 +3,10 @@ import { CreatureCard, CreatureCardId, Dialog } from "../types";
 import amerigoTexture from "./geppetto/combat_characters.png";
 import amerigoAnimation from "./geppetto/amerigo.json";
 import ozosnelAnimation from "./geppetto/ozosnel.json";
+import ozoveelsnellerAnimation from "./geppetto/ozoveelsneller.json";
 import ameerigogoAnimation from "./geppetto/ameerigogo.json";
 import robotAnimation from "./geppetto/robot.json";
+import bearAnimation from "./geppetto/beer.json";
 
 const loadTexture = async (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve) => {
@@ -155,7 +157,9 @@ const ozoveelsneller: CreatureCard = {
   energy: 12,
 
   texture: genericCombatTexture,
-  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+  animation: prepareAnimation(
+    ozoveelsnellerAnimation as unknown as ImageDefinition
+  ),
 
   actions: [
     {
@@ -232,11 +236,12 @@ const bear: CreatureCard = {
   energy: 4,
 
   texture: genericCombatTexture,
-  animation: prepareAnimation(amerigoAnimation as unknown as ImageDefinition),
+  animation: prepareAnimation(bearAnimation as unknown as ImageDefinition),
 
   actions: [
     {
       name: "Knuffel",
+      animationTrack: { target: "self", track: "hugAttack" },
       damage: 6,
       cost: 0,
       cooldown: 0,
@@ -244,6 +249,7 @@ const bear: CreatureCard = {
     },
     {
       name: "Knuffel sprong",
+      animationTrack: { target: "self", track: "hugJump" },
       damage: 12,
       cost: 0,
       cooldown: 3,
@@ -251,6 +257,7 @@ const bear: CreatureCard = {
     },
     {
       name: "Groepsknuffel",
+      animationTrack: { target: "self", track: "groupHug" },
       damage: -30,
       cost: 2,
       cooldown: 4,

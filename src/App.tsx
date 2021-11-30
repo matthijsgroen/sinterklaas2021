@@ -30,6 +30,8 @@ import { useAppDispatch, useAppSelector } from "./state/hooks";
 import { LevelCharacter, LevelData, Dialog } from "./types";
 import Icon from "./components/Icon";
 
+const AFTER_FIGHT_COOLDOWN = 3000;
+
 type DialogType =
   | "initial"
   | "conditional"
@@ -232,12 +234,23 @@ function App() {
       encounter.result === "lost" &&
       dialogState.type !== "lose"
     ) {
-      setDialogState({ type: "lose", sentence: 0 });
-      dispatch(endEncounter());
+      const timeoutId = setTimeout(() => {
+        setDialogState({ type: "lose", sentence: 0 });
+        dispatch(endEncounter());
+      }, AFTER_FIGHT_COOLDOWN);
+      return () => clearTimeout(timeoutId);
     }
     if (character && encounter.result === "won" && dialogState.type !== "win") {
-      setDialogState({ type: "win", sentence: 0 });
-      dispatch(endEncounter());
+      if (inCombat) {
+        const timeoutId = setTimeout(() => {
+          setDialogState({ type: "win", sentence: 0 });
+          dispatch(endEncounter());
+        }, AFTER_FIGHT_COOLDOWN);
+        return () => clearTimeout(timeoutId);
+      } else {
+        setDialogState({ type: "win", sentence: 0 });
+        dispatch(endEncounter());
+      }
     }
     if (
       inCombat &&
@@ -251,7 +264,7 @@ function App() {
         dispatch(
           startFight(character.fights[encounter.fightsFinished].enemies)
         );
-      }, 1000);
+      }, AFTER_FIGHT_COOLDOWN);
       return () => clearTimeout(timeoutId);
     }
   }, [

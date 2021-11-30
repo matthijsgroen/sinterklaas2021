@@ -286,7 +286,10 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         !combatStatus.turn.isStunned &&
         actionSelection === null && (
           <div className={styles.actionsMenu}>
-            <h2>Acties</h2>
+            <h2>
+              Kies je actie, {combatStatus.turn.creature.card.name}{" "}
+              <Icon symbol={combatStatus.turn.creature.card.type} />:
+            </h2>
             <ul>
               {combatStatus.turn.actions.map((action, index) => (
                 <li
@@ -337,7 +340,11 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         ) &&
         targetSelection === null && (
           <div className={styles.actionsMenu}>
-            <h2>Actie "{actionSelection}" doelwit:</h2>
+            <h2>
+              Kies je "{actionSelection}" doelwit,
+              {combatStatus.turn.creature.card.name}{" "}
+              <Icon symbol={combatStatus.turn.creature.card.type} />:
+            </h2>
             <ul>
               {combatStatus.partyB
                 .filter((a) => a.health > 0)
@@ -370,7 +377,11 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         ) &&
         targetSelection === null && (
           <div className={styles.actionsMenu}>
-            <h2>Actie "{actionSelection}" doelwit:</h2>
+            <h2>
+              Kies je "{actionSelection}" doelwit,
+              {combatStatus.turn.creature.card.name}{" "}
+              <Icon symbol={combatStatus.turn.creature.card.type} />:
+            </h2>
             <ul>
               {combatStatus.partyA
                 .filter((a) => a.health > 0)

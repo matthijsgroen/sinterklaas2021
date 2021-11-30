@@ -52,8 +52,8 @@ export const catoo: LevelCharacter = {
       characterName: "Amerigo",
       text: [
         "Ja zeker. Maar mijn schade kwam niet volledig aan.",
-        "Dit komt omdat ik een :scissors: type ben, en deze robot is van het type :rock:",
-        ":rock: is sterker tegen :scissors:, :scissors: is sterker tegen :paper:, en :paper: is weer sterker tegen :rock:.",
+        "Dit komt omdat ik een :scissors: (schoen) type ben, en deze robot is van het type :rock: (zak)",
+        ":rock: (roe) is sterker tegen :scissors: (schoen), :scissors: (schoen) is sterker tegen :paper: (zak), en :paper: (zak) is weer sterker tegen :rock: (roe).",
         "Gebruik die informatie voor tactische keuzes!",
       ],
     },
