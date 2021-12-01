@@ -74,6 +74,7 @@ export type LevelCharacter = {
     card?: string;
     removeCard?: string;
     xp?: number;
+    gameCompleted?: boolean;
   };
 };
 

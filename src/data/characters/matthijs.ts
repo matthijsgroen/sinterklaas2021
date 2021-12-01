@@ -4,7 +4,6 @@ export const matthijs: LevelCharacter = {
   characterSprite: CharacterSprites.Matthijs,
   position: [8, 2, 1],
   conditions: {
-    minimalCards: 2,
     encountersCompleted: [CharacterSprites.Sint],
   },
   conditionDialog: [
@@ -38,11 +37,11 @@ export const matthijs: LevelCharacter = {
     {
       characterColor: "green",
       characterName: "Matthijs",
-      text: ["Wow wat tof, laten we snel naar binnen gaan!"],
+      text: ["Wow goed gedaan! Laten we snel naar binnen gaan!"],
     },
   ],
   fights: [],
-  rewards: {},
+  rewards: { gameCompleted: true },
   winDialog: [],
   loseDialog: [],
 };
