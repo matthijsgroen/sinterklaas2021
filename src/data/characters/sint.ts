@@ -64,8 +64,22 @@ export const sint: LevelCharacter = {
         "Fantastisch gedaan jongen! Dat was...",
         "GEWELDIG!",
         "(en geweldadig)",
-        "Nou, euhm, goed... laten we nu fijn mijn verjaardag gaan vieren!",
+        "Trouwens, wat heb je precies met mijn paarden gedaan?",
+        "Ze zien er zo... Blits uit...",
+      ],
+    },
+    {
+      characterColor: "orange",
+      characterName: "Tristan",
+      text: ["Ik heb ze even ge-evolueerd Sinterklaas."],
+    },
+    {
+      characterColor: "yellow",
+      characterName: "Sinterklaas",
+      text: [
+        "Nou, euhm, goed dan... laten we nu fijn mijn verjaardag gaan vieren!",
         "Zullen we naar dat gezellige huisje bovenaan de berg gaan?",
+        "Volgens mij liggen daar alle pakjes...",
       ],
     },
   ],

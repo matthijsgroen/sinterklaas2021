@@ -47,7 +47,7 @@ export const tinka: LevelCharacter = {
       text: ["Zie je mam, geen probleem!"],
     },
     {
-      characterColor: "pink",
+      characterColor: "red",
       characterName: "Tinka",
       text: [
         "Tristan, je bent geweldig!",
@@ -62,7 +62,7 @@ export const tinka: LevelCharacter = {
       text: ["Hmm dat moet ik nog maar eens oefenen!"],
     },
     {
-      characterColor: "pink",
+      characterColor: "red",
       characterName: "Tinka",
       text: ["Kom snel terug!!"],
     },

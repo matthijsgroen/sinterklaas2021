@@ -70,8 +70,8 @@ export const gina: LevelCharacter = {
       text: ["Dat was best wel lastig..."],
     },
     {
-      characterColor: "pink",
-      characterName: "Catootje",
+      characterColor: "red",
+      characterName: "Gina",
       text: ["Als iemand dit moet kunnen dan ben jij dit!"],
     },
   ],

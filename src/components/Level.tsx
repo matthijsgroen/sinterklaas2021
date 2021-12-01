@@ -85,6 +85,9 @@ const samePosition = (a: Position, b: Position) =>
 const isRamp = (img: string): boolean =>
   ["blockDirtRamp", "blockSlope", "blockSnowSlope", "stairs"].includes(img);
 
+const isFloor = (newTerrain: TerrainTile): boolean =>
+  !["treePineSnow"].includes(newTerrain.img);
+
 const inDirection = (
   direction: Direction,
   xDelta: number,
@@ -149,8 +152,9 @@ const calculateNewPos = (
       return position;
     }
   }
+
   // Higher or lower level
-  if (newTerrain.coord[2] !== z - 1) {
+  if (newTerrain.coord[2] !== z - 1 || !isFloor(newTerrain)) {
     return position;
   }
 

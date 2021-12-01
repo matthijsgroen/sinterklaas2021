@@ -6,7 +6,7 @@ const DUMMY_ACTION = { action: "wait", target: "all" };
 export const enemyActionSelection = (
   combatStatus: CombatStatus
 ): { action: string; target: string } => {
-  if (combatStatus.turn === undefined) {
+  if (combatStatus.turn === undefined || combatStatus.turn.isStunned) {
     return DUMMY_ACTION;
   }
   // weak team mates? heal!
