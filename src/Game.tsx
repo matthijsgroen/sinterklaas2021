@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import CombatArena from "./components/CombatArena";
 import DialogView from "./components/Dialog";
 import Level from "./components/Level";
