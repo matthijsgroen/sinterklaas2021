@@ -137,7 +137,11 @@ const selectEncounterCharacter = (
   );
 };
 
-function App() {
+type Props = {
+  onComplete: () => void;
+};
+
+const Game: React.FunctionComponent<Props> = ({ onComplete }) => {
   const dispatch = useAppDispatch();
   const encounter = useAppSelector(selectActiveEncounter);
   const zoneId = useAppSelector(selectZone);
@@ -224,8 +228,12 @@ function App() {
       if (character.rewards.xp) {
         dispatch(giveXP(character.rewards.xp));
       }
+      if (character.rewards.gameCompleted) {
+        onComplete();
+      }
     }
   }, [
+    onComplete,
     inCombat,
     character,
     dialogState,
@@ -308,6 +316,6 @@ function App() {
       )}
     </main>
   );
-}
+};
 
-export default App;
+export default Game;

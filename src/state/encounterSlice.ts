@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CharacterSprites } from "../types";
 import { RootState } from "./store";
 
 export interface EncounterState {
