@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import StartScreen from "./components/StartScreen";
+import SplashScreen from "./components/SplashScreen";
 import Game from "./Game";
 
 type GameState = "init" | "started" | "finished";
@@ -19,7 +19,11 @@ const App: React.FunctionComponent = () => {
     return <Game onComplete={onComplete} />;
   }
 
-  return <StartScreen onStart={onStart} />;
+  if (gameState === "finished") {
+    return <SplashScreen screen="end" />;
+  }
+
+  return <SplashScreen onKeyPress={onStart} screen="start" />;
 };
 
 export default App;
