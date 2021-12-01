@@ -20,6 +20,7 @@ import CombatLogSentence from "./CombatLogSentence";
 import CombatView from "./CombatView";
 import MemberStats from "./MemberStats";
 import systeemImage from "../data/geppetto/systeem.png";
+import logo from "./logo.png";
 import Icon from "./Icon";
 
 const DELAY_FOR_CPU_OPPONENT = 3000;
@@ -250,6 +251,12 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         height={100}
         alt={"Schoen -> Zak -> Roe"}
         style={{ position: "absolute", top: "10px", left: "10px" }}
+      />
+      <img
+        src={logo}
+        height={100}
+        alt={"Tristámon"}
+        style={{ position: "absolute", top: "10px", right: "10px" }}
       />
       <div className={styles.log}>
         {combatLog.map((sentence, index) => (

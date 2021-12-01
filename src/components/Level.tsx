@@ -20,6 +20,7 @@ import { Direction, LevelData, Position, TerrainTile } from "../types";
 import Character, { calculateXy } from "./Character";
 import styles from "./Level.module.css";
 import Tile from "./Tile";
+import logo from "./logo.png";
 
 type Props = {
   data: LevelData;
@@ -324,6 +325,12 @@ const Level: React.FunctionComponent<Props> = ({ data: levelData }) => {
       })}
       ref={terrainRef}
     >
+      <img
+        src={logo}
+        alt="Tristámon"
+        height="100"
+        style={{ position: "fixed", top: "10px", right: "10px" }}
+      />
       {data.tiles.map((tile, index) => (
         <Tile tile={tile} key={index} />
       ))}

@@ -200,8 +200,8 @@ export const combatSlice = createSlice({
 
       // Need a next turn?
 
-      const leftAlive = state.creatures.some(
-        (c) => c.party === "left" && c.health > 0
+      const leftAlive = !state.creatures.some(
+        (c) => c.party === "left" && c.health <= 0
       );
       const rightAlive = state.creatures.some(
         (c) => c.party === "right" && c.health > 0
