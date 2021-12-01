@@ -3,7 +3,7 @@ import { tinka } from "./characters/tinka";
 import { carl } from "./characters/carl";
 import { piet } from "./characters/piet";
 
-const livingroom: LevelData = {
+const street: LevelData = {
   name: "Straat",
   tiles: [
     { coord: [7, -5, 0], img: "floorFull", set: "furniture" },
@@ -35,6 +35,9 @@ const livingroom: LevelData = {
     { coord: [10, -7, 1], img: "treePine", set: "terrain" },
     { coord: [10, -4, 1], img: "fence", set: "fantasy", direction: "south" },
     { coord: [10, -7, 1], img: "fence", set: "fantasy", direction: "south" },
+    { coord: [12, 6, 0], img: "block", set: "terrain" },
+    { coord: [11, 6, 0], img: "block", set: "terrain" },
+    { coord: [14, 6, 0], img: "block", set: "terrain" },
 
     ...Array(4)
       .fill(0)
@@ -112,6 +115,9 @@ const livingroom: LevelData = {
       set: "fantasy",
       direction: "north",
     },
+    { coord: [12, 7, 1], img: "wallHalf", set: "fantasy", direction: "west" },
+    { coord: [14, 7, 1], img: "wallHalf", set: "fantasy", direction: "west" },
+    { coord: [11, 7, 1], img: "wallHalf", set: "fantasy", direction: "west" },
   ],
   decorations: [
     { coord: [8, -5, 1], img: "wallDoorwayRound", set: "fantasy" },
@@ -122,10 +128,13 @@ const livingroom: LevelData = {
     { coord: [8, -6, 2], img: "wallWindowStone", set: "fantasy" },
     { coord: [8, -5, 2], img: "wallWindowStone", set: "fantasy" },
     { coord: [8, -4, 2], img: "wallWindowStone", set: "fantasy" },
-    { coord: [7, -7, 3], img: "roof", set: "fantasy" },
+    { coord: [7, -7, 2], img: "wall", set: "fantasy", direction: "west" },
+    { coord: [7, -7, 1], img: "wall", set: "fantasy", direction: "west" },
+    { coord: [7, -7, 0], img: "blockDirt", set: "terrain" },
+    { coord: [7, -7, 3], img: "roofLeft", set: "fantasy" },
     { coord: [7, -6, 3], img: "roof", set: "fantasy" },
     { coord: [7, -5, 3], img: "roof", set: "fantasy" },
-    { coord: [7, -4, 3], img: "roof", set: "fantasy" },
+    { coord: [7, -4, 3], img: "roofRight", set: "fantasy" },
     { coord: [7, -4, 3], img: "chimneyTop", set: "fantasy" },
   ],
   characters: [tinka, carl, piet],
@@ -135,4 +144,4 @@ const livingroom: LevelData = {
   ],
 };
 
-export default livingroom;
+export default street;

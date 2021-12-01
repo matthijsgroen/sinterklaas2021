@@ -22,3 +22,10 @@ if [ ! -f "bin/$FILE.zip" ]; then
     curl -o "bin/$FILE.zip" "https://kenney.nl/content/3-assets/$NUMBER-fantasy-town-kit/fantasy-town-kit-1.0.zip"
 fi
 unzip -u -d "public/images/$FILE" "bin/$FILE.zip" Isometric/*
+
+NUMBER=20
+FILE=kenney_holidaykit
+if [ ! -f "bin/$FILE.zip" ]; then
+    curl -o "bin/$FILE.zip" "https://kenney.nl/content/3-assets/$NUMBER-holiday-kit/kenney_holidaykit_2.zip"
+fi
+unzip -u -d "public/images/$FILE" "bin/$FILE.zip" Isometric/*

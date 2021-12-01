@@ -22,7 +22,7 @@ import MemberStats from "./MemberStats";
 import systeemImage from "../data/geppetto/systeem.png";
 import Icon from "./Icon";
 
-const DELAY_FOR_CPU_OPPONENT = 5000;
+const DELAY_FOR_CPU_OPPONENT = 3000;
 
 const actionRequiresTarget =
   (type: ActionTarget) =>

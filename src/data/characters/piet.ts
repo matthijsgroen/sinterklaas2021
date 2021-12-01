@@ -2,7 +2,7 @@ import { CharacterSprites, LevelCharacter } from "../../types";
 
 export const piet: LevelCharacter = {
   characterSprite: CharacterSprites.Piet,
-  position: [13, 8, 1],
+  position: [14, 6, 1],
   conditions: {
     minimalCards: 1,
   },

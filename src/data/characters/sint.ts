@@ -2,7 +2,7 @@ import { CharacterSprites, LevelCharacter } from "../../types";
 
 export const sint: LevelCharacter = {
   characterSprite: CharacterSprites.Sint,
-  position: [9, -3, 1],
+  position: [10, 9, 3],
   conditions: {
     minimalCards: 2,
   },

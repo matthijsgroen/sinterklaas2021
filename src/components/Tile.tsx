@@ -10,6 +10,7 @@ const tileMapping: TileMapping = {
   terrain: "kenney_platformerkit",
   furniture: "kenney_furniturekit",
   fantasy: "kenney_fantasytownkit",
+  holiday: "kenney_holidaykit",
 };
 
 const directionMapping: Record<
@@ -17,6 +18,12 @@ const directionMapping: Record<
   Record<Direction, string>
 > = {
   terrain: {
+    north: "NE",
+    east: "SE",
+    south: "SW",
+    west: "NW",
+  },
+  holiday: {
     north: "NE",
     east: "SE",
     south: "SW",
@@ -54,11 +61,11 @@ const getTile = (tile: TerrainTile): string => {
   }.png`;
 };
 
-const sizeMapping: Record<TileSize, number> = {
-  wide: 0,
-  normal: 0,
-  large: 60,
-  small: -16,
+const sizeMapping: Record<TileSize, { x: number; y: number }> = {
+  wide: { x: 0, y: 0 },
+  normal: { x: 0, y: 0 },
+  large: { x: 64, y: 0 },
+  small: { x: -16, y: 0 },
 };
 
 type TileData = {
@@ -154,17 +161,17 @@ const getDimensions = (tile: TerrainTile): TileData => {
     return {
       width: 512,
       height: 512,
-      offsetX: size,
-      offsetY: 0,
+      offsetX: size.x,
+      offsetY: size.y,
     };
   } else if (tile.set === "fantasy") {
     const size = sizeMapping[tile.size ?? "normal"];
     const defaultSettings = {
       width: 512,
       height: 512,
-      offsetX: tile.direction === "south" ? size + 4 : size,
-      offsetY: tile.direction === "south" ? 4 : 0,
-      offsetZ: tile.direction === "south" ? 1 : 0,
+      offsetX: tile.direction === "south" ? size.x : size.x,
+      offsetY: tile.direction === "south" ? 0 : 0,
+      offsetZ: tile.direction === "south" ? 0 : 0,
     };
 
     const elevatedSettings = {

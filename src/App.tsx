@@ -165,6 +165,14 @@ function App() {
         ) {
           metConditions = false;
         }
+        if (
+          character.conditions.encountersCompleted &&
+          !character.conditions.encountersCompleted.every((e) =>
+            encounter.encountersCompleted.includes(e)
+          )
+        ) {
+          metConditions = false;
+        }
       }
 
       setDialogState({
@@ -224,6 +232,7 @@ function App() {
     dialogState,
     dispatch,
     encounter.fightsFinished,
+    encounter.encountersCompleted,
     cardIds.length,
     evolving,
   ]);

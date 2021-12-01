@@ -9,6 +9,7 @@ export enum CharacterSprites {
   Piet = 5,
   Sint = 6,
   Amerigo = 7,
+  Matthijs = 8,
 }
 
 export type Creature = {
@@ -42,7 +43,7 @@ export type TerrainTile = {
   img: string;
   direction?: Direction;
   size?: TileSize;
-  set: "terrain" | "furniture" | "fantasy";
+  set: "terrain" | "furniture" | "fantasy" | "holiday";
 };
 
 export type Dialog = {
@@ -62,6 +63,7 @@ export type LevelCharacter = {
   loseDialog: Dialog[];
   conditions?: {
     minimalCards?: number;
+    encountersCompleted?: CharacterSprites[];
   };
   conditionDialog: Dialog[];
   characterSprite: CharacterSprites;

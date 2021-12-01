@@ -2,7 +2,7 @@ import { CharacterSprites, LevelCharacter } from "../../types";
 
 export const carl: LevelCharacter = {
   characterSprite: CharacterSprites.Carl,
-  position: [14, 4, 1],
+  position: [11, -7, 1],
   conditions: {
     minimalCards: 1,
   },

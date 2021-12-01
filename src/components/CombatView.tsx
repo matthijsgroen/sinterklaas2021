@@ -41,10 +41,9 @@ const synchronizeAnimations = (
     if (!animationsRef.current[creature.id]) {
       const img = await creature.card.texture;
 
-      //   const texIndex = Object.keys(animationsRef.current).length;
       const animation = player.addAnimation(creature.card.animation, img, 0, {
         panX:
-          creature.party === "left" ? -0.3 + index * -0.1 : 0.2 + index * 0.15,
+          creature.party === "left" ? -0.4 + index * -0.1 : 0.3 + index * 0.15,
         panY: 0.2 + index * -0.2,
         zoom: 1.5,
         zIndex: 2 + index,
@@ -62,7 +61,6 @@ const synchronizeAnimations = (
           animation.startTrack(stateTrack);
         }
         if (track === "dead") {
-          console.log("dead");
           animation.destroy();
           delete animationsRef.current[creature.id];
         }

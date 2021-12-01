@@ -4,8 +4,9 @@ import bedroom from "./bedroom";
 import livingroom from "./livingroom";
 import street from "./street";
 import mountain from "./mountain";
+import finish from "./finish";
 
-const zones = [stage1, bedroom, livingroom, street, mountain].reduce(
+const zones = [stage1, bedroom, livingroom, street, mountain, finish].reduce(
   (r, e) => ({ ...r, [e.name]: e }),
   {} as Record<string, LevelData>
 );
