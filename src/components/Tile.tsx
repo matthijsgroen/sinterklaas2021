@@ -155,7 +155,7 @@ const furnitureLookup: Record<string, TileDirectionData> = {
 };
 
 const getDimensions = (tile: TerrainTile): TileData => {
-  if (tile.set === "terrain") {
+  if (tile.set === "terrain" || tile.set === "holiday") {
     const size = sizeMapping[tile.size ?? "normal"];
 
     return {

@@ -191,6 +191,27 @@ const finish: LevelData = {
       set: "fantasy",
       direction: "west",
     },
+    {
+      coord: [10, 0, 1],
+      img: "presentGreenLow",
+      direction: "west",
+      set: "holiday",
+    },
+    {
+      coord: [7, 2, 1],
+      img: "presentGreenRound",
+      set: "holiday",
+    },
+    {
+      coord: [11, -3, 2],
+      img: "presentLow",
+      set: "holiday",
+    },
+    {
+      coord: [11, 2, 1],
+      img: "present",
+      set: "holiday",
+    },
     { coord: [7, 3, 1], img: "treePineSnow", set: "terrain" },
     { coord: [6, 2, 1], img: "treePineSnow", set: "terrain" },
     { coord: [6, 1, 1], img: "treePineSnow", set: "terrain" },
