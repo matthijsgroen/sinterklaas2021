@@ -55,7 +55,12 @@ const synchronizeAnimations = (
         current: "idle",
       };
       animation.onTrackStopped((track) => {
-        if (track !== "idle" && track !== "stunned" && track !== "dead") {
+        if (
+          track !== "idle" &&
+          track !== "stunned" &&
+          track !== "dead" &&
+          animationsRef.current[creature.id]
+        ) {
           const stateTrack = animationsRef.current[creature.id].stateTrack;
           animationsRef.current[creature.id].current = stateTrack;
           animation.startTrack(stateTrack);

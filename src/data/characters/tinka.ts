@@ -49,7 +49,10 @@ export const tinka: LevelCharacter = {
     {
       characterColor: "pink",
       characterName: "Tinka",
-      text: ["Tristan, je bent geweldig!"],
+      text: [
+        "Tristan, je bent geweldig!",
+        "Ik ga met je mee, dan kunnen we anderen helpen.",
+      ],
     },
   ],
   loseDialog: [
