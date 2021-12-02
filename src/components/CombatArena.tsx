@@ -3,6 +3,7 @@ import className from "../className";
 import { enemyActionSelection } from "../combat";
 import {
   actionTurn,
+  CombatStatus,
   endEncounter,
   selectCombatLog,
   selectCombatStatus,
@@ -40,17 +41,27 @@ type Props = {
 };
 
 const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
-  const combatStatus = useAppSelector(selectCombatStatus);
+  const delayedCombatStatus = useAppSelector(selectCombatStatus);
   const combatLog = useAppSelector(selectCombatLog);
   const encounter = useAppSelector(selectActiveEncounter);
   const dispatch = useAppDispatch();
+
+  const [combatStatus, setCombatStatus] =
+    useState<CombatStatus>(delayedCombatStatus);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setCombatStatus(delayedCombatStatus);
+    }, 3000);
+    return () => clearTimeout(timeoutId);
+  }, [delayedCombatStatus]);
 
   const [actionSelection, setActionSelection] = useState<string | null>(null);
   const [targetSelection, setTargetSelection] = useState<string | null>(null);
   const [actionFocus, setActionFocus] = useState(0);
 
-  const characterOrder = combatStatus.partyA
-    .concat(combatStatus.partyB)
+  const characterOrder = delayedCombatStatus.partyA
+    .concat(delayedCombatStatus.partyB)
     .sort((a, b) => a.card.initiative - b.card.initiative);
 
   useEffect(() => {
@@ -262,7 +273,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         {combatLog.map((sentence, index) => (
           <CombatLogSentence sentence={sentence} key={index} />
         ))}
-        {combatStatus.turn && (
+        {combatStatus.turn && combatStatus === delayedCombatStatus && (
           <p>
             <strong>{combatStatus.turn.creature.card.name}</strong> is aan de
             beurt!
@@ -289,6 +300,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       </div>
 
       {combatStatus.turn &&
+        combatStatus === delayedCombatStatus &&
         combatStatus.turn.creature.party === "left" &&
         !combatStatus.turn.isStunned &&
         actionSelection === null && (
@@ -339,6 +351,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           </div>
         )}
       {combatStatus.turn &&
+        combatStatus === delayedCombatStatus &&
         combatStatus.turn.creature.party === "left" &&
         actionSelection &&
         actionRequiresEnemyTarget(
@@ -376,6 +389,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           </div>
         )}
       {combatStatus.turn &&
+        combatStatus === delayedCombatStatus &&
         combatStatus.turn.creature.party === "left" &&
         actionSelection &&
         actionRequiresFriendlyTarget(
