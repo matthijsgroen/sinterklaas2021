@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.0c841544.chunk.css",
+    "main.js": "/static/js/main.141a4bce.chunk.js",
+    "main.js.map": "/static/js/main.141a4bce.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.068a85bc.js",
+    "runtime-main.js.map": "/static/js/runtime-main.068a85bc.js.map",
+    "static/js/2.5111c916.chunk.js": "/static/js/2.5111c916.chunk.js",
+    "static/js/2.5111c916.chunk.js.map": "/static/js/2.5111c916.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/main.0c841544.chunk.css.map": "/static/css/main.0c841544.chunk.css.map",
+    "static/js/2.5111c916.chunk.js.LICENSE.txt": "/static/js/2.5111c916.chunk.js.LICENSE.txt",
+    "static/media/SplashScreen.module.css": "/static/media/StartScreen.0c1c2251.jpg",
+    "static/media/combat_characters.2f0018a7.png": "/static/media/combat_characters.2f0018a7.png",
+    "static/media/logo.692cd592.png": "/static/media/logo.692cd592.png",
+    "static/media/systeem.1f6c1aca.png": "/static/media/systeem.1f6c1aca.png",
+    "static/media/Character.module.css": "/static/media/tristan.377deac8.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.068a85bc.js",
+    "static/js/2.5111c916.chunk.js",
+    "static/css/main.0c841544.chunk.css",
+    "static/js/main.141a4bce.chunk.js"
+  ]
+}

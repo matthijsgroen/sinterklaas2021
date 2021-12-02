@@ -20,10 +20,15 @@
     "typescript": "~4.1.5"
   },
   "scripts": {
+    "setup-assets": "bin/setup-assets.sh",
+    "purge-assets": "ts-node bin/purge-assets.ts",
+    "postinstall": "yarn setup-assets",
     "start": "react-scripts start",
+    "prebuild": "yarn purge-assets",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "preupdate-site": "yarn build",
+    "update-site": "rm -rf docs; cp -r build docs",
+    "test": "react-scripts test"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -39,5 +44,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "glob": "^7.2.0",
+    "ts-node": "^10.4.0"
   }
 }

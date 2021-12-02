@@ -1,65 +1,7 @@
 import React from "react";
-import { Direction, Position, TerrainTile, TileSize } from "../types";
+import { Position, TerrainTile, TileSize } from "../types";
 import styles from "./Tile.module.css";
-
-type TileMapping = {
-  [Key in TerrainTile["set"]]: string;
-};
-
-const tileMapping: TileMapping = {
-  terrain: "kenney_platformerkit",
-  furniture: "kenney_furniturekit",
-  fantasy: "kenney_fantasytownkit",
-  holiday: "kenney_holidaykit",
-};
-
-const directionMapping: Record<
-  TerrainTile["set"],
-  Record<Direction, string>
-> = {
-  terrain: {
-    north: "NE",
-    east: "SE",
-    south: "SW",
-    west: "NW",
-  },
-  holiday: {
-    north: "NE",
-    east: "SE",
-    south: "SW",
-    west: "NW",
-  },
-  furniture: {
-    north: "NE",
-    east: "SE",
-    south: "SW",
-    west: "NW",
-  },
-  fantasy: {
-    north: "N",
-    east: "E",
-    south: "S",
-    west: "W",
-  },
-};
-
-const remapDirection: Record<string, Record<Direction, Direction>> = {
-  stairs: {
-    east: "west",
-    north: "west",
-    west: "south",
-    south: "east",
-  },
-};
-
-const getTile = (tile: TerrainTile): string => {
-  const direction = remapDirection[tile.img]
-    ? remapDirection[tile.img][tile.direction ?? "north"]
-    : tile.direction ?? "north";
-  return `/images/${tileMapping[tile.set]}/Isometric/${tile.img}_${
-    directionMapping[tile.set][direction]
-  }.png`;
-};
+import { getTileSrc } from "./tileHelpers";
 
 const sizeMapping: Record<TileSize, { x: number; y: number }> = {
   wide: { x: 0, y: 0 },
@@ -229,7 +171,7 @@ const Tile: React.FunctionComponent<Props> = ({ tile }) => {
   const dimensions = getDimensions(tile);
   return (
     <img
-      src={getTile(tile)}
+      src={getTileSrc(tile)}
       width={dimensions.width}
       height={dimensions.height}
       alt={tile.img}
