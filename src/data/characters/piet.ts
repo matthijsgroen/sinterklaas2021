@@ -56,14 +56,14 @@ export const piet: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Wauw super vet!"],
+      text: ["Wauw, super vet!"],
     },
   ],
   loseDialog: [
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Oei dat moet ik nog maar eens proberen"],
+      text: ["Oei, dat moet ik nog maar eens proberen"],
     },
     {
       characterColor: "navyblue",

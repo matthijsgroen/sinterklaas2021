@@ -11,7 +11,7 @@ export const catoo: LevelCharacter = {
       characterColor: "pink",
       characterName: "Catootje",
       text: [
-        "Help grote broer! Ik wordt door speelgoed gevangen gehouden!",
+        "Help, grote broer! Ik wordt door speelgoed gevangen gehouden!",
         "Kan jij deze robot verslaan?",
       ],
     },
@@ -26,7 +26,7 @@ export const catoo: LevelCharacter = {
       characterColor: "pink",
       characterName: "Catootje",
       text: [
-        "Help grote broer! Ik wordt door speelgoed gevangen gehouden!",
+        "Help, grote broer! Ik wordt door speelgoed gevangen gehouden!",
         "Kan jij deze robot verslaan?",
       ],
     },
@@ -51,7 +51,7 @@ export const catoo: LevelCharacter = {
       characterColor: "lightblue",
       characterName: "Amerigo",
       text: [
-        "Ja zeker. Maar mijn schade kwam niet volledig aan.",
+        "Ja zeker, maar mijn schade kwam niet volledig aan.",
         "Dit komt omdat ik een :scissors: (schoen) type ben, en deze robot is van het type :rock: (roe)",
         ":rock: (roe) is sterker tegen :scissors: (schoen), :scissors: (schoen) is sterker tegen :paper: (zak), en :paper: (zak) is weer sterker tegen :rock: (roe).",
         "Gebruik die informatie voor tactische keuzes!",

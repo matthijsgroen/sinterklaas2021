@@ -10,7 +10,7 @@ export const carl: LevelCharacter = {
     {
       characterColor: "green",
       characterName: "Carl",
-      text: ["Tris! Dit speelgoed houdt mij gevangen!"],
+      text: ["Tris! Dit slijmmonster houdt mij gevangen!"],
     },
     {
       characterColor: "orange",
@@ -23,7 +23,7 @@ export const carl: LevelCharacter = {
       characterColor: "green",
       characterName: "Carl",
       text: [
-        "Tris! Dit speelgoed houdt mij gevangen!",
+        "Tris! Dit slijmmonster houdt mij gevangen!",
         "Ik heb dit nog nooit meegemaakt!",
       ],
     },

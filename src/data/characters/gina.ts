@@ -55,7 +55,7 @@ export const gina: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Poe dat was wel even een gevecht..."],
+      text: ["Poe, dat was wel even een gevecht..."],
     },
     {
       characterColor: "red",
