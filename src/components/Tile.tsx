@@ -171,7 +171,7 @@ const Tile: React.FunctionComponent<Props> = ({ tile }) => {
   const dimensions = getDimensions(tile);
   return (
     <img
-      src={getTileSrc(tile)}
+      src={"." + getTileSrc(tile)}
       width={dimensions.width}
       height={dimensions.height}
       alt={tile.img}
