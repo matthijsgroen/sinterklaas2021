@@ -32,7 +32,7 @@ export const tinka: LevelCharacter = {
     {
       characterColor: "red",
       characterName: "Tinka",
-      text: ["Iiieee!!! Ik vindt het eng!!"],
+      text: ["Iiieee!!! Ik vind het eng!!"],
     },
   ],
   fights: [{ enemies: ["bear"] }],

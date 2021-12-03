@@ -30,7 +30,7 @@ export const gina: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Dat klopt Amma! ik ben dat aan het fixen!"],
+      text: ["Dat klopt Amma! Ik ben daar al mee bezig!"],
     },
     {
       characterColor: "red",
@@ -40,7 +40,7 @@ export const gina: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Blijf rustig Amma! Ik knok ze wel weg!"],
+      text: ["Blijf rustig Amma! Ik krijg ze wel weg!"],
     },
   ],
   fights: [

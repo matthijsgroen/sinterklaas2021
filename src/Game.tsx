@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import CombatArena from "./components/CombatArena";
 import DialogView from "./components/Dialog";
 import Level from "./components/Level";
-import { evolutions } from "./data/creatures";
+import creatures, { evolutions } from "./data/creatures";
 import zones from "./data";
 import {
   addFollower,
@@ -68,23 +68,38 @@ const hasDialogEnded = (
   dialogType: DialogType,
   character: LevelCharacter | undefined,
   dialogState: DialogState,
-  evolving?: string
+  evolving?: string,
+  cardIds?: string[]
 ): boolean => {
   if (dialogState.type !== dialogType) return false;
 
-  const dialogData = selectDialogData(character, dialogState, evolving);
+  const dialogData = selectDialogData(
+    character,
+    dialogState,
+    evolving,
+    cardIds
+  );
   return dialogData === false;
 };
 
 const selectDialogData = (
   character: LevelCharacter | undefined,
   dialogState: DialogState,
-  evolving?: string
+  evolving?: string,
+  cardIds?: string[]
 ): DialogProps | false => {
   let dialogList: Dialog[] = [];
   if (character) {
     if (dialogState.type === "initial") {
-      dialogList = character.initialDialog;
+      dialogList = character.initialDialog.concat(
+        (cardIds ?? [])
+          .map((id) => creatures[id].name)
+          .map((name) => ({
+            characterColor: "orange",
+            characterName: "Tristan",
+            text: [`Ik kies jou, ${name}!`],
+          }))
+      );
     }
     if (dialogState.type === "lose") {
       dialogList = character.loseDialog;
@@ -186,7 +201,7 @@ const Game: React.FunctionComponent<Props> = ({ onComplete }) => {
     if (
       !inCombat &&
       character &&
-      hasDialogEnded("initial", character, dialogState)
+      hasDialogEnded("initial", character, dialogState, undefined, cardIds)
     ) {
       const activeFight = character.fights[encounter.fightsFinished];
       if (activeFight) {
@@ -242,6 +257,7 @@ const Game: React.FunctionComponent<Props> = ({ onComplete }) => {
     encounter.encountersCompleted,
     cardIds.length,
     evolving,
+    cardIds,
   ]);
 
   useEffect(() => {
@@ -293,7 +309,12 @@ const Game: React.FunctionComponent<Props> = ({ onComplete }) => {
     encounter.fightsFinished,
   ]);
 
-  const dialogData = selectDialogData(character, dialogState, evolving);
+  const dialogData = selectDialogData(
+    character,
+    dialogState,
+    evolving,
+    cardIds
+  );
 
   return (
     <main>

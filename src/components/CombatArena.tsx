@@ -41,6 +41,9 @@ type Props = {
   character: LevelCharacter;
 };
 
+const formatTurns = (amount: number) =>
+  amount === 1 ? "1 beurt" : `${amount} beurten`;
+
 const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   const delayedCombatStatus = useAppSelector(selectCombatStatus);
   const combatLog = useAppSelector(selectCombatLog);
@@ -327,7 +330,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                     <strong>{action.name}</strong>
                   </p>
                   {action.inCooldown > 0 && (
-                    <span>(Afkoelen: {action.inCooldown} beurten)</span>
+                    <span>(Afkoelen: {formatTurns(action.inCooldown)})</span>
                   )}
                   <p>
                     {action.damage > 0 && action.damageType === undefined
@@ -337,8 +340,8 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                       : ""}
                     {action.damage > 0 && action.damageType === "stun"
                       ? action.targets.includes("allEnemies")
-                        ? `Verdoof iedereen: ${action.damage} beurten. `
-                        : `Verdoof: ${action.damage} beurten. `
+                        ? `Verdoof iedereen: ${formatTurns(action.damage)}. `
+                        : `Verdoof: ${formatTurns(action.damage)}. `
                       : ""}
                     {action.damage < 0
                       ? action.targets.includes("allFriendlies")
@@ -346,7 +349,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
                         : `Genezing: ${action.damage * -1} HP. `
                       : ""}
                     {action.cooldown > 0
-                      ? `Afkoeling: ${action.cooldown} beurten. `
+                      ? `Afkoeling: ${formatTurns(action.cooldown)}. `
                       : ""}
                     {action.cost > 0 ? `Kosten: ${action.cost} energie.` : ""}
                   </p>

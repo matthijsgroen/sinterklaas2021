@@ -3,7 +3,7 @@ import styles from "./SplashScreen.module.css";
 
 type Props = {
   onKeyPress?: () => void;
-  screen: "start" | "end";
+  screen: "start" | "intro" | "end";
 };
 
 const SplashScreen: React.FunctionComponent<Props> = ({
@@ -25,7 +25,13 @@ const SplashScreen: React.FunctionComponent<Props> = ({
   }, [onKeyPress]);
   return (
     <div
-      className={screen === "start" ? styles.startScreen : styles.endScreen}
+      className={
+        screen === "start"
+          ? styles.startScreen
+          : screen === "intro"
+          ? styles.introScreen
+          : styles.endScreen
+      }
     />
   );
 };

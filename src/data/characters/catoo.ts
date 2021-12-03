@@ -26,7 +26,7 @@ export const catoo: LevelCharacter = {
       characterColor: "pink",
       characterName: "Catootje",
       text: [
-        "Help, grote broer! Ik wordt door speelgoed gevangen gehouden!",
+        "Help, grote broer! Ik word door speelgoed gevangen gehouden!",
         "Kan jij deze robot verslaan?",
       ],
     },
@@ -45,7 +45,7 @@ export const catoo: LevelCharacter = {
     {
       characterColor: "orange",
       characterName: "Tristan",
-      text: ["Ha! Daar hebben we mooi van gewonnen Amerigo!"],
+      text: ["Ha! Daar hebben we mooi van gewonnen, Amerigo!"],
     },
     {
       characterColor: "lightblue",
