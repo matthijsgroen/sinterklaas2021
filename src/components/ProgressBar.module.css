@@ -1,0 +1,13 @@
+.bar {
+  margin: 0.25em 0;
+  height: 0.5em;
+  border: 1px solid #555;
+  border-radius: 0.5em;
+  background: #0008;
+}
+
+.progress {
+  height: 0.5em;
+  border-radius: 0.5em;
+  transition: width 1.5s ease-in;
+}

@@ -98,8 +98,8 @@ export const sint: LevelCharacter = {
         "en Roe :rock: sterker is tegen Schoen :scissors:",
         "en Schoen :scissors: sterker is tegen Zak :paper:.",
         "Oja. En wees zuinig met waar je je energie aan uitgeeft!",
-        "Ik kwam er net achter dat de beren pas gaan genezen onder",
-        "15 punten. Dus misschien net daarboven een grote aanval plannen?",
+        "Ik kwam er net achter dat de beren pas gaan genezen onder 15 punten.",
+        "Dus misschien net daarboven een grote aanval plannen?",
       ],
     },
     {

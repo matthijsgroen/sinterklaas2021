@@ -21,10 +21,11 @@ import CombatLogSentence from "./CombatLogSentence";
 import CombatView from "./CombatView";
 import MemberStats from "./MemberStats";
 import systeemImage from "../data/geppetto/systeem.png";
-import logo from "./logo.png";
 import Icon from "./Icon";
+import Tristamon from "./Tristamon";
 
-const DELAY_FOR_CPU_OPPONENT = 3000;
+const DELAY_FOR_CPU_OPPONENT = 1500;
+const DELAY_FOR_ANIMATION = 3000;
 
 const actionRequiresTarget =
   (type: ActionTarget) =>
@@ -52,7 +53,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setCombatStatus(delayedCombatStatus);
-    }, 3000);
+    }, DELAY_FOR_ANIMATION);
     return () => clearTimeout(timeoutId);
   }, [delayedCombatStatus]);
 
@@ -65,27 +66,21 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
     .sort((a, b) => a.card.initiative - b.card.initiative);
 
   useEffect(() => {
-    if (combatStatus.outcome === "lost") {
-      const timeoutId = setTimeout(() => {
-        dispatch(loseEncounter());
-      }, 3000);
-      return () => clearTimeout(timeoutId);
-    }
-    if (combatStatus.outcome === "won") {
+    if (delayedCombatStatus.outcome === "won") {
       dispatch(completeFight());
     }
-  }, [combatStatus.outcome, dispatch]);
+  }, [delayedCombatStatus.outcome, dispatch]);
 
   useEffect(() => {
+    if (combatStatus.outcome === "lost") {
+      dispatch(loseEncounter());
+    }
     if (combatStatus.outcome !== "inProgress") {
       const nextFightDetails = character.fights[encounter.fightsFinished];
 
       if (!nextFightDetails && combatStatus.outcome === "won") {
-        const timeoutId = setTimeout(() => {
-          dispatch(endEncounter());
-          dispatch(winEncounter());
-        }, 3000);
-        return () => clearTimeout(timeoutId);
+        dispatch(endEncounter());
+        dispatch(winEncounter());
       }
     }
   }, [
@@ -114,7 +109,10 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
   }, [combatStatus, dispatch]);
 
   useEffect(() => {
-    if (combatStatus.turn?.isStunned) {
+    if (
+      combatStatus.turn?.isStunned &&
+      combatStatus.turn === delayedCombatStatus.turn
+    ) {
       const timeoutId = setTimeout(() => {
         dispatch(actionTurn({ action: "wait", target: "" }));
         setActionSelection(null);
@@ -160,10 +158,18 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
       );
       if (targetName) {
         dispatch(actionTurn({ action: actionSelection, target: targetName }));
+        setActionSelection(null);
+        setTargetSelection(null);
         return;
       }
     }
-  }, [actionSelection, targetSelection, dispatch, combatStatus.turn]);
+  }, [
+    actionSelection,
+    targetSelection,
+    dispatch,
+    combatStatus.turn,
+    delayedCombatStatus.turn,
+  ]);
 
   useEffect(() => {
     if (
@@ -233,7 +239,11 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         if (ev.code === "ArrowUp") {
           setActionFocus((state) => (party.length + state - 1) % party.length);
         }
-        if ((ev.code === "Space" || ev.code === "Enter") && combatStatus.turn) {
+        if (
+          (ev.code === "Space" || ev.code === "Enter") &&
+          combatStatus.turn &&
+          party[actionFocus]
+        ) {
           setTargetSelection(party[actionFocus].id);
           setActionFocus(0);
         }
@@ -263,12 +273,7 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         alt={"Schoen -> Zak -> Roe"}
         style={{ position: "absolute", top: "10px", left: "10px" }}
       />
-      <img
-        src={logo}
-        height={100}
-        alt={"Tristámon"}
-        style={{ position: "absolute", top: "10px", right: "10px" }}
-      />
+      <Tristamon />
       <div className={styles.log}>
         {combatLog.map((sentence, index) => (
           <CombatLogSentence sentence={sentence} key={index} />

@@ -74,6 +74,9 @@ const synchronizeAnimations = (
       if (creature.cooldowns["stunned"]) {
         animationsRef.current[creature.id].stateTrack = "stunned";
       } else {
+        if (animationsRef.current[creature.id].current !== "idle") {
+          animationsRef.current[creature.id].controls.startTrack("idle");
+        }
         animationsRef.current[creature.id].stateTrack = "idle";
       }
     }

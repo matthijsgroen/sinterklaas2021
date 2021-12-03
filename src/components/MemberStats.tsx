@@ -2,6 +2,7 @@ import React from "react";
 import { CombatCreature } from "../state/combatSlice";
 import Icon from "./Icon";
 import styles from "./MemberStats.module.css";
+import ProgressBar from "./ProgressBar";
 
 type MemberProps = {
   member: CombatCreature;
@@ -17,8 +18,9 @@ const MemberStats: React.FunctionComponent<MemberProps> = ({
   return (
     <div
       style={{
+        transition: "opacity 2s",
         opacity: member.health > 0 ? 1 : 0.5,
-        background: inTurn ? "#222" : "#000",
+        background: inTurn ? "#333" : "#000",
         padding: "0.5em",
       }}
     >
@@ -33,16 +35,19 @@ const MemberStats: React.FunctionComponent<MemberProps> = ({
         <span>
           HP: {Math.max(member.health, 0)} / {member.card.health}
         </span>
-        <progress value={member.health / member.card.health} />
+        <ProgressBar
+          value={member.health / member.card.health}
+          color={"#4c4"}
+        />
       </p>
       {member.card.energy > 0 && (
         <p className={styles.memberProps}>
           <span>
             E: {member.energy} / {member.card.energy}
           </span>
-          <progress
-            className={styles.energyBar}
+          <ProgressBar
             value={member.energy / member.card.energy}
+            color={"#44f"}
           />
         </p>
       )}
