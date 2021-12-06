@@ -5,9 +5,12 @@ const DUMMY_ACTION = { action: "wait", target: "all" };
 
 export const enemyActionSelection = (
   combatStatus: CombatStatus
-): { action: string; target: string } => {
+): { action: string; target: string; creatureId: string } => {
   if (combatStatus.turn === undefined || combatStatus.turn.isStunned) {
-    return DUMMY_ACTION;
+    return {
+      ...DUMMY_ACTION,
+      creatureId: combatStatus.turn?.creature.id ?? "",
+    };
   }
   // weak team mates? heal!
   const needsHealing = combatStatus.partyB
@@ -25,7 +28,11 @@ export const enemyActionSelection = (
         ? "all"
         : needsHealing[0].id;
 
-    return { action: defensiveAction.name, target };
+    return {
+      action: defensiveAction.name,
+      target,
+      creatureId: combatStatus.turn.creature.id,
+    };
   }
 
   const specialAbilities = combatStatus.turn.actions
@@ -74,8 +81,9 @@ export const enemyActionSelection = (
       return {
         action: action.name,
         target,
+        creatureId: combatStatus.turn.creature.id,
       };
     }
   }
-  return DUMMY_ACTION;
+  return { ...DUMMY_ACTION, creatureId: combatStatus.turn.creature.id };
 };

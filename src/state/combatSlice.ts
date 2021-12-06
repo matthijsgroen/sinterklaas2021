@@ -78,12 +78,17 @@ export const combatSlice = createSlice({
     },
     actionTurn: (
       state,
-      action: PayloadAction<{ action: string; target: string }>
+      action: PayloadAction<{
+        action: string;
+        target: string;
+        creatureId: string;
+      }>
     ) => {
       const currentcreature = state.creatures.find(
         (c) => c.id === state.currentTurn
       );
       if (!currentcreature) return;
+      if (state.currentTurn !== action.payload.creatureId) return;
 
       const team = currentcreature.party;
       const ownCard = creatures[currentcreature.card];

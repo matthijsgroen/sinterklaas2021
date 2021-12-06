@@ -113,19 +113,32 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
 
   useEffect(() => {
     if (
-      combatStatus.turn?.isStunned &&
+      combatStatus.turn &&
+      combatStatus.turn.isStunned &&
       combatStatus.turn === delayedCombatStatus.turn
     ) {
       const timeoutId = setTimeout(() => {
-        dispatch(actionTurn({ action: "wait", target: "" }));
-        setActionSelection(null);
-        setTargetSelection(null);
+        if (combatStatus.turn) {
+          dispatch(
+            actionTurn({
+              action: "wait",
+              target: "",
+              creatureId: combatStatus.turn.creature.id,
+            })
+          );
+          setActionSelection(null);
+          setTargetSelection(null);
+        }
       }, 2000);
       return () => clearTimeout(timeoutId);
     }
-    if (actionSelection && targetSelection) {
+    if (actionSelection && targetSelection && combatStatus.turn) {
       dispatch(
-        actionTurn({ action: actionSelection, target: targetSelection })
+        actionTurn({
+          action: actionSelection,
+          target: targetSelection,
+          creatureId: combatStatus.turn.creature.id,
+        })
       );
       setActionSelection(null);
       setTargetSelection(null);
@@ -160,7 +173,13 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
         null
       );
       if (targetName) {
-        dispatch(actionTurn({ action: actionSelection, target: targetName }));
+        dispatch(
+          actionTurn({
+            action: actionSelection,
+            target: targetName,
+            creatureId: combatStatus.turn.creature.id,
+          })
+        );
         setActionSelection(null);
         setTargetSelection(null);
         return;
@@ -205,7 +224,13 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           );
         }
         if ((ev.code === "Space" || ev.code === "Enter") && combatStatus.turn) {
-          setActionSelection(combatStatus.turn.actions[actionFocus].name);
+          setActionSelection((action) =>
+            action === null &&
+            combatStatus.turn &&
+            combatStatus.turn.creature.party === "left"
+              ? combatStatus.turn.actions[actionFocus].name
+              : action
+          );
           setActionFocus(0);
         }
       };
@@ -247,7 +272,9 @@ const CombatArena: React.FunctionComponent<Props> = ({ character }) => {
           combatStatus.turn &&
           party[actionFocus]
         ) {
-          setTargetSelection(party[actionFocus].id);
+          setTargetSelection((target) =>
+            target === null ? party[actionFocus].id : target
+          );
           setActionFocus(0);
         }
       };
